@@ -1,0 +1,25 @@
+{
+  "name": "@baoxia/baoxia.utils.javascript",
+  "version": "1.0.0",
+  "description": "Baoxia Software Javascript Utils.",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "tsc -p tsconfig.json && node dist/test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BaoXiaRuanJian/BaoXia.Utils.JavaScript.git"
+  },
+  "keywords": [
+    "Baoxia",
+    "Javascript",
+    "Utils"
+  ],
+  "author": "Baoxia Software",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BaoXiaRuanJian/BaoXia.Utils.JavaScript/issues"
+  },
+  "homepage": "https://github.com/BaoXiaRuanJian/BaoXia.Utils.JavaScript#readme"
+}
