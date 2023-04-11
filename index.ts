@@ -1,4 +1,4 @@
 import * as UnitTest from "./src/UnitTest.js"
-import { StringExtension } from "./src/StringExtension.js"
+import { StringUtil } from "./src/StringUtil.js"
 
-export { StringExtension, UnitTest }
+export { StringUtil, UnitTest }

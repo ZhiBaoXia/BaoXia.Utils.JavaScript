@@ -18,12 +18,12 @@ export class TestCase
 
     static assertFalse(isFalse: boolean): any
     {
-        this.assertTrue(!isFalse)
+        TestCase.assertTrue(!isFalse)
     }
 
     static assert(isTure: boolean): any
     {
-        this.assertTrue(isTure)
+        TestCase.assertTrue(isTure)
     }
 
 

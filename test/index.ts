@@ -1,5 +1,5 @@
 
-import { UnitTest, StringExtension } from "../index.js"
+import { UnitTest, StringUtil } from "../index.js"
 
 try
 {
@@ -9,9 +9,9 @@ try
         (assert: (isTrue: boolean) => any,
             assertFalse: (isFalse: boolean) => any) =>
         {
-            let number = StringExtension.tryParseInt("0");
+            let number = StringUtil.tryParseToInt("0");
             // !!!
-            assert(number != 0);
+            assert(number == 0);
             // !!!
         });
 }

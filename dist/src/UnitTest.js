@@ -11,10 +11,10 @@ export class TestCase {
         }
     }
     static assertFalse(isFalse) {
-        this.assertTrue(!isFalse);
+        TestCase.assertTrue(!isFalse);
     }
     static assert(isTure) {
-        this.assertTrue(isTure);
+        TestCase.assertTrue(isTure);
     }
     ////////////////////////////////////////////////
     // @私有方法
