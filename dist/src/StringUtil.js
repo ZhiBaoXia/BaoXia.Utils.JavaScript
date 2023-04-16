@@ -3,7 +3,7 @@
 /*          宝匣软件 Java Script 工具集
 /*
 /* ************************************************/
-import { StringRange } from "./model/StringRange.js";
+import { StringRange } from "./model/stringRange.js";
 export class StringUtil {
     ////////////////////////////////////////////////
     ////////////////////////////////////////////////

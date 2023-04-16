@@ -1,5 +1,5 @@
 
-import {AssertFailedError} from "./AssertFailedError.js"
+import {AssertFailedError} from "./assertFailedError.js"
 
 ////////////////////////////////////////////////
 // TestCase

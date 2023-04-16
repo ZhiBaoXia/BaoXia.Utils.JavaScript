@@ -1,4 +1,4 @@
-import { TestCase } from "./TestCase.js";
+import { TestCase } from "./testCase.js";
 
 export class TestProject
 {

@@ -1,12 +1,13 @@
 
-import { TestProject } from "../src/UnitTest/TestProject.js"
-import { StringUtilTest } from "./StringUtilTest.js";
-
+import { TestProject } from "../src/unitTest/testProject.js"
+import { StringUtilTest } from "./stringUtilTest.js";
+import { ArrayUtilTest } from "./arrayUtilTest.js";
 
 let testProject = new TestProject(
     "BaoXia.Utils.Javascript",
     [
-        new StringUtilTest()
+        new StringUtilTest(),
+        new ArrayUtilTest()
     ]);
 // !!!
 testProject.test();

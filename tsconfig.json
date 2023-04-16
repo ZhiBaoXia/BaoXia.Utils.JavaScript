@@ -6,7 +6,7 @@
     "index.ts",
     "src/*",
     "test/*"
-, "src/UnitTest/TestCase.ts", "src/UnitTest/TestCase.ts"  ],
+, "src/unitTest/testCase.ts", "src/unitTest/testCase.ts"  ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
     /* Projects */

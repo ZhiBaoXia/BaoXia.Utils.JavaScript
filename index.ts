@@ -1,4 +1,4 @@
-import * as UnitTest from "./src/UnitTest/TestCase.js"
-import { StringUtil } from "./src/StringUtil.js"
+import * as UnitTest from "./src/unitTest/testCase.js"
+import { StringUtil } from "./src/stringUtil.js"
 
 export { StringUtil, UnitTest }
