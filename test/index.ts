@@ -1,21 +1,13 @@
 
-import { UnitTest, StringUtil } from "../index.js"
+import { TestProject } from "../src/UnitTest/TestProject.js"
+import { StringUtilTest } from "./StringUtilTest.js";
 
-try
-{
-    // 测试数字转换：
-    new UnitTest.TestCase(
-        "字符串转整数，01",
-        (assert: (isTrue: boolean) => any,
-            assertFalse: (isFalse: boolean) => any) =>
-        {
-            let number = StringUtil.tryParseToInt("0");
-            // !!!
-            assert(number == 0);
-            // !!!
-        });
-}
-catch (exception)
-{
-    console.error(exception);
-}
+
+let testProject = new TestProject(
+    "BaoXia.Utils.Javascript",
+    [
+        new StringUtilTest()
+    ]);
+// !!!
+testProject.test();
+// !!!

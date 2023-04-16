@@ -1,3 +1,4 @@
+import { AssertFailedError } from "./AssertFailedError.js";
 ////////////////////////////////////////////////
 // TestCase
 ////////////////////////////////////////////////
@@ -13,7 +14,7 @@ export class TestCase {
         if (isTure != true) {
             let assertFailedInfo = "验证失败：";
             {
-                let error = new Error();
+                let error = new AssertFailedError();
                 assertFailedInfo += error.stack;
             }
             throw assertFailedInfo;
@@ -41,18 +42,24 @@ export class TestCase {
      * @param name 当前测试用例的名称。
      * @param runable 当前测试用例的测试内容。
      */
-    constructor(name, runable) {
+    constructor(name, testRunable) {
+        this.name = name;
+        this.testRunable = testRunable;
+    }
+    test() {
         try {
-            console.error("用例“" + name + "”，开始测试：");
+            console.error("用例“" + this.name + "”，开始测试：");
             {
                 // !!!
-                runable(TestCase.assert, TestCase.assertFalse);
+                this.testRunable(TestCase.assert, TestCase.assertFalse);
                 // !!!
             }
-            console.error("✔\t用例“" + name + "”，测试成功。");
+            console.error("✔\t用例“" + this.name + "”，测试成功。");
+            return true;
         }
         catch (exception) {
-            console.error("\t❌\t用例“" + name + "”，测试失败，错误信息：\r\n" + exception);
+            console.error("\t❌\t用例“" + this.name + "”，测试失败，错误信息：\r\n" + exception);
+            return false;
         }
     }
 }
