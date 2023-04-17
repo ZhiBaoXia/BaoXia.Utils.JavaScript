@@ -1,5 +1,6 @@
 
 import { DateTimeField } from "./constants/dateTimeField.js"
+import { StringRange } from "./model/stringRange.js";
 import { StringUtil } from "./stringUtil.js";
 
 export class DateTime
@@ -302,7 +303,8 @@ export class DateTime
 
 
     /**
-     * 根据指定的格式化模板，将当前时间对象，转为指定模板结构的字符串。
+     * 根据指定的格式化模板，将当前时间对象，转为指定模板结构的字符串，字符串模板的可选参数有：
+     * y，年；M，月；d，日；H，24小时格式的小时；m，分钟；s，秒钟；f，毫秒。
      * @param stringFormatter 指定的格式化模板。
      * @returns 指定模板结构的当前时间对象字符串。
      */
@@ -314,7 +316,33 @@ export class DateTime
             return StringUtil.Empty;
         }
 
-        @last
+        // 先替换年份的占位符：
+        let yearPlaceholder = "y";
+        let yearPlaceholderRanges
+            = StringUtil.getRangesOfKeywordIn(
+                stringFormatter,
+                "y",
+                true);
+        if (yearPlaceholderRanges.length > 0)
+        {
+            yearPlaceholderRanges
+                = StringRange.tryCompressionRangesWithConsecutiveCharIndex(
+                    yearPlaceholderRanges);
+            let yearCaptions:string[] = [];
+            for (let yearPlaceholder of yearPlaceholderRanges)
+            {
+                let yearPlaceholderLength = yearPlaceholder.charsCount;
+                let yearCaption = this.year.toString();
+                {
+                    yearCaption = StringUtil.complementZeroToIntegerNumberDigitsTo(
+                        yearCaption,
+                        yearPlaceholderLength);
+                }
+                yearCaptions.push(yearCaption);
+            }
+        }
+
+
 
         return StringUtil.Empty;
     }

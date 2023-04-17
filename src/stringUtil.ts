@@ -11,10 +11,10 @@ export class StringUtil
     ////////////////////////////////////////////////
     // @静态常量
     ////////////////////////////////////////////////
-    
-    static readonly Empty:string = "";
 
-    
+    static readonly Empty: string = "";
+
+
     ////////////////////////////////////////////////
     // @类方法
     ////////////////////////////////////////////////
@@ -473,15 +473,29 @@ export class StringUtil
             }
 
             let nextOriginalStringBeingCharIndex
-            = indexOfKeyword
-            + keywordLength;
+                = indexOfKeyword
+                + keywordLength;
             {
                 str = str.substring(nextOriginalStringBeingCharIndex);
             }
-            prevOriginalStringLength 
+            prevOriginalStringLength
                 += nextOriginalStringBeingCharIndex;
         }
         return keywordRanges;
+    }
+
+    static replaceTextInRangesWithTextSpecifiedIn(
+        str: string | null,
+        ranges: StringRange[] | null,
+        textSpecified: string | null): string | null
+    {
+        if (StringUtil.isEmpty(str))
+        {
+            return str;
+        }
+
+
+        @last
     }
 
     /**
