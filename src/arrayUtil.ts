@@ -7,6 +7,31 @@ export class ArrayUtil
     ////////////////////////////////////////////////
 
     /**
+     * 判断指定的数组，是否为“null”，或“空数组”。
+     * @param str 指定的数组对象。
+     * @returns 如果指定的数组对象为“null”，或“空数组”，则返回：true，否则返回：false。
+     */
+    static isEmpty(items: Array<any> | null): boolean
+    {
+        if (items == null
+            || items.length <= 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 判断指定的数组，是否不为“null”，或“空数组”。
+     * @param str 指定的数组对象。
+     * @returns 如果指定的数组对象不为“null”，或“空数组”，则返回：true，否则返回：false。
+     */
+    static isNotEmpty(items: Array<any> | null): boolean
+    {
+        return !ArrayUtil.isEmpty(items);
+    }
+
+    /**
      * 获取数组中的第一个元素。
      * @param items 指定的数组。
      * @returns 返回数组中的第一个元素。
@@ -189,8 +214,8 @@ export class ArrayUtil
             subarrayEndIndex = items.length;
         }
         subarrayLength
-        = subarrayEndIndex
-        - subarrayBeginIndex;
+            = subarrayEndIndex
+            - subarrayBeginIndex;
         if (subarrayLength <= 0)
         {
             return null;
@@ -208,7 +233,7 @@ export class ArrayUtil
      * @param items 要清空元素的指定数组对象。
      * @returns items 已被移除的元素数组对象。
      */
-    static clearItems(items:Array<any>): Array<any>
+    static clearItems(items: Array<any>): Array<any>
     {
         let lastArray = items.slice(0, items.length);
         {

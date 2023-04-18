@@ -4,6 +4,7 @@
 /*
 /* ************************************************/
 
+import { ArrayUtil } from "./arrayUtil.js";
 import { StringRange } from "./model/stringRange.js"
 
 export class StringUtil
@@ -486,17 +487,79 @@ export class StringUtil
 
     static replaceTextInRangesWithTextSpecifiedIn(
         str: string | null,
-        ranges: StringRange[] | null,
-        textSpecified: string | null): string | null
+        substringRanges: StringRange[] | null,
+        newSubstringsSpecified: string | null): string | null
     {
         if (StringUtil.isEmpty(str))
         {
             return str;
         }
+        if (ArrayUtil.isEmpty(substringRanges))
+        {
+            return str;
+        }
 
+        let newString = "";
+        let lastSubstringRangeEndCharIndex = 0;
+        let substringRangesCount = substringRanges!.length;
+        for (let substringRangeIndex = 0;
+            substringRangeIndex <= substringRangesCount;
+            substringRangeIndex++)
+        {
+            let substringRange
+                = substringRangeIndex < substringRangesCount
+                    ? substringRanges![substringRangeIndex]
+                    : new StringRange(
+                        str!.length,
+                        0);
 
-        @last
+            // 1/2，填充“子字符串区域之间”的文字：
+            let originalSubstringBeginCharIndex
+                = lastSubstringRangeEndCharIndex;
+            let originalSubstringEndCharIndex
+                = substringRange.beginCharIndex;
+            let originalSubstringLength
+                = originalSubstringEndCharIndex
+                - originalSubstringBeginCharIndex;
+            if (originalSubstringLength > 0)
+            {
+                let originalSubstring = str?.substring(
+                    originalSubstringBeginCharIndex,
+                    originalSubstringEndCharIndex);
+                {
+                    // !!!
+                    newString += originalSubstring;
+                    // !!!
+                }
+            }
+
+            // 2/2，填充要替换关键字的新字符：
+            if (substringRange.charsCount > 0)
+            {
+                let newSubstring: string | null = StringUtil.Empty;
+                if (newSubstringsSpecified != null)
+                {
+                    @last
+                    if (substringRangeIndex < newSubstringsSpecified.length)
+                    {
+                        newSubstring = newSubstringsSpecified[substringRangeIndex];
+                        if (newSubstring == null)
+                        {
+                            newSubstring = StringUtil.Empty;
+                        }
+                    }
+                }
+                // !!!
+                newString += newSubstring;
+                // !!!
+            }
+
+            lastSubstringRangeEndCharIndex
+                = substringRange.endCharIndex;
+        }
+        return newString;
     }
+
 
     /**
      * 在指定的字符串中替换指定的关键字为指定的新字符串。
