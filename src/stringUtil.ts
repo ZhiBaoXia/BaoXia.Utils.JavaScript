@@ -485,10 +485,19 @@ export class StringUtil
         return keywordRanges;
     }
 
+    /**
+     * 在字符串中，使用指定的字符串替换指定的关键字。
+     * @param str 要进行替换操作的字符串。
+     * @param substringRanges 指定要替换字符串的区域信息数组。
+     * @param newSubstringsSpecified 指定要使用的新字符串数组。
+     * @param [isUseLastNewSubstringsSpecifiedAsDefault] 是否使用最后一个新字符串作为默认新字符串使用，为“true”时，当指定的字符串区域没有对应的新字符串时，将尝试使用最后一个新字符串进行替换。
+     * @returns 使用指定的字符串替换指定的关键字后的字符串。
+     */
     static replaceTextInRangesWithTextSpecifiedIn(
         str: string | null,
         substringRanges: StringRange[] | null,
-        newSubstringsSpecified: string | null): string | null
+        newSubstringsSpecified: string[] | null,
+        isUseLastNewSubstringsSpecifiedToRange = false): string | null
     {
         if (StringUtil.isEmpty(str))
         {
@@ -539,10 +548,15 @@ export class StringUtil
                 let newSubstring: string | null = StringUtil.Empty;
                 if (newSubstringsSpecified != null)
                 {
-                    @last
-                    if (substringRangeIndex < newSubstringsSpecified.length)
+                    let newSubstringSpecifiedIndex = substringRangeIndex;
+                    if (newSubstringSpecifiedIndex >= newSubstringsSpecified.length
+                        && isUseLastNewSubstringsSpecifiedToRange)
                     {
-                        newSubstring = newSubstringsSpecified[substringRangeIndex];
+                        newSubstringSpecifiedIndex = newSubstringsSpecified.length - 1;
+                    }
+                    if (newSubstringSpecifiedIndex < newSubstringsSpecified.length)
+                    {
+                        newSubstring = newSubstringsSpecified[newSubstringSpecifiedIndex];
                         if (newSubstring == null)
                         {
                             newSubstring = StringUtil.Empty;
@@ -553,13 +567,11 @@ export class StringUtil
                 newString += newSubstring;
                 // !!!
             }
-
             lastSubstringRangeEndCharIndex
                 = substringRange.endCharIndex;
         }
         return newString;
     }
-
 
     /**
      * 在指定的字符串中替换指定的关键字为指定的新字符串。
@@ -585,57 +597,16 @@ export class StringUtil
             // 没有发现关键字时，返回原始字符串。
             return str;
         }
-
-        let keywordLength = keyword?.length ?? 0;
-
-        let newString = "";
-        let lastKeywordEndCharIndex = 0;
-        let keywordRangesCount = keywordRanges.length;
-        for (let keywordRangeIndex = 0;
-            keywordRangeIndex <= keywordRangesCount;
-            keywordRangeIndex++)
+        if (StringUtil.isEmpty(newValue))
         {
-            let keywordRange
-                = keywordRangeIndex < keywordRangesCount
-                    ? keywordRanges[keywordRangeIndex]
-                    : new StringRange(
-                        str!.length,
-                        0);
-
-            // 1/2，填充关键字之间的文字：
-            let originalSubstringBeginCharIndex
-                = lastKeywordEndCharIndex;
-            let originalSubstringEndCharIndex
-                = keywordRange.beginCharIndex;
-            let originalSubstringLength
-                = originalSubstringEndCharIndex
-                - originalSubstringBeginCharIndex;
-            if (originalSubstringLength > 0)
-            {
-                let originalSubstring = str?.substring(
-                    originalSubstringBeginCharIndex,
-                    originalSubstringEndCharIndex);
-                {
-                    // !!!
-                    newString += originalSubstring;
-                    // !!!
-                }
-            }
-
-            // 2/2，填充要替换关键字的新字符：
-            if (newValue != null
-                && newValue.length > 0
-                && keywordRange.charsCount > 0)
-            {
-                // !!!
-                newString += newValue;
-                // !!!
-            }
-
-            lastKeywordEndCharIndex
-                = keywordRange.endCharIndex;
+            return str;
         }
-        return newString;
+
+        return StringUtil.replaceTextInRangesWithTextSpecifiedIn(
+            str,
+            keywordRanges,
+            [newValue!],
+            true);
     }
 
     /**
