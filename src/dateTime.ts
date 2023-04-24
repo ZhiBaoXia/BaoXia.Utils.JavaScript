@@ -9,7 +9,7 @@ export class DateTime
     // @静态变量
     ////////////////////////////////////////////////
 
-    static WeekdayCaptions:string[] = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]; 
+    static WeekdayCaptions: string[] = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 
     ////////////////////////////////////////////////
     // @自身属性
@@ -34,7 +34,7 @@ export class DateTime
 
     set month(month: number)
     {
-        this._date.setMonth(month);
+        this._date.setMonth(month - 1);
     }
 
     get day(): number
@@ -106,7 +106,7 @@ export class DateTime
     ////////////////////////////////////////////////
     // @类方法
     ////////////////////////////////////////////////
-    
+
     /**
      * 根据指定的比较精度，比较两个时间对象的“早晚”，当“dateTimeA”早于“dateTimeB”时返回“-1”；当“dateTimeA”晚于“dateTimeB”时返回“1”；当“dateTimeA”等于“dateTimeB”时返回“0”。
      * @param dateTimeA 要进行比较的时间对象A。
@@ -290,7 +290,7 @@ export class DateTime
         this._date = new Date(
             this._date.getTime()
             + years * 365 * 24 * 60 * 60 * 1000);
-        {}
+        { }
         return this;
     }
 
@@ -318,7 +318,7 @@ export class DateTime
         this._date = new Date(
             this._date.getTime()
             + days * 24 * 60 * 60 * 1000);
-        {}
+        { }
         return this;
     }
 
@@ -332,7 +332,7 @@ export class DateTime
         this._date = new Date(
             this._date.getTime()
             + hours * 60 * 60 * 1000);
-        {}
+        { }
         return this;
     }
 
@@ -346,7 +346,7 @@ export class DateTime
         this._date = new Date(
             this._date.getTime()
             + minutes * 60 * 1000);
-        {}
+        { }
         return this;
     }
 
@@ -360,7 +360,7 @@ export class DateTime
         this._date = new Date(
             this._date.getTime()
             + seconds * 1000);
-        {}
+        { }
         return this;
     }
 
@@ -374,7 +374,7 @@ export class DateTime
         this._date = new Date(
             this._date.getTime()
             + milliseconds);
-        {}
+        { }
         return this;
     }
 
@@ -395,6 +395,38 @@ export class DateTime
     }
 
     /**
+     * 根据指定的比较精度，比较两个时间对象的“早晚”，当前时间对象早于“anotherDateTime”时返回“true”，否则返回“false”。
+     * @param anotherDateTime 要进行比较的时间对象。
+     * @param [compareAccuracy] 指定的时间比较精度，类型为“DateTimeField”。
+     * @returns 当前时间早于“anotherDateTime”时返回“true”，否则返回“false”。
+     */
+    isLessThan(
+        anotherDateTime: DateTime | null,
+        compareAccuracy: DateTimeField = DateTimeField.Millisecond): boolean
+    {
+        return DateTime.compareDateTimes(
+            this,
+            anotherDateTime,
+            compareAccuracy) < 0;
+    }
+
+    /**
+     * 根据指定的比较精度，比较两个时间对象的“早晚”，当前时间对象早于或等于“anotherDateTime”时返回“true”，否则返回“false”。
+     * @param anotherDateTime 要进行比较的时间对象。
+     * @param [compareAccuracy] 指定的时间比较精度，类型为“DateTimeField”。
+     * @returns 当前时间早于或等于“anotherDateTime”时返回“true”，否则返回“false”。
+     */
+    isLessThanOrEquals(
+        anotherDateTime: DateTime | null,
+        compareAccuracy: DateTimeField = DateTimeField.Millisecond): boolean
+    {
+        return DateTime.compareDateTimes(
+            this,
+            anotherDateTime,
+            compareAccuracy) <= 0;
+    }
+
+    /**
      * 根据指定的比较精度，比较两个时间对象是否相等。
      * @param anotherDateTime 要进行比较的时间对象。
      * @param [compareAccuracy] 指定的时间比较精度，类型为“DateTimeField”。
@@ -409,7 +441,97 @@ export class DateTime
             anotherDateTime,
             compareAccuracy);
     }
-    
+
+    /**
+     * 根据指定的比较精度，比较两个时间对象是否不相等。
+     * @param anotherDateTime 要进行比较的时间对象。
+     * @param [compareAccuracy] 指定的时间比较精度，类型为“DateTimeField”。
+     * @returns 当前时间不等于“anotherDateTime”时返回“true”，否则返回“false”。
+     */
+    isNotEquals(
+        anotherDateTime: DateTime | null,
+        compareAccuracy: DateTimeField = DateTimeField.Millisecond): boolean
+    {
+        return !this.isEquals(anotherDateTime, compareAccuracy);
+    }
+
+    /**
+     * 根据指定的比较精度，比较两个时间对象的“早晚”，当前时间对象晚于或等于“anotherDateTime”时返回“true”，否则返回“false”。
+     * @param anotherDateTime 要进行比较的时间对象。
+     * @param [compareAccuracy] 指定的时间比较精度，类型为“DateTimeField”。
+     * @returns 当前时间晚于“anotherDateTime”时返回“true”，否则返回“false”。
+     */
+    isGreaterThan(
+        anotherDateTime: DateTime | null,
+        compareAccuracy: DateTimeField = DateTimeField.Millisecond): boolean
+    {
+        return DateTime.compareDateTimes(
+            this,
+            anotherDateTime,
+            compareAccuracy) > 0;
+    }
+
+    /**
+     * 根据指定的比较精度，比较两个时间对象的“早晚”，当前时间对象晚于或等于“anotherDateTime”时返回“true”，否则返回“false”。
+     * @param anotherDateTime 要进行比较的时间对象。
+     * @param [compareAccuracy] 指定的时间比较精度，类型为“DateTimeField”。
+     * @returns 当前时间晚于或等于“anotherDateTime”时返回“true”，否则返回“false”。
+     */
+    isGreaterThanOrEquals(
+        anotherDateTime: DateTime | null,
+        compareAccuracy: DateTimeField = DateTimeField.Millisecond): boolean
+    {
+        return DateTime.compareDateTimes(
+            this,
+            anotherDateTime,
+            compareAccuracy) >= 0;
+    }
+
+    /**
+     * 在当前时间对象的基础上，通过指定的时间偏移量，创建并返回一个新的时间对象。
+     * @param dateTimeField 指定的时间偏移量，类型为“DateTimeField”。
+     * @param offset 指定的时间偏移量。
+     * @returns 偏移指定时间后的，新的时间对象。
+     */
+    dateTimeByOffset(
+        dateTimeField: DateTimeField,
+        offset: number): DateTime
+    {
+        var dateTime = new DateTime(this);
+        switch (dateTimeField)
+        {
+            case DateTimeField.Year:
+                {
+                    dateTime.addYears(offset);
+                } break;
+            case DateTimeField.Month:
+                {
+                    dateTime.addMonths(offset);
+                } break;
+            case DateTimeField.Day:
+                {
+                    dateTime.addDays(offset);
+                } break;
+            case DateTimeField.Hour:
+                {
+                    dateTime.addHours(offset);
+                } break;
+            case DateTimeField.Minute:
+                {
+                    dateTime.addMinutes(offset);
+                } break;
+            case DateTimeField.Second:
+                {
+                    dateTime.addSeconds(offset);
+                } break;
+            case DateTimeField.Millisecond:
+                {
+                    dateTime.addMilliseconds(offset);
+                } break;
+        }
+        return dateTime;
+    }
+
     /**
      * 获取当前日期时间，“0点0分0秒0毫秒”的日期时间对象。
      * @returns 返回当前日期时间，“0点0分0秒0毫秒”的日期时间对象。
@@ -425,7 +547,7 @@ export class DateTime
         }
         return dateTime;
     }
-    
+
     /**
      * 获取当前日期时间，“明日，0点0分0秒0毫秒”的日期时间对象。
      * @returns 返回当前日期时间，“明日，0点0分0秒0毫秒”的日期时间对象。
@@ -487,6 +609,32 @@ export class DateTime
         var dateTime = this.dateTimeAtBeginOfMonth();
         {
             dateTime.month += 1;
+        }
+        return dateTime;
+    }
+
+    /**
+     * 获取当前日期时间，“当季1日，0点0分0秒0毫秒”的日期时间对象。
+     * @returns 返回当前日期时间，“当季1日，0点0分0秒0毫秒”的日期时间对象。
+     */
+    dateTimeAtBeginOfQuarter(): DateTime
+    {
+        var dateTime = this.dateTimeAtBeginOfMonth();
+        {
+            dateTime.month = Math.floor((dateTime.month - 1) / 3) * 3 + 1;
+        }
+        return dateTime;
+    }
+
+    /**
+     * 获取当前日期时间，“下季1日，0点0分0秒0毫秒”的日期时间对象。
+     * @returns 返回当前日期时间，“下季1日，0点0分0秒0毫秒”的日期时间对象。
+     */
+    dateTimeAtEndOfQuarter(): DateTime
+    {
+        var dateTime = this.dateTimeAtBeginOfQuarter();
+        {
+            dateTime.month += 3;
         }
         return dateTime;
     }
@@ -626,7 +774,7 @@ export class DateTime
         ////////////////////////////////////////////////
         let weekdayFormatterPlaceholder = "w";
         let weekdayIndex = this.weekday;
-        let weekdayFieldCaption:string | null = null;
+        let weekdayFieldCaption: string | null = null;
         let weekdayCaptions = DateTime.WeekdayCaptions;
         if (weekdayCaptions != null
             && weekdayIndex >= 0
