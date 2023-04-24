@@ -6,8 +6,10 @@ import { StringUtil } from "./stringUtil.js";
 export class DateTime
 {
     ////////////////////////////////////////////////
-    // @静态常量
+    // @静态变量
     ////////////////////////////////////////////////
+
+    static WeekdayCaptions:string[] = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]; 
 
     ////////////////////////////////////////////////
     // @自身属性
@@ -40,7 +42,12 @@ export class DateTime
         return this._date.getDate();
     }
 
-    get weekDay(): number
+    set day(day: number)
+    {
+        this._date.setDate(day);
+    }
+
+    get weekday(): number
     {
         return this._date.getDay();
     }
@@ -99,7 +106,7 @@ export class DateTime
     ////////////////////////////////////////////////
     // @类方法
     ////////////////////////////////////////////////
-
+    
     /**
      * 根据指定的比较精度，比较两个时间对象的“早晚”，当“dateTimeA”早于“dateTimeB”时返回“-1”；当“dateTimeA”晚于“dateTimeB”时返回“1”；当“dateTimeA”等于“dateTimeB”时返回“0”。
      * @param dateTimeA 要进行比较的时间对象A。
@@ -257,16 +264,118 @@ export class DateTime
     // @自身实现
     ////////////////////////////////////////////////
 
-    constructor(date: Date | number | null = null)
+    constructor(date: DateTime | Date | number | null = null)
     {
         if (typeof (date) == "number")
         {
             date = new Date(date);
         }
+        else if (date instanceof DateTime)
+        {
+            date = date._date;
+        }
         this._date
             = date != null
                 ? date
                 : new Date();
+    }
+
+    /**
+     * 在当前时间对象上增加指定的年数，返回增加后的时间对象（当前对象）。
+     * @param years 要增加的年数。
+     * @returns 返回已增加指定年数后的时间对象（当前对象）。
+     */
+    addYears(years: number): DateTime
+    {
+        this._date = new Date(
+            this._date.getTime()
+            + years * 365 * 24 * 60 * 60 * 1000);
+        {}
+        return this;
+    }
+
+    /**
+     * 在当前时间对象上增加指定的月数，返回增加后的时间对象（当前对象）。
+     * @param years 要增加的月数。
+     * @returns 返回已增加指定月数后的时间对象（当前对象）。
+     */
+    addMonths(months: number): DateTime
+    {
+        var dateTime = this.addYears(Math.floor(months / 12))
+        {
+            dateTime.month = Math.round(months) % 12;
+        }
+        return this;
+    }
+
+    /**
+     * 在当前时间对象上增加指定的天数，返回增加后的时间对象（当前对象）。
+     * @param years 要增加的天数。
+     * @returns 返回已增加指定天数后的时间对象（当前对象）。
+     */
+    addDays(days: number): DateTime
+    {
+        this._date = new Date(
+            this._date.getTime()
+            + days * 24 * 60 * 60 * 1000);
+        {}
+        return this;
+    }
+
+    /**
+     * 在当前时间对象上增加指定的小时数，返回增加后的时间对象（当前对象）。
+     * @param years 要增加的小时数。
+     * @returns 返回已增加指定小时数后的时间对象（当前对象）。
+     */
+    addHours(hours: number): DateTime
+    {
+        this._date = new Date(
+            this._date.getTime()
+            + hours * 60 * 60 * 1000);
+        {}
+        return this;
+    }
+
+    /**
+     * 在当前时间对象上增加指定的分钟数，返回增加后的时间对象（当前对象）。
+     * @param years 要增加的分钟数。
+     * @returns 返回已增加指定分钟数后的时间对象（当前对象）。
+     */
+    addMinutes(minutes: number): DateTime
+    {
+        this._date = new Date(
+            this._date.getTime()
+            + minutes * 60 * 1000);
+        {}
+        return this;
+    }
+
+    /**
+     * 在当前时间对象上增加指定的秒数，返回增加后的时间对象（当前对象）。
+     * @param years 要增加的秒数。
+     * @returns 返回已增加指定秒数后的时间对象（当前对象）。
+     */
+    addSeconds(seconds: number): DateTime
+    {
+        this._date = new Date(
+            this._date.getTime()
+            + seconds * 1000);
+        {}
+        return this;
+    }
+
+    /**
+     * 在当前时间对象上增加指定的毫秒数，返回增加后的时间对象（当前对象）。
+     * @param years 要增加的毫秒数。
+     * @returns 返回已增加指定毫秒数后的时间对象（当前对象）。
+     */
+    addMilliseconds(milliseconds: number): DateTime
+    {
+        this._date = new Date(
+            this._date.getTime()
+            + milliseconds);
+        {}
+        return this;
     }
 
     /**
@@ -300,11 +409,174 @@ export class DateTime
             anotherDateTime,
             compareAccuracy);
     }
+    
+    /**
+     * 获取当前日期时间，“0点0分0秒0毫秒”的日期时间对象。
+     * @returns 返回当前日期时间，“0点0分0秒0毫秒”的日期时间对象。
+     */
+    dateTimeAtBeginOfDay(): DateTime
+    {
+        var dateTime = new DateTime(this);
+        {
+            dateTime.hour = 0;
+            dateTime.minute = 0;
+            dateTime.second = 0;
+            dateTime.millisecond = 0;
+        }
+        return dateTime;
+    }
+    
+    /**
+     * 获取当前日期时间，“明日，0点0分0秒0毫秒”的日期时间对象。
+     * @returns 返回当前日期时间，“明日，0点0分0秒0毫秒”的日期时间对象。
+     */
+    dateTimeAtEndOfDay(): DateTime
+    {
+        var dateTime = this.dateTimeAtBeginOfDay();
+        {
+            dateTime.addDays(1);
+        }
+        return dateTime;
+    }
 
+    /**
+     * 获取当前日期时间，“周日，0点0分0秒0毫秒”的日期时间对象。
+     * @returns 返回当前日期时间，“周日，0点0分0秒0毫秒”的日期时间对象。
+     */
+    dateTimeAtBeginOfWeek(): DateTime
+    {
+        var dateTime = this.dateTimeAtBeginOfDay();
+        {
+            dateTime.addDays(-dateTime.weekday);
+        }
+        return dateTime;
+    }
+
+    /**
+     * 获取当前日期时间，“下周日，0点0分0秒0毫秒”的日期时间对象。
+     * @returns 返回当前日期时间，“周日，0点0分0秒0毫秒”的日期时间对象。
+     */
+    dateTimeAtEndOfWeek(): DateTime
+    {
+        var dateTime = this.dateTimeAtEndOfDay();
+        {
+            dateTime.addDays(6 - dateTime.weekday);
+        }
+        return dateTime;
+    }
+
+    /**
+     * 获取当前日期时间，“当月1日，0点0分0秒0毫秒”的日期时间对象。
+     * @returns 返回当前日期时间，“当月1日，0点0分0秒0毫秒”的日期时间对象。
+     */
+    dateTimeAtBeginOfMonth(): DateTime
+    {
+        var dateTime = this.dateTimeAtBeginOfDay();
+        {
+            dateTime.day = 1;
+        }
+        return dateTime;
+    }
+
+    /**
+     * 获取当前日期时间，“下月1日，0点0分0秒0毫秒”的日期时间对象。
+     * @returns 返回当前日期时间，“下月1日，0点0分0秒0毫秒”的日期时间对象。
+     */
+    dateTimeAtEndOfMonth(): DateTime
+    {
+        var dateTime = this.dateTimeAtBeginOfMonth();
+        {
+            dateTime.month += 1;
+        }
+        return dateTime;
+    }
+
+    /**
+     * 获取当前日期时间，“当年1月1日，0点0分0秒0毫秒”的日期时间对象。
+     * @returns 返回当前日期时间，“当年1月1日，0点0分0秒0毫秒”的日期时间对象。
+     */
+    dateTimeAtBeginOfYear(): DateTime
+    {
+        var dateTime = this.dateTimeAtBeginOfDay();
+        {
+            dateTime.month = 1;
+            dateTime.day = 1;
+        }
+        return dateTime;
+    }
+
+    /**
+     * 获取当前日期时间，“下一年1月1日，0点0分0秒0毫秒”的日期时间对象。
+     * @returns 返回当前日期时间，“下一年1月1日，0点0分0秒0毫秒”的日期时间对象。
+     */
+    dateTimeAtEndOfYear(): DateTime
+    {
+        var dateTime = this.dateTimeAtBeginOfYear();
+        {
+            dateTime.year += 1;
+        }
+        return dateTime;
+    }
+
+    /**
+     * 在字符串格式化模板中替换日期格式化占位符为指定的日期字段名称。
+     * @param stringFormatter 字符串格式化模板。
+     * @param formatterPlaceholder 日期格式化占位符。  
+     * @param dateFieldCaption 日期字段标题。
+     * @returns 使用给定的模板和日期字段标题替换后的日期字符串。 
+     */
+    _replaceDateFormatterPlaceholderInFormatter(
+        stringFormatter: string | null,
+        formatterPlaceholder: string | null,
+        dateFieldCaption: string | null): string | null
+    {
+        if (StringUtil.isEmpty(stringFormatter)
+            || StringUtil.isEmpty(formatterPlaceholder))
+        {
+            return stringFormatter;
+        }
+        if (StringUtil.isEmpty(dateFieldCaption))
+        {
+            dateFieldCaption = StringUtil.Empty;
+        }
+
+        let formatterPlaceholderRanges
+            = StringUtil.getRangesOfKeywordIn(
+                stringFormatter,
+                formatterPlaceholder,
+                false);
+        if (formatterPlaceholderRanges.length > 0)
+        {
+            formatterPlaceholderRanges
+                = StringRange.tryCompressionRangesWithConsecutiveCharIndex(
+                    formatterPlaceholderRanges);
+            let dateFieldCaptions: string[] = [];
+            let dateFieldCaptionOriginal = dateFieldCaption;
+            for (let formatterPlaceholderRange of formatterPlaceholderRanges)
+            {
+                let formatterPlaceholderLength = formatterPlaceholderRange.charsCount;
+                {
+                    dateFieldCaption = StringUtil.complementZeroToIntegerNumberDigitsTo(
+                        dateFieldCaptionOriginal!,
+                        formatterPlaceholderLength);
+                }
+                dateFieldCaptions.push(dateFieldCaption);
+            }
+            // !!!
+            stringFormatter
+                = StringUtil.replaceKeywordsInRangesWithStringsSpecifiedIn(
+                    stringFormatter,
+                    formatterPlaceholderRanges,
+                    dateFieldCaptions,
+                    false);
+            // !!!
+        }
+        return stringFormatter;
+    }
 
     /**
      * 根据指定的格式化模板，将当前时间对象，转为指定模板结构的字符串，字符串模板的可选参数有：
-     * y，年；M，月；d，日；H，24小时格式的小时；m，分钟；s，秒钟；f，毫秒。
+     * y，年；M，月；d，日；w，周日期；H，24小时格式的小时；m，分钟；s，秒钟；f，毫秒。
      * @param stringFormatter 指定的格式化模板。
      * @returns 指定模板结构的当前时间对象字符串。
      */
@@ -316,33 +588,102 @@ export class DateTime
             return StringUtil.Empty;
         }
 
-        // 先替换年份的占位符：
-        let yearPlaceholder = "y";
-        let yearPlaceholderRanges
-            = StringUtil.getRangesOfKeywordIn(
+        ////////////////////////////////////////////////
+        // 年份的占位符： y 。
+        ////////////////////////////////////////////////
+        let yearFormatterPlaceholder = "y";
+        let yearFieldCaption = this.year.toString();
+        stringFormatter
+            = this._replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
-                "y",
-                true);
-        if (yearPlaceholderRanges.length > 0)
+                yearFormatterPlaceholder,
+                yearFieldCaption);
+
+        ////////////////////////////////////////////////
+        // 月份的占位符： M 。
+        ////////////////////////////////////////////////
+        let monthFormatterPlaceholder = "M";
+        let monthFieldCaption = (this.month + 1).toString();
+        stringFormatter
+            = this._replaceDateFormatterPlaceholderInFormatter(
+                stringFormatter,
+                monthFormatterPlaceholder,
+                monthFieldCaption);
+
+        ////////////////////////////////////////////////
+        // 日期的占位符： d 。
+        ////////////////////////////////////////////////
+        let dayFormatterPlaceholder = "d";
+        let dayFieldCaption = this.day.toString();
+        stringFormatter
+            = this._replaceDateFormatterPlaceholderInFormatter(
+                stringFormatter,
+                dayFormatterPlaceholder,
+                dayFieldCaption);
+
+        ////////////////////////////////////////////////
+        // 周日期的占位符： w 。
+        ////////////////////////////////////////////////
+        let weekdayFormatterPlaceholder = "w";
+        let weekdayIndex = this.weekday;
+        let weekdayFieldCaption:string | null = null;
+        let weekdayCaptions = DateTime.WeekdayCaptions;
+        if (weekdayCaptions != null
+            && weekdayIndex >= 0
+            && weekdayIndex < weekdayCaptions.length)
         {
-            yearPlaceholderRanges
-                = StringRange.tryCompressionRangesWithConsecutiveCharIndex(
-                    yearPlaceholderRanges);
-            let yearCaptions:string[] = [];
-            for (let yearPlaceholder of yearPlaceholderRanges)
-            {
-                let yearPlaceholderLength = yearPlaceholder.charsCount;
-                let yearCaption = this.year.toString();
-                {
-                    yearCaption = StringUtil.complementZeroToIntegerNumberDigitsTo(
-                        yearCaption,
-                        yearPlaceholderLength);
-                }
-                yearCaptions.push(yearCaption);
-            }
+            weekdayFieldCaption = weekdayCaptions[weekdayIndex];
         }
+        stringFormatter
+            = this._replaceDateFormatterPlaceholderInFormatter(
+                stringFormatter,
+                weekdayFormatterPlaceholder,
+                weekdayFieldCaption);
+
+        ////////////////////////////////////////////////
+        // 小时的占位符： h 。
+        ////////////////////////////////////////////////
+        let hourFormatterPlaceholder = "h";
+        let hourFieldCaption = this.hour.toString();
+        stringFormatter
+            = this._replaceDateFormatterPlaceholderInFormatter(
+                stringFormatter,
+                hourFormatterPlaceholder,
+                hourFieldCaption);
+
+        ////////////////////////////////////////////////
+        // 分钟的占位符： m 。
+        ////////////////////////////////////////////////
+        let minuteFormatterPlaceholder = "m";
+        let minuteFieldCaption = this.minute.toString();
+        stringFormatter
+            = this._replaceDateFormatterPlaceholderInFormatter(
+                stringFormatter,
+                minuteFormatterPlaceholder,
+                minuteFieldCaption);
+
+        ////////////////////////////////////////////////
+        // 秒钟的占位符： s 。
+        ////////////////////////////////////////////////
+        let secondFormatterPlaceholder = "m";
+        let secondFieldCaption = this.second.toString();
+        stringFormatter
+            = this._replaceDateFormatterPlaceholderInFormatter(
+                stringFormatter,
+                secondFormatterPlaceholder,
+                secondFieldCaption);
 
 
+        ////////////////////////////////////////////////
+        // 毫秒的占位符： f 。
+        ////////////////////////////////////////////////
+        let millisecondFormatterPlaceholder = "f";
+        let millisecondFieldCaption = this.millisecond.toString();
+        stringFormatter
+            = this._replaceDateFormatterPlaceholderInFormatter(
+                stringFormatter,
+                millisecondFormatterPlaceholder,
+                millisecondFieldCaption);
 
         return StringUtil.Empty;
     }

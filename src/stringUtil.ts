@@ -493,7 +493,7 @@ export class StringUtil
      * @param [isUseLastNewSubstringsSpecifiedAsDefault] 是否使用最后一个新字符串作为默认新字符串使用，为“true”时，当指定的字符串区域没有对应的新字符串时，将尝试使用最后一个新字符串进行替换。
      * @returns 使用指定的字符串替换指定的关键字后的字符串。
      */
-    static replaceTextInRangesWithTextSpecifiedIn(
+    static replaceKeywordsInRangesWithStringsSpecifiedIn(
         str: string | null,
         substringRanges: StringRange[] | null,
         newSubstringsSpecified: string[] | null,
@@ -602,7 +602,7 @@ export class StringUtil
             return str;
         }
 
-        return StringUtil.replaceTextInRangesWithTextSpecifiedIn(
+        return StringUtil.replaceKeywordsInRangesWithStringsSpecifiedIn(
             str,
             keywordRanges,
             [newValue!],
