@@ -1,6 +1,7 @@
 
 import { DateTimeField } from "./constants/dateTimeField.js"
 import { StringRange } from "./model/stringRange.js";
+import { DateTimeSpan} from "./model/dateTimeSpan.js"
 import { StringUtil } from "./stringUtil.js";
 
 export class DateTime
@@ -376,6 +377,17 @@ export class DateTime
             + milliseconds);
         { }
         return this;
+    }
+
+    timeSpanBySubtract(anotherDateTime: DateTime | null): DateTimeSpan
+    {
+        let dateTimeSpan = new DateTimeSpan();
+        if (anotherDateTime == null)
+        {
+            return dateTimeSpan;
+        }
+
+        return dateTimeSpan;
     }
 
     /**
