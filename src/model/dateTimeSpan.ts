@@ -1,6 +1,6 @@
 import { DateTimeFieldConverter } from "../constants/dateTimeFieldConverter.js";
 
-export class DateTimeSppan
+export class DateTimeSpan
 {
     ////////////////////////////////////////////////
     // @自身属性
@@ -73,32 +73,7 @@ export class DateTimeSppan
 
     set totalMonths(months:number)
     {
-        this.months = Math.floor(months);
-
-        let days = (months - this.months) * DateTimeFieldConverter.DaysPerMonth;
-        {
-            this.days = Math.floor(days);
-        }
-
-        let hours = (days - this.days) * DateTimeFieldConverter.HoursPerDay;
-        {
-            this.hours = Math.floor(hours);
-        }
-
-        let minutes = (hours - this.hours) * DateTimeFieldConverter.MinutesPerHour;
-        {
-            this.minutes = Math.floor(minutes);
-        }
-
-        let seconds = (minutes - this.minutes) * DateTimeFieldConverter.SecondsPerMinute;
-        {
-            this.seconds = Math.floor(seconds);
-        }
-
-        let milliseconds = (seconds - this.seconds) * DateTimeFieldConverter.MillisecondsPerSecond;
-        {
-            this.milliseconds = Math.floor(milliseconds);
-        }
+        this.totalYears = months / DateTimeFieldConverter.MonthsPerYear;
     }
 
     get totalDays(): number
@@ -112,7 +87,11 @@ export class DateTimeSppan
             + this.milliseconds / DateTimeFieldConverter.MillisecondsPerDay;
     }
 
-    @last
+    set totalDays(days: number)
+    {
+        this.totalYears = days / DateTimeFieldConverter.DaysPerYear;
+    }
+    
     get totalHours(): number
     {
         return this.years * DateTimeFieldConverter.HoursPerYear
@@ -122,6 +101,11 @@ export class DateTimeSppan
             + this.minutes / DateTimeFieldConverter.MinutesPerHour
             + this.seconds / DateTimeFieldConverter.SecondsPerHour
             + this.milliseconds / DateTimeFieldConverter.MillisecondsPerHour;
+    }
+
+    set totalHours(hours: number)
+    {
+        this.totalYears = hours / DateTimeFieldConverter.HoursPerYear;
     }
 
     get totalMinutes(): number
@@ -135,6 +119,11 @@ export class DateTimeSppan
             + this.milliseconds / DateTimeFieldConverter.MillisecondsPerMinute;
     }
 
+    set totalMinutes(minutes: number)
+    {
+        this.totalYears = minutes / DateTimeFieldConverter.MinutesPerYear;
+    }
+
     get totalSeconds(): number
     {
         return this.years * DateTimeFieldConverter.SecondsPerYear
@@ -144,6 +133,11 @@ export class DateTimeSppan
             + this.minutes * DateTimeFieldConverter.SecondsPerMinute
             + this.seconds
             + this.milliseconds / DateTimeFieldConverter.MillisecondsPerSecond;
+    }
+
+    set totalSeconds(seconds: number)
+    {
+        this.totalYears = seconds / DateTimeFieldConverter.SecondsPerYear;
     }
 
     get totalMilliseconds(): number
@@ -157,18 +151,23 @@ export class DateTimeSppan
             + this.milliseconds;
     }
 
+    set totalMilliseconds(milliseconds: number)
+    {
+        this.totalYears = milliseconds / DateTimeFieldConverter.MillisecondsPerYear;
+    }
+
     ////////////////////////////////////////////////
     // @自身实现
     ////////////////////////////////////////////////
 
     constructor(
-        years: number = 0,
-        months: number = 0,
-        days: number = 0,
-        hours: number = 0,
-        minutes: number = 0,
+        milliseconds: number = 0,
         seconds: number = 0,
-        milliseconds: number = 0)
+        minutes: number = 0,
+        hours: number = 0,
+        days: number = 0,
+        months: number = 0,
+        years: number = 0)
     {
         this.years = years;
         this.months = months;

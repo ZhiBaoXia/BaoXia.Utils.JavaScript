@@ -1,7 +1,7 @@
 
 import { DateTimeField } from "./constants/dateTimeField.js"
 import { StringRange } from "./model/stringRange.js";
-import { DateTimeSpan} from "./model/dateTimeSpan.js"
+import { DateTimeSpan } from "./model/dateTimeSpan.js"
 import { StringUtil } from "./stringUtil.js";
 
 export class DateTime
@@ -102,7 +102,6 @@ export class DateTime
     {
         this._date.setTime(millsecondsFrom1970);
     }
-
 
     ////////////////////////////////////////////////
     // @类方法
@@ -379,14 +378,24 @@ export class DateTime
         return this;
     }
 
+    /**
+     * 获取当前时间对象减去指定时间对象后的时间间隔对象。
+     * @param anotherDateTime 指定的另一个时间对象。
+     * @returns 当前时间对象减去指定时间对象后的时间间隔对象。
+     */
     timeSpanBySubtract(anotherDateTime: DateTime | null): DateTimeSpan
     {
-        let dateTimeSpan = new DateTimeSpan();
-        if (anotherDateTime == null)
+        let currentDateTimeStamp = this.millsecondsFrom1970;
+        let anotherDateTimeStamp = 0
+        if (anotherDateTime != null)
         {
-            return dateTimeSpan;
+            anotherDateTimeStamp = anotherDateTime.millsecondsFrom1970;
         }
 
+        let dateTimeSpan = new DateTimeSpan(
+            currentDateTimeStamp
+            - anotherDateTimeStamp);
+        { }
         return dateTimeSpan;
     }
 
@@ -540,6 +549,104 @@ export class DateTime
                 {
                     dateTime.addMilliseconds(offset);
                 } break;
+        }
+        return dateTime;
+    }
+
+    /**
+     * 通过增加指定的年份数，创建并返回一个新的时间对象。
+     * @param years 指定的年份数。
+     * @returns 增加指定的年份数后的，新的时间对象。
+     */
+    dateTimeByAddYears(years: number): DateTime
+    {
+        var dateTime = new DateTime(this);
+        {
+            dateTime.addYears(years);
+        }
+        return dateTime;
+    }
+
+    /**
+     * 通过增加指定的月份数，创建并返回一个新的时间对象。
+     * @param months 指定的月份数。
+     * @returns 增加指定的月份数后的，新的时间对象。
+     */
+    dateTimeByAddMonths(months: number): DateTime
+    {
+        var dateTime = new DateTime(this);
+        {
+            dateTime.addMonths(months);
+        }
+        return dateTime;
+    }
+
+    /**
+     * 通过增加指定的天数，创建并返回一个新的时间对象。
+     * @param days 指定的天数。
+     * @returns 增加指定的天数后的，新的时间对象。
+     */
+    dateTimeByAddDays(days: number): DateTime
+    {
+        var dateTime = new DateTime(this);
+        {
+            dateTime.addDays(days);
+        }
+        return dateTime;
+    }
+
+    /**
+     * 通过增加指定的小时数，创建并返回一个新的时间对象。
+     * @param hours 指定的小时数。
+     * @returns 增加指定的小时数后的，新的时间对象。
+     */
+    dateTimeByAddHours(hours: number): DateTime
+    {
+        var dateTime = new DateTime(this);
+        {
+            dateTime.addHours(hours);
+        }
+        return dateTime;
+    }
+
+    /**
+     * 通过增加指定的分钟数，创建并返回一个新的时间对象。
+     * @param minutes 指定的分钟数。
+     * @returns 增加指定的分钟数后的，新的时间对象。
+     */
+    dateTimeByAddMinutes(minutes: number): DateTime
+    {
+        var dateTime = new DateTime(this);
+        {
+            dateTime.addMinutes(minutes);
+        }
+        return dateTime;
+    }
+    
+    /**
+     * 通过增加指定的秒数，创建并返回一个新的时间对象。
+     * @param seconds 指定的秒数。
+     * @returns 增加指定的秒数后的，新的时间对象。
+     */
+    dateTimeByAddSeconds(seconds: number): DateTime
+    {
+        var dateTime = new DateTime(this);
+        {
+            dateTime.addSeconds(seconds);
+        }
+        return dateTime;
+    }
+
+    /**
+     * 通过增加指定的毫秒数，创建并返回一个新的时间对象。
+     * @param milliseconds 指定的毫秒数。
+     * @returns 增加指定的毫秒数后的，新的时间对象。
+     */
+    dateTimeByAddMilliseconds(milliseconds: number): DateTime
+    {
+        var dateTime = new DateTime(this);
+        {
+            dateTime.addMilliseconds(milliseconds);
         }
         return dateTime;
     }

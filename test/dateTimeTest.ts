@@ -12,13 +12,34 @@ export class DateTimeTest extends UnitTest.TestCase
                 ////////////////////////////////////////////////
                 // 日期时间操作相关测试：
                 ////////////////////////////////////////////////
+                let dateTimeA = new DateTime();
+                let dateTimeB = dateTimeA.dateTimeByAddSeconds(1);
+                let dateTimeSpan = dateTimeB.timeSpanBySubtract(dateTimeA);
+                {
+                    assert(dateTimeSpan.totalSeconds == 1);
+                }
+                
+                dateTimeSpan = dateTimeA.timeSpanBySubtract(dateTimeB);
+                {
+                    assert(dateTimeSpan.totalSeconds == -1);
+                }
+
+                dateTimeB = dateTimeA.dateTimeByAddSeconds(-1);
+                dateTimeSpan = dateTimeB.timeSpanBySubtract(dateTimeA);
+                {
+                    assert(dateTimeSpan.totalSeconds == -1);
+                }
+                
+                dateTimeSpan = dateTimeA.timeSpanBySubtract(dateTimeB);
+                {
+                    assert(dateTimeSpan.totalSeconds == 1);
+                }
 
                 ////////////////////////////////////////////////
                 // 日期时间比较相关测试：
                 ////////////////////////////////////////////////
-
-                let dateTimeA = new DateTime();
-                let dateTimeB = dateTimeA;
+                dateTimeA = new DateTime();
+                dateTimeB = dateTimeA;
                 assertFalse(dateTimeA.isLessThan(dateTimeB));
                 assert(dateTimeA.isLessThanOrEquals(dateTimeB));
                 assert(dateTimeA.isEquals(dateTimeB));
