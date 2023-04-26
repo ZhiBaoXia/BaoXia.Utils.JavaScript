@@ -65,6 +65,38 @@ export class DateTimeTest extends UnitTest.TestCase
                 assert(dateTimeA.isGreaterThan(dateTimeB));
                 assert(dateTimeA.isGreaterThanOrEquals(dateTimeB));
 
+                ////////////////////////////////////////////////
+                // 其他相关测试：
+                ////////////////////////////////////////////////
+                dateTimeA = new DateTime();
+                {
+                    dateTimeA.year = 2023;
+                    dateTimeA.month = 4;
+                    dateTimeA.day = 26;
+                    dateTimeA.hour = 16;
+                    dateTimeA.minute = 30;
+                    dateTimeA.second = 1;
+                    dateTimeA.millisecond = 123;
+                }
+                let dateTimeCaption = dateTimeA.toString("yyyy-MM-dd HH:mm:ss.fff");
+                {
+                    assert(dateTimeCaption == "2023-04-26 16:30:01.123");
+                }
+
+                dateTimeCaption = dateTimeA.toString("yy-M-dd HH:mm:ss.fff");
+                {
+                    assert(dateTimeCaption == "23-4-26 16:30:01.123");
+                }
+
+                dateTimeCaption = dateTimeA.toString("yyyy-MM-dd hh:mm:ss.fff");
+                {
+                    assert(dateTimeCaption == "2023-04-26 04:30:01.123");
+                }
+
+                dateTimeCaption = dateTimeA.toString("yy-M-dd hh:mm:ss.fff");
+                {
+                    assert(dateTimeCaption == "23-4-26 04:30:01.123");
+                }
             });
     }
 }

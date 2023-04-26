@@ -6,13 +6,13 @@ export class DateTimeSpan
     // @自身属性
     ////////////////////////////////////////////////
 
-    years: number;
-    months: number;
-    days: number;
-    hours: number;
-    minutes: number;
-    seconds: number;
-    milliseconds: number;
+    years: number = 0;
+    months: number = 0;
+    days: number = 0;
+    hours: number = 0;
+    minutes: number = 0;
+    seconds: number = 0;
+    milliseconds: number = 0;
 
     get totalYears(): number
     {
@@ -27,37 +27,8 @@ export class DateTimeSpan
 
     set totalYears(years: number)
     {
-        this.years = Math.floor(years);
-
-        let months = (years - this.years) * DateTimeFieldConverter.MonthsPerYear;
-        {
-            this.months = Math.floor(months);
-        }
-
-        let days = (months - this.months) * DateTimeFieldConverter.DaysPerMonth;
-        {
-            this.days = Math.floor(days);
-        }
-
-        let hours = (days - this.days) * DateTimeFieldConverter.HoursPerDay;
-        {
-            this.hours = Math.floor(hours);
-        }
-
-        let minutes = (hours - this.hours) * DateTimeFieldConverter.MinutesPerHour;
-        {
-            this.minutes = Math.floor(minutes);
-        }
-
-        let seconds = (minutes - this.minutes) * DateTimeFieldConverter.SecondsPerMinute;
-        {
-            this.seconds = Math.floor(seconds);
-        }
-
-        let milliseconds = (seconds - this.seconds) * DateTimeFieldConverter.MillisecondsPerSecond;
-        {
-            this.milliseconds = Math.floor(milliseconds);
-        }
+        // ⚠ 注意，除法存在计算误差，所以基于乘法，使用“set totalMilliseconds”来更新合计时间值 ⚠
+        this.totalMilliseconds = years * DateTimeFieldConverter.MillisecondsPerYear;
     }
 
     get totalMonths(): number
@@ -71,9 +42,9 @@ export class DateTimeSpan
             + this.milliseconds / DateTimeFieldConverter.MillisecondsPerMonth;
     }
 
-    set totalMonths(months:number)
+    set totalMonths(months: number)
     {
-        this.totalYears = months / DateTimeFieldConverter.MonthsPerYear;
+        this.totalMilliseconds = months * DateTimeFieldConverter.MillisecondsPerMonth;
     }
 
     get totalDays(): number
@@ -89,9 +60,9 @@ export class DateTimeSpan
 
     set totalDays(days: number)
     {
-        this.totalYears = days / DateTimeFieldConverter.DaysPerYear;
+        this.totalMilliseconds = days * DateTimeFieldConverter.MillisecondsPerDay;
     }
-    
+
     get totalHours(): number
     {
         return this.years * DateTimeFieldConverter.HoursPerYear
@@ -105,7 +76,7 @@ export class DateTimeSpan
 
     set totalHours(hours: number)
     {
-        this.totalYears = hours / DateTimeFieldConverter.HoursPerYear;
+        this.totalMilliseconds = hours * DateTimeFieldConverter.MillisecondsPerHour;
     }
 
     get totalMinutes(): number
@@ -121,7 +92,7 @@ export class DateTimeSpan
 
     set totalMinutes(minutes: number)
     {
-        this.totalYears = minutes / DateTimeFieldConverter.MinutesPerYear;
+        this.totalMilliseconds = minutes * DateTimeFieldConverter.MillisecondsPerMinute;
     }
 
     get totalSeconds(): number
@@ -137,7 +108,7 @@ export class DateTimeSpan
 
     set totalSeconds(seconds: number)
     {
-        this.totalYears = seconds / DateTimeFieldConverter.SecondsPerYear;
+        this.totalMilliseconds = seconds * DateTimeFieldConverter.MillisecondsPerSecond;
     }
 
     get totalMilliseconds(): number
@@ -153,7 +124,43 @@ export class DateTimeSpan
 
     set totalMilliseconds(milliseconds: number)
     {
-        this.totalYears = milliseconds / DateTimeFieldConverter.MillisecondsPerYear;
+        let years = Math.floor(milliseconds / DateTimeFieldConverter.MillisecondsPerYear);
+        {
+            this.years = years;
+        }
+        milliseconds -= years * DateTimeFieldConverter.MillisecondsPerYear;
+        
+        let months = Math.floor(milliseconds / DateTimeFieldConverter.MillisecondsPerMonth);
+        {
+            this.months = months;
+        }
+        milliseconds -= months * DateTimeFieldConverter.MillisecondsPerMonth;
+
+        let days = Math.floor(milliseconds / DateTimeFieldConverter.MillisecondsPerDay);
+        {
+            this.days = days;
+        }
+        milliseconds -= days * DateTimeFieldConverter.MillisecondsPerDay;
+
+        let hours = Math.floor(milliseconds / DateTimeFieldConverter.MillisecondsPerHour);
+        {
+            this.hours = hours;
+        }
+        milliseconds -= hours * DateTimeFieldConverter.MillisecondsPerHour;
+
+        let minutes = Math.floor(milliseconds / DateTimeFieldConverter.MillisecondsPerMinute);
+        {
+            this.minutes = minutes;
+        }
+        milliseconds -= minutes * DateTimeFieldConverter.MillisecondsPerMinute;
+
+        let seconds = Math.floor(milliseconds / DateTimeFieldConverter.MillisecondsPerSecond);
+        {
+            this.seconds = seconds;
+        }
+        milliseconds -= seconds * DateTimeFieldConverter.MillisecondsPerSecond;
+
+        this.milliseconds = milliseconds;
     }
 
     ////////////////////////////////////////////////
@@ -169,12 +176,13 @@ export class DateTimeSpan
         months: number = 0,
         years: number = 0)
     {
-        this.years = years;
-        this.months = months;
-        this.days = days;
-        this.hours = hours;
-        this.minutes = minutes;
-        this.seconds = seconds;
-        this.milliseconds = milliseconds;
+        this.totalMilliseconds
+            = milliseconds
+            + seconds * DateTimeFieldConverter.MillisecondsPerSecond
+            + minutes * DateTimeFieldConverter.MillisecondsPerMinute
+            + hours * DateTimeFieldConverter.MillisecondsPerHour
+            + days * DateTimeFieldConverter.MillisecondsPerDay
+            + months * DateTimeFieldConverter.MillisecondsPerMonth
+            + years * DateTimeFieldConverter.MillisecondsPerYear;
     }
 }

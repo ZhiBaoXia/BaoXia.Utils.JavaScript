@@ -622,7 +622,7 @@ export class DateTime
         }
         return dateTime;
     }
-    
+
     /**
      * 通过增加指定的秒数，创建并返回一个新的时间对象。
      * @param seconds 指定的秒数。
@@ -790,12 +790,14 @@ export class DateTime
      * @param stringFormatter 字符串格式化模板。
      * @param formatterPlaceholder 日期格式化占位符。  
      * @param dateFieldCaption 日期字段标题。
+     * @param isRemoveLeftCharsByPlaceholder 是否依据日期格式化占位符移除时间字段左边的字符，默认为：false。
      * @returns 使用给定的模板和日期字段标题替换后的日期字符串。 
      */
     _replaceDateFormatterPlaceholderInFormatter(
         stringFormatter: string | null,
         formatterPlaceholder: string | null,
-        dateFieldCaption: string | null): string | null
+        dateFieldCaption: string | null,
+        isRemoveLeftCharsByPlaceholder: boolean = false): string | null
     {
         if (StringUtil.isEmpty(stringFormatter)
             || StringUtil.isEmpty(formatterPlaceholder))
@@ -826,6 +828,12 @@ export class DateTime
                     dateFieldCaption = StringUtil.complementZeroToIntegerNumberDigitsTo(
                         dateFieldCaptionOriginal!,
                         formatterPlaceholderLength);
+                    if (isRemoveLeftCharsByPlaceholder
+                        && dateFieldCaption.length > formatterPlaceholderLength)
+                    {
+                        dateFieldCaption = dateFieldCaption.substring(
+                            (dateFieldCaption.length - formatterPlaceholderLength));
+                    }
                 }
                 dateFieldCaptions.push(dateFieldCaption);
             }
@@ -864,13 +872,14 @@ export class DateTime
             = this._replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
                 yearFormatterPlaceholder,
-                yearFieldCaption);
+                yearFieldCaption,
+                true);
 
         ////////////////////////////////////////////////
         // 月份的占位符： M 。
         ////////////////////////////////////////////////
         let monthFormatterPlaceholder = "M";
-        let monthFieldCaption = (this.month + 1).toString();
+        let monthFieldCaption = this.month.toString();
         stringFormatter
             = this._replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
@@ -908,15 +917,31 @@ export class DateTime
                 weekdayFieldCaption);
 
         ////////////////////////////////////////////////
-        // 小时的占位符： h 。
+        // 24小时制，小时的占位符： H 。
         ////////////////////////////////////////////////
-        let hourFormatterPlaceholder = "h";
-        let hourFieldCaption = this.hour.toString();
+        let hourIn24FormatterPlaceholder = "H";
+        let hourIn24FieldCaption = this.hour.toString();
         stringFormatter
             = this._replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
-                hourFormatterPlaceholder,
-                hourFieldCaption);
+                hourIn24FormatterPlaceholder,
+                hourIn24FieldCaption);
+
+        ////////////////////////////////////////////////
+        // 12小时制，小时的占位符： h 。
+        ////////////////////////////////////////////////
+        let hourIn12FormatterPlaceholder = "h";
+        let hourIn12 = this.hour;
+        if (hourIn12 > 12)
+        {
+            hourIn12 -= 12;
+        }
+        let hourIn12FieldCaption = hourIn12.toString();
+        stringFormatter
+            = this._replaceDateFormatterPlaceholderInFormatter(
+                stringFormatter,
+                hourIn12FormatterPlaceholder,
+                hourIn12FieldCaption);
 
         ////////////////////////////////////////////////
         // 分钟的占位符： m 。
@@ -932,7 +957,7 @@ export class DateTime
         ////////////////////////////////////////////////
         // 秒钟的占位符： s 。
         ////////////////////////////////////////////////
-        let secondFormatterPlaceholder = "m";
+        let secondFormatterPlaceholder = "s";
         let secondFieldCaption = this.second.toString();
         stringFormatter
             = this._replaceDateFormatterPlaceholderInFormatter(
@@ -952,6 +977,10 @@ export class DateTime
                 millisecondFormatterPlaceholder,
                 millisecondFieldCaption);
 
+        if (stringFormatter != null)
+        {
+            return stringFormatter
+        }
         return StringUtil.Empty;
     }
 }

@@ -95,7 +95,7 @@ export class StringUtil
         let dotIndex = numberString.indexOf(".");
         if (dotIndex < 0)
         {
-            return this.length;
+            return numberString.length;
         }
         return dotIndex;
     };
@@ -113,7 +113,7 @@ export class StringUtil
         {
             return 0;
         }
-        return this.length - (dotIndex + 1);
+        return numberString.length - (dotIndex + 1);
     };
 
     /**
