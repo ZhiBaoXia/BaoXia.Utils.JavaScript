@@ -1,7 +1,7 @@
 
 import { StringUtil } from "../stringUtil.js";
 
-export class UriUtil
+export class Uri
 {
     ////////////////////////////////////////////////
     // @静态常量
@@ -16,6 +16,9 @@ export class UriUtil
     static readonly PathQueryDelimiter: string = "?";
 
     static readonly QueryFragmentDelimiter: string = "#";
+
+
+    static readonly DefaultScheme: string = "https";
 
 
     ////////////////////////////////////////////////
@@ -34,7 +37,7 @@ export class UriUtil
         {
             if (this.scheme != null)
             {
-                absoluteUri += this.scheme + UriUtil.SchemeDelimiter;
+                absoluteUri += this.scheme + Uri.SchemeDelimiter;
             }
             if (this.host != null)
             {
@@ -42,7 +45,7 @@ export class UriUtil
             }
             if (this.port != null)
             {
-                absoluteUri += UriUtil.HostPortDelimiter + this.port;
+                absoluteUri += Uri.HostPortDelimiter + this.port;
             }
             if (this.path != null)
             {
@@ -50,11 +53,11 @@ export class UriUtil
             }
             if (this.query != null)
             {
-                absoluteUri += UriUtil.PathQueryDelimiter + this.query;
+                absoluteUri += Uri.PathQueryDelimiter + this.query;
             }
             if (this.fragment != null)
             {
-                absoluteUri += UriUtil.QueryFragmentDelimiter + this.fragment;
+                absoluteUri += Uri.QueryFragmentDelimiter + this.fragment;
             }
         }
         return absoluteUri;
@@ -68,24 +71,28 @@ export class UriUtil
         }
 
         absoluteUri = absoluteUri!;
+        if (absoluteUri.startsWith("//"))
+        {
+            absoluteUri = Uri.DefaultScheme + ":" + absoluteUri;
+        }
 
-        let schemeDelimiterIndex = absoluteUri.indexOf(UriUtil.SchemeDelimiter);
+        let schemeDelimiterIndex = absoluteUri.indexOf(Uri.SchemeDelimiter);
         if (schemeDelimiterIndex > -1)
         {
             this.scheme = absoluteUri.substring(0, schemeDelimiterIndex);
-            absoluteUri = absoluteUri.substring(schemeDelimiterIndex + UriUtil.SchemeDelimiter.length);
+            absoluteUri = absoluteUri.substring(schemeDelimiterIndex + Uri.SchemeDelimiter.length);
         }
 
-        let pathDirectoryDelimiterIndex = absoluteUri.indexOf(UriUtil.PathDirectoryDelimiter);
+        let pathDirectoryDelimiterIndex = absoluteUri.indexOf(Uri.PathDirectoryDelimiter);
         if (pathDirectoryDelimiterIndex > -1)
         {
             let host = absoluteUri.substring(0, pathDirectoryDelimiterIndex);
-            let hostPortDelimiterIndex = host.indexOf(UriUtil.HostPortDelimiter);
+            let hostPortDelimiterIndex = host.indexOf(Uri.HostPortDelimiter);
             if (hostPortDelimiterIndex > -1)
             {
                 this.host = host.substring(0, hostPortDelimiterIndex);
                 this.port = StringUtil.parseToInt(
-                    host.substring(hostPortDelimiterIndex + UriUtil.HostPortDelimiter.length));
+                    host.substring(hostPortDelimiterIndex + Uri.HostPortDelimiter.length));
             }
             else
             {
@@ -94,30 +101,30 @@ export class UriUtil
             absoluteUri = absoluteUri.substring(pathDirectoryDelimiterIndex);
         }
 
-        let pathQueryDelimiterIndex = absoluteUri.indexOf(UriUtil.PathQueryDelimiter);
+        let pathQueryDelimiterIndex = absoluteUri.indexOf(Uri.PathQueryDelimiter);
         if (pathQueryDelimiterIndex > -1)
         {
             this.path = absoluteUri.substring(0, pathQueryDelimiterIndex);
-            absoluteUri = absoluteUri.substring(pathQueryDelimiterIndex + UriUtil.PathQueryDelimiter.length);
+            absoluteUri = absoluteUri.substring(pathQueryDelimiterIndex + Uri.PathQueryDelimiter.length);
         }
 
-        let queryFragmentDelimiterIndex = absoluteUri.indexOf(UriUtil.QueryFragmentDelimiter);
+        let queryFragmentDelimiterIndex = absoluteUri.indexOf(Uri.QueryFragmentDelimiter);
         if (queryFragmentDelimiterIndex > -1)
         {
             this.query = absoluteUri.substring(0, queryFragmentDelimiterIndex);
-            this.fragment = absoluteUri.substring(queryFragmentDelimiterIndex + UriUtil.QueryFragmentDelimiter.length);
+            this.fragment = absoluteUri.substring(queryFragmentDelimiterIndex + Uri.QueryFragmentDelimiter.length);
         }
     }
 
-    scheme: string | null;
+    scheme: string | null = null;
 
-    host: string | null;
+    host: string | null = null;
 
-    port: number | null;
+    port: number | null = null;
 
-    path: string | null;
+    path: string | null = null;
 
-    _query: string | null;
+    _query: string | null = null;
 
     get query(): string | null
     {
@@ -169,9 +176,19 @@ export class UriUtil
         // !!!
     }
 
-    queryParameters: Map<string, string> | null;
+    queryParameters: Map<string, string> | null = null;
 
-    fragment: string | null;
+    fragment: string | null = null;
+
+    get isValid():boolean
+    {
+        if (StringUtil.isEmpty(this.scheme)
+            || StringUtil.isEmpty(this.host))
+        {
+            return false;
+        }
+        return true;
+    }
 
     ////////////////////////////////////////////////
     // @自身实现

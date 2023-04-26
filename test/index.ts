@@ -3,6 +3,7 @@ import { TestProject } from "../src/unitTest/testProject.js"
 import { StringUtilTest } from "./stringUtilTest.js";
 import { ArrayUtilTest } from "./arrayUtilTest.js";
 import { DateTimeTest } from "./dateTimeTest.js";
+import { UriUtilTest } from "./uriUtilTest.js";
 
 
 let testProject = new TestProject(
@@ -10,7 +11,8 @@ let testProject = new TestProject(
     [
         new StringUtilTest(),
         new ArrayUtilTest(),
-        new DateTimeTest()
+        new DateTimeTest(),
+        new UriUtilTest()
     ]);
 // !!!
 testProject.test();
