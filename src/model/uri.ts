@@ -11,7 +11,7 @@ export class Uri
 
     static readonly HostPortDelimiter: string = ":";
 
-    static readonly PathDirectoryDelimiter: string = "/";
+    static readonly HostPathDelimiter: string = "/";
 
     static readonly PathQueryDelimiter: string = "?";
 
@@ -71,48 +71,110 @@ export class Uri
         }
 
         absoluteUri = absoluteUri!;
-        if (absoluteUri.startsWith("//"))
-        {
-            absoluteUri = Uri.DefaultScheme + ":" + absoluteUri;
-        }
 
         let schemeDelimiterIndex = absoluteUri.indexOf(Uri.SchemeDelimiter);
         if (schemeDelimiterIndex > -1)
         {
             this.scheme = absoluteUri.substring(0, schemeDelimiterIndex);
             absoluteUri = absoluteUri.substring(schemeDelimiterIndex + Uri.SchemeDelimiter.length);
+            if (StringUtil.isEmpty(absoluteUri))
+            {
+                return;
+            }
         }
 
-        let pathDirectoryDelimiterIndex = absoluteUri.indexOf(Uri.PathDirectoryDelimiter);
-        if (pathDirectoryDelimiterIndex > -1)
+        let hostPathDelimiter = Uri.HostPathDelimiter;
+        let hostPathDelimiterIndex = absoluteUri.indexOf(hostPathDelimiter);
+        if (hostPathDelimiterIndex < 0)
         {
-            let host = absoluteUri.substring(0, pathDirectoryDelimiterIndex);
-            let hostPortDelimiterIndex = host.indexOf(Uri.HostPortDelimiter);
-            if (hostPortDelimiterIndex > -1)
+            hostPathDelimiter = Uri.HostPathDelimiter;
+            hostPathDelimiterIndex = absoluteUri.indexOf(hostPathDelimiter);
+            if (hostPathDelimiterIndex < 0)
             {
-                this.host = host.substring(0, hostPortDelimiterIndex);
-                this.port = StringUtil.parseToInt(
-                    host.substring(hostPortDelimiterIndex + Uri.HostPortDelimiter.length));
+                hostPathDelimiter = Uri.QueryFragmentDelimiter;
+                hostPathDelimiterIndex = absoluteUri.indexOf(hostPathDelimiter);
+                if (hostPathDelimiterIndex < 0)
+                {
+                    hostPathDelimiter = StringUtil.Empty;
+                    hostPathDelimiterIndex = absoluteUri.length;
+                }
             }
-            else
-            {
-                this.host = host;
-            }
-            absoluteUri = absoluteUri.substring(pathDirectoryDelimiterIndex);
         }
+        ////////////////////////////////////////////////
+        let host = absoluteUri.substring(0, hostPathDelimiterIndex);
+        let hostPortDelimiterIndex = host.indexOf(Uri.HostPortDelimiter);
+        if (hostPortDelimiterIndex > -1)
+        {
+            this.host = host.substring(0, hostPortDelimiterIndex);
+            this.port = StringUtil.parseToInt(
+                host.substring(hostPortDelimiterIndex + Uri.HostPortDelimiter.length));
+        }
+        else
+        {
+            this.host = host;
+        }
+        // absoluteUri = absoluteUri.substring(hostPathDelimiterIndex + hostPathDelimiter.length);
+        absoluteUri = absoluteUri.substring(hostPathDelimiterIndex);
+        if (StringUtil.isEmpty(absoluteUri))
+        {
+            return;
+        }
+        ////////////////////////////////////////////////
 
-        let pathQueryDelimiterIndex = absoluteUri.indexOf(Uri.PathQueryDelimiter);
+
+        let pathQueryDelimiter = Uri.PathQueryDelimiter;
+        let pathQueryDelimiterIndex = absoluteUri.indexOf(pathQueryDelimiter);
+        if (pathQueryDelimiterIndex < 0)
+        {
+            pathQueryDelimiter = Uri.QueryFragmentDelimiter;
+            pathQueryDelimiterIndex = absoluteUri.indexOf(pathQueryDelimiter);
+            if (pathQueryDelimiterIndex < 0)
+            {
+                pathQueryDelimiter = StringUtil.Empty;
+                pathQueryDelimiterIndex = absoluteUri.length;
+            }
+        }
         if (pathQueryDelimiterIndex > -1)
         {
             this.path = absoluteUri.substring(0, pathQueryDelimiterIndex);
-            absoluteUri = absoluteUri.substring(pathQueryDelimiterIndex + Uri.PathQueryDelimiter.length);
+            absoluteUri
+                = pathQueryDelimiterIndex < absoluteUri.length
+                    ? absoluteUri.substring(pathQueryDelimiterIndex + pathQueryDelimiter.length)
+                    : StringUtil.Empty;
+            if (StringUtil.isEmpty(absoluteUri))
+            {
+                return;
+            }
         }
 
-        let queryFragmentDelimiterIndex = absoluteUri.indexOf(Uri.QueryFragmentDelimiter);
-        if (queryFragmentDelimiterIndex > -1)
+
+        if (pathQueryDelimiter == Uri.PathQueryDelimiter)
         {
-            this.query = absoluteUri.substring(0, queryFragmentDelimiterIndex);
-            this.fragment = absoluteUri.substring(queryFragmentDelimiterIndex + Uri.QueryFragmentDelimiter.length);
+            let queryFragmentDelimiter = Uri.QueryFragmentDelimiter;
+            let queryFragmentDelimiterIndex = absoluteUri.indexOf(queryFragmentDelimiter);
+            if (queryFragmentDelimiterIndex < 0)
+            {
+                queryFragmentDelimiter = StringUtil.Empty;
+                queryFragmentDelimiterIndex = absoluteUri.length;
+            }
+            if (queryFragmentDelimiterIndex > -1)
+            {
+                this.query = absoluteUri.substring(
+                    0,
+                    queryFragmentDelimiterIndex);
+
+                let fragmentBeginIndex
+                    = queryFragmentDelimiterIndex
+                    + queryFragmentDelimiter.length;
+                if (fragmentBeginIndex < absoluteUri.length)
+                {
+                    this.fragment = absoluteUri.substring(fragmentBeginIndex);
+                }
+            }
+        }
+        else if (pathQueryDelimiter == Uri.QueryFragmentDelimiter)
+        {
+            this.fragment = absoluteUri;
         }
     }
 
@@ -120,7 +182,7 @@ export class Uri
 
     host: string | null = null;
 
-    port: number | null = null;
+    port: number = 0;
 
     path: string | null = null;
 
@@ -178,9 +240,65 @@ export class Uri
 
     queryParameters: Map<string, string> | null = null;
 
-    fragment: string | null = null;
+    _fragment: string | null = null;
 
-    get isValid():boolean
+    get fragment(): string | null
+    {
+        return this._fragment;
+    }
+
+    set fragment(fragment: string | null)
+    {
+        if (StringUtil.isEquals(
+            this._fragment,
+            fragment,
+            false,
+            true))
+        {
+            return;
+        }
+
+        this._fragment = fragment;
+        this.fragmentParameters = null;
+
+        if (StringUtil.isEmpty(fragment))
+        {
+            return;
+        }
+
+        fragment = fragment!;
+
+        let fragmentParameters = new Map<string, string>();
+        let fragmentParameterStrings = fragment.split("&");
+        for (let fragmentParameterString of fragmentParameterStrings)   
+        {
+            if (StringUtil.isEmpty(fragmentParameterString))
+            {
+                continue;
+            }
+
+            let fragmentParameterNameValue = fragmentParameterString.split("=");
+            let fragmentParameterName = fragmentParameterNameValue[0];
+            if (StringUtil.isEmpty(fragmentParameterName))
+            {
+                continue;
+            }
+            let fragmentParameterValue = StringUtil.Empty;
+            if (fragmentParameterNameValue.length > 1)
+            {
+                fragmentParameterValue = fragmentParameterNameValue[1];
+                fragmentParameterValue = decodeURIComponent(fragmentParameterValue);
+            }
+            fragmentParameters.set(fragmentParameterName, fragmentParameterValue);
+        }
+        // !!!
+        this.fragmentParameters = fragmentParameters;
+        // !!!
+    }
+
+    fragmentParameters: Map<string, string> | null = null;
+
+    get isValid(): boolean
     {
         if (StringUtil.isEmpty(this.scheme)
             || StringUtil.isEmpty(this.host))

@@ -1,6 +1,7 @@
 
 import { StringUtil, UnitTest } from "../index.js";
 import { UriUtil } from "../index.js";
+import { ArrayUtil } from "../src/arrayUtil.js";
 
 export class UriUtilTest extends UnitTest.TestCase
 {
@@ -109,8 +110,27 @@ export class UriUtilTest extends UnitTest.TestCase
                     }
                     assert(StringUtil.isEmpty(uri.fragment));
                 }
+
                 
-                uriString = "https://www.baidu.com:8080/search?keyword=abc#fragment=lastReadPoint";
+                uriString = "https://www.baidu.com:8080/search#fragment=lastReadPosition";
+                uri = UriUtil.parseUri(uriString);
+                {
+                    assert(uri != null);
+                    uri = uri!;
+
+                    assert(uri.scheme == "https");
+                    assert(uri.host == "www.baidu.com");
+                    assert(uri.port == 8080);
+                    assert(uri.path == "/search");
+                    assert(StringUtil.isEmpty(uri.query));
+                    assert(uri.fragment == "fragment=lastReadPosition");
+                    {
+                        let fragment = uri.fragmentParameters!.get("fragment");
+                        assert(fragment == "lastReadPosition");
+                    }
+                }
+                
+                uriString = "https://www.baidu.com:8080/search?keyword=abc#fragment=lastReadPosition";
                 uri = UriUtil.parseUri(uriString);
                 {
                     assert(uri != null);
@@ -121,10 +141,13 @@ export class UriUtilTest extends UnitTest.TestCase
                     assert(uri.port == 8080);
                     assert(uri.path == "/search");
                     assert(uri.query == "keyword=abc");
+                    assert(uri.fragment == "fragment=lastReadPosition");
                     {
                         assert(uri.queryParameters!.get("keyword") == "abc");
+                        
+                        let fragment = uri.fragmentParameters!.get("fragment");
+                        assert(fragment == "lastReadPosition");
                     }
-                    assert(uri.fragment == "fragment=lastReadPoint");
                 }
             });
     }
