@@ -3,10 +3,9 @@
     "node_modules"
   ],
   "include": [
-    "index.ts",
     "src/*",
     "test/*"
-, "src/unitTest/testCase.ts", "src/unitTest/testCase.ts"  ],
+  ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
     /* Projects */
@@ -55,7 +54,9 @@
     // "maxNodeModuleJsDepth": 1,                        /* Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'. */
     /* Emit */
     // "declaration": true,                              /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
+    "declaration": true,
     // "declarationMap": true,                           /* Create sourcemaps for d.ts files. */
+    "declarationMap": true,
     // "emitDeclarationOnly": true,                      /* Only output d.ts files and not JavaScript files. */
     // "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
     // "inlineSourceMap": true,                          /* Include sourcemap files inside the emitted JavaScript. */

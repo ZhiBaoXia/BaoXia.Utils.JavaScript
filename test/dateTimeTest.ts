@@ -1,5 +1,5 @@
-import { DateTime, UnitTest } from "../index.js";
-import { StringUtil } from "../index.js";
+import { DateTime, UnitTest } from "../src/index.js";
+import { StringUtil } from "../src/index.js";
 import { DateTimeField } from "../src/constants/dateTimeField.js";
 
 export class DateTimeTest extends UnitTest.TestCase

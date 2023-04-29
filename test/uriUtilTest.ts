@@ -1,7 +1,6 @@
 
-import { StringUtil, UnitTest } from "../index.js";
-import { UriUtil } from "../index.js";
-import { ArrayUtil } from "../src/arrayUtil.js";
+import { StringUtil, UnitTest } from "../src/index.js";
+import { UriUtil } from "../src/index.js";
 
 export class UriUtilTest extends UnitTest.TestCase
 {
@@ -26,6 +25,7 @@ export class UriUtilTest extends UnitTest.TestCase
                     assert(uri == null);
                 }
 
+                
                 uriString = "://www.baidu.com";
                 uri = UriUtil.parseUri(uriString);
                 {

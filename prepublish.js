@@ -1,15 +1,24 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const sourceDir = '/';
-const targetDir = 'dist';
+// 复制文件夹不包括文件夹本身
+function copyFolder(sourcePath, destinationPath) {
+  if (!fs.existsSync(destinationPath)) {
+    fs.mkdirSync(destinationPath);
+  }
 
-// 复制 .ts 文件
-fs.readdirSync(sourceDir)
-    .filter(file => path.extname(file) === '.ts')
-    .forEach(file =>
-    {
-        const sourcePath = path.join(sourceDir, file);
-        const targetPath = path.join(targetDir, file);
-        fs.copyFileSync(sourcePath, targetPath);
-    });
+  const files = fs.readdirSync(sourcePath);
+  files.forEach((file) => {
+    const sourceFile = path.join(sourcePath, file);
+    const destFile = path.join(destinationPath, file);
+    if (fs.lstatSync(sourceFile).isDirectory()) {
+      copyFolder(sourceFile, destFile);
+    } else {
+      fs.copyFileSync(sourceFile, destFile);
+    }
+  });
+}
+
+// !!!
+copyFolder('./src', './dist/src');
+// !!!
