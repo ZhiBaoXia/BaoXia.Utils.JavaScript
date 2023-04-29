@@ -8,9 +8,9 @@
   ],
   "main": "dist/src/index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json && node prepublish.js",
+    "build": "tsc -p tsconfig.json",
     "test": "tsc -p tsconfig.json && node dist/test/index.js",
-    "prepublish": "npm run build && node prepublish.js"
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
