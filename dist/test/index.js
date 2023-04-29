@@ -1,13 +1,16 @@
-import { UnitTest, StringExtension } from "../index.js";
-try {
-    // 测试数字转换：
-    new UnitTest.TestCase("字符串转整数，01", (assert, assertFalse) => {
-        let number = StringExtension.tryParseInt("0");
-        // !!!
-        assert(number != 0);
-        // !!!
-    });
-}
-catch (exception) {
-    console.error(exception);
-}
+import { TestProject } from "../src/unitTest/testProject.js";
+import { StringUtilTest } from "./stringUtilTest.js";
+import { ArrayUtilTest } from "./arrayUtilTest.js";
+import { DateTimeTest } from "./dateTimeTest.js";
+import { UriUtilTest } from "./uriUtilTest.js";
+import { CookieUtilTest } from "./cookieUtilTest.js";
+let testProject = new TestProject("BaoXia.Utils.Javascript", [
+    new StringUtilTest(),
+    new ArrayUtilTest(),
+    new DateTimeTest(),
+    new UriUtilTest(),
+    new CookieUtilTest()
+]);
+// !!!
+testProject.test();
+// !!!
