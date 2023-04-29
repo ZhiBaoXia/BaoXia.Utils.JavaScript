@@ -40,9 +40,12 @@ export class TestProject
                 let testCase = testCases[testCaseIndex];
                 let testCaseNumber = testCaseIndex + 1;
                 let testProgressCaption = testCaseNumber + "/" + testCasesCount;
-                console.log("\r\n第 " + testProgressCaption + " 个用例，测试开始...");
+                let testCaseNameCaption = "第 " + testProgressCaption + " 个用例，" + testCase.name;
+                console.log("\r\n" + testCaseNameCaption + "，测试开始...");
+                let testException = null;
                 {
-                    if (testCase.test())
+                    testException = testCase.test();
+                    if (testException == null)
                     {
                         testCasesCountWithTestSuccess++;
                     }
@@ -51,20 +54,29 @@ export class TestProject
                         testCasesCountWithTestFailed++;
                     }
                 }
-                console.log("第 " + testProgressCaption + " 个用例，测试结束。\r\n");
+                let testResult: string;
+                if (testException != null)
+                {
+                    testResult = "❌\t" + testCase.name + "，未通过测试：\r\n" + testException;
+                }
+                else
+                {
+                    testResult = "✔\t" + testCase.name + "，通过测试。";
+                }
+                console.log(testResult);
             }
             if (testCasesCountWithTestFailed > 0)
             {
-                console.log("💣测试未通过，共 " + testCasesCountWithTestFailed + "/" + testCasesCount + " 个用例，未通过测试。");
+                console.log("\r\n💣💣💣\t" + this.name + "，未通过测试，共 " + testCasesCountWithTestFailed + "/" + testCasesCount + " 个用例，未通过测试。\r\n");
             }
             else
             {
-                console.log("🎉测试完成，共 " + testCasesCount + " 个用例，全部通过测试！");
+                console.log("\r\n🎉🎉🎉\t" + this.name + "，通过测试，共 " + testCasesCount + " 个用例，全部通过测试！\r\n");
             }
         }
         catch (exception)
         {
-            console.error("测试失败，程序异常：\r\n" + exception);
+            console.error("\r\n💣💣💣\t" + this.name + "，未通过测试，测试项目程序异常：\r\n" + exception + "\r\n");
         }
     }
 }

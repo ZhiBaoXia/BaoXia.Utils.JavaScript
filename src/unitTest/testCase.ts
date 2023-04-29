@@ -1,18 +1,19 @@
 
-import {AssertFailedError} from "./assertFailedError.js"
+import { AssertFailedError } from "./assertFailedError.js"
 
 ////////////////////////////////////////////////
 // TestCase
 ////////////////////////////////////////////////
+
 export class TestCase
 {
     ////////////////////////////////////////////////
     // @自身属性
     ////////////////////////////////////////////////
 
-    name:string;
+    name: string;
 
-    testRunable:(
+    testRunable: (
         assert: (isTure: boolean) => any,
         assertFalse: (isTure: boolean) => any)
         => any;
@@ -33,7 +34,7 @@ export class TestCase
             let assertFailedInfo = "验证失败：";
             {
                 let error = new AssertFailedError();
-            
+
                 assertFailedInfo += error.stack;
             }
             throw assertFailedInfo;
@@ -79,23 +80,18 @@ export class TestCase
         this.testRunable = testRunable;
     }
 
-    test():boolean
+    test(): any | null
     {
         try
         {
-            console.error("用例“" + this.name + "”，开始测试：");
-            {
-                // !!!
-                this.testRunable(TestCase.assert, TestCase.assertFalse);
-                // !!!
-            }
-            console.error("✔\t用例“" + this.name + "”，测试成功。");
-            return true;
+            // !!!
+            this.testRunable(TestCase.assert, TestCase.assertFalse);
+            // !!!
         }
         catch (exception)
         {
-            console.error("\t❌\t用例“" + this.name + "”，测试失败，错误信息：\r\n" + exception);
-            return false;
+            return exception;
         }
+        return null;
     }
 }
