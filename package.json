@@ -1,7 +1,7 @@
 {
   "name": "@baoxia/utils.javascript",
   "version": "1.0.1",
-  "description": "Baoxia Software Javascript Utils Set，includes commonly used utility components such as StringUtil, ArrayUtil, DateTime..",
+  "description": "BaoXia Software Javascript Utils Set，includes commonly used utility components such as StringUtil, ArrayUtil, DateTime..",
   "type": "module",
   "files": [
     "lib/"
