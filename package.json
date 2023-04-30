@@ -1,15 +1,15 @@
 {
   "name": "@baoxia/utils.javascript",
-  "version": "1.0.0",
-  "description": "Baoxia Software Javascript Utils Set，includes commonly used utility components such as StringUtil, ArrayUtil, DateTime..",
+  "version": "1.0.1",
+  "description": "BaoXia Software Javascript Utils Set，includes commonly used utility components such as StringUtil, ArrayUtil, DateTime..",
   "type": "module",
   "files": [
-    "dist/src"
+    "lib/"
   ],
-  "main": "dist/src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "tsc -p tsconfig.json && node dist/test/index.js",
+    "test": "tsc -p tsconfig.test.json && node lib_test/test/index.js",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -19,9 +19,10 @@
   "keywords": [
     "Baoxia",
     "Javascript",
-    "Utils"
+    "Utils",
+    "DateTime Util"
   ],
-  "author": "Baoxia Software",
+  "author": "BaoXia Software",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/BaoXiaRuanJian/BaoXia.Utils.JavaScript/issues"

@@ -1,9 +1,7 @@
 
-import { StringUtil, UnitTest } from "../src/index.js";
-import { CookieUtil } from "../src/index.js";
+import { TestCase, StringUtil, CookieUtil } from "../src/index.js";
 
-
-export class CookieUtilTest extends UnitTest.TestCase
+export class CookieUtilTest extends TestCase
 {
     ////////////////////////////////////////////////
     // @测试函数
@@ -105,7 +103,7 @@ export class CookieUtilTest extends UnitTest.TestCase
 
                     cookieValue = cookieKeyValues.get("buvid_fp_plain") as string;
                     assert(StringUtil.isEquals(cookieValue, "undefined"));
-                    
+
                     cookieValue = cookieKeyValues.get("browser_resolution") as string;
                     assert(StringUtil.isEquals(cookieValue, "1060-2294"));
                 }

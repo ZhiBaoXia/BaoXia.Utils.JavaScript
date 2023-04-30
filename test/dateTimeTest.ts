@@ -1,8 +1,6 @@
-import { DateTime, UnitTest } from "../src/index.js";
-import { StringUtil } from "../src/index.js";
-import { DateTimeField } from "../src/constants/dateTimeField.js";
+import { TestCase, DateTime, DateTimeField } from "../src/index.js";
 
-export class DateTimeTest extends UnitTest.TestCase
+export class DateTimeTest extends TestCase
 {
     constructor()
     {
@@ -18,7 +16,7 @@ export class DateTimeTest extends UnitTest.TestCase
                 {
                     assert(dateTimeSpan.totalSeconds == 1);
                 }
-                
+
                 dateTimeSpan = dateTimeA.timeSpanBySubtract(dateTimeB);
                 {
                     assert(dateTimeSpan.totalSeconds == -1);
@@ -29,7 +27,7 @@ export class DateTimeTest extends UnitTest.TestCase
                 {
                     assert(dateTimeSpan.totalSeconds == -1);
                 }
-                
+
                 dateTimeSpan = dateTimeA.timeSpanBySubtract(dateTimeB);
                 {
                     assert(dateTimeSpan.totalSeconds == 1);
