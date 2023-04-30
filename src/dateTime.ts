@@ -264,9 +264,10 @@ export class DateTime
     // @自身实现
     ////////////////////////////////////////////////
 
-    constructor(date: DateTime | Date | number | null = null)
+    constructor(date: DateTime | Date | number | string | null = null)
     {
-        if (typeof (date) == "number")
+        if (typeof (date) == "number"
+            || typeof (date) == "string")
         {
             date = new Date(date);
         }
@@ -982,5 +983,14 @@ export class DateTime
             return stringFormatter
         }
         return StringUtil.Empty;
+    }
+
+    /**
+     * 将当前时间对象，转为 ISO 格式的字符串。
+     * @returns ISO 格式的当前时间对象字符串。
+     */
+    toISOString(): string
+    {
+        return this._date.toISOString();
     }
 }

@@ -1,18 +1,22 @@
-import {ObjectUtil} from "./objectUtil.js"
+import { ObjectUtil } from "./objectUtil.js"
+import { ArrayUtil } from "./arrayUtil.js"
 import { StringUtil } from "./stringUtil.js"
 import { DateTime } from "./dateTime.js"
 import { DateTimeField } from "./constants/dateTimeField.js"
 import { UriUtil } from "./uriUtil.js"
 import { CookieUtil } from "./cookieUtil.js"
-import * as UnitTest from "./unitTest/testCase.js"
+import { TestCase } from "./unitTest/testCase.js"
+import { TestProject } from "./unitTest/testProject.js"
 
 export 
 {
     ObjectUtil,
+    ArrayUtil,
     StringUtil,
     DateTime,
     DateTimeField,
     UriUtil,
     CookieUtil,
-    UnitTest
+    TestCase,
+    TestProject
 }
