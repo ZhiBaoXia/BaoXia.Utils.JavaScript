@@ -1,8 +1,7 @@
 
-import { StringUtil, UnitTest } from "../index.js";
-import { UriUtil } from "../index.js";
+import { TestCase, UriUtil, StringUtil } from "../src/index.js";
 
-export class UriUtilTest extends UnitTest.TestCase
+export class UriUtilTest extends TestCase
 {
     ////////////////////////////////////////////////
     // @测试函数

@@ -1,7 +1,6 @@
-import { UnitTest } from "../index.js";
-import { ArrayUtil } from "../arrayUtil.js";
+import { TestCase, ArrayUtil } from "../src/index.js";
 
-export class ArrayUtilTest extends UnitTest.TestCase
+export class ArrayUtilTest extends TestCase
 {
     ////////////////////////////////////////////////
     // @自身实现
