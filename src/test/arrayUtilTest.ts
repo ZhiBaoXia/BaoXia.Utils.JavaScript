@@ -1,5 +1,5 @@
-import { UnitTest } from "../src/index.js";
-import { ArrayUtil } from "../src/arrayUtil.js";
+import { UnitTest } from "../index.js";
+import { ArrayUtil } from "../arrayUtil.js";
 
 export class ArrayUtilTest extends UnitTest.TestCase
 {

@@ -1,6 +1,6 @@
 
-import { StringUtil, UnitTest } from "../src/index.js";
-import { UriUtil } from "../src/index.js";
+import { StringUtil, UnitTest } from "../index.js";
+import { UriUtil } from "../index.js";
 
 export class UriUtilTest extends UnitTest.TestCase
 {

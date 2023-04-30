@@ -1,5 +1,5 @@
 
-import { TestProject } from "../src/unitTest/testProject.js"
+import { TestProject } from "../unitTest/testProject.js"
 import { StringUtilTest } from "./stringUtilTest.js";
 import { ArrayUtilTest } from "./arrayUtilTest.js";
 import { DateTimeTest } from "./dateTimeTest.js";

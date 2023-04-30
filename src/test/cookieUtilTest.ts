@@ -1,6 +1,6 @@
 
-import { StringUtil, UnitTest } from "../src/index.js";
-import { CookieUtil } from "../src/index.js";
+import { StringUtil, UnitTest } from "../index.js";
+import { CookieUtil } from "../index.js";
 
 
 export class CookieUtilTest extends UnitTest.TestCase

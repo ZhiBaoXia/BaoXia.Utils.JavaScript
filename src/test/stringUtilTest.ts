@@ -1,5 +1,5 @@
-import { UnitTest } from "../src/index.js";
-import { StringUtil} from "../src/index.js";
+import { UnitTest } from "../index.js";
+import { StringUtil} from "../index.js";
 
 export class StringUtilTest extends UnitTest.TestCase
 {
