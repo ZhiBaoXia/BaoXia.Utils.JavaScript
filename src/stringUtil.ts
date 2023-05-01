@@ -644,4 +644,36 @@ export class StringUtil
         }
         return newString;
     }
+
+    static toFormatString(formatter: string | null, ...values:any[]): string
+    {
+        if (StringUtil.isEmpty(formatter))
+        {
+            return StringUtil.Empty;
+        }
+
+        formatter = formatter!;
+
+        let formatString = formatter;
+        {
+            const formatterPlaceholderEscapeCharacter = "%";
+            
+            const formatterPlaceholderPercent = formatterPlaceholderEscapeCharacter + formatterPlaceholderEscapeCharacter
+            const formatterPlaceholderDecimal = formatterPlaceholderEscapeCharacter + "d";
+            const formatterPlaceholderFloat = formatterPlaceholderEscapeCharacter + "f";
+
+            // 去除转义后的“%”：
+            formatString = StringUtil.replaceAllKeywordIn(
+                formatString,
+                formatterPlaceholderPercent,
+                formatterPlaceholderEscapeCharacter)!;
+
+            // 替换“%d”：
+            let decimalPlaceholderRanges = StringUtil.getRangesOfKeywordIn(
+                formatString,
+                formatterPlaceholderDecimal,
+                true);
+        }
+        return formatString;
+    }
 }
