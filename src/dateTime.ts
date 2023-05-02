@@ -842,7 +842,7 @@ export class DateTime
             {
                 let formatterPlaceholderLength = formatterPlaceholderRange.charsCount;
                 {
-                    dateFieldCaption = StringUtil.complementZeroToIntegerNumberDigitsTo(
+                    dateFieldCaption = StringUtil.complementZeroAtIntegerCharsLeftTo (
                         dateFieldCaptionOriginal!,
                         formatterPlaceholderLength);
                     if (isRemoveLeftCharsByPlaceholder

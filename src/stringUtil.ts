@@ -6,6 +6,7 @@
 
 import { ArrayUtil } from "./arrayUtil.js";
 import { StringRange } from "./model/stringRange.js"
+import { NumberUtil } from "./numberUtil.js";
 
 export class StringUtil
 {
@@ -25,6 +26,65 @@ export class StringUtil
     // 数值（Number）操作相关。
     ////////////////////////////////////////////////
     ////////////////////////////////////////////////
+
+
+    /**
+     * 判断指定的字符，是否为“数字字符”。
+     * @param character 指定的字符。
+     * @param [isIncludeDot] 是否包含“小数点”字符，默认为：false。
+     * @returns 如果指定的字符为“数字字符”，则返回：true，否则返回：false。
+     */
+    static isNumberChar(
+        character: string | null,
+        isIncludeDot: boolean = false): boolean
+    {
+        if (character == null
+            || character.length < 1)
+        {
+            return false;
+        }
+        let characterCode = character.charCodeAt(0);
+        if (characterCode >= 48
+            && characterCode <= 57)
+        {
+            return true;
+        }
+        else if (characterCode == 46
+            && isIncludeDot)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * 判断指定的字符，是否为“英文字母字符”。
+     * @param character 指定的字符。
+     * @returns 如果指定的字符为“英文字母字符”，则返回：true，否则返回：false。 
+     */
+    static isAlphabetChar(
+        character: string | null): boolean
+    {
+        if (character == null
+            || character.length < 1)
+        {
+            return false;
+        }
+
+        let characterCode = character.charCodeAt(0);
+        if (characterCode >= 65
+            && characterCode <= 90)
+        {
+            return true;
+        }
+        if (characterCode >= 97
+            && characterCode <= 122)
+        {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * 尝试转换字符串为整数数值。
@@ -89,7 +149,7 @@ export class StringUtil
      * @param numberString 指定的数字字符串。
      * @returns 数字字符串中整数部分的字符个数。
      */
-    static getIntegerNumberDigitsOf(
+    static getIntegerCharsCountOf(
         numberString: string): number
     {
         let dotIndex = numberString.indexOf(".");
@@ -105,7 +165,7 @@ export class StringUtil
      * @param numberString 指定的数字字符串。
      * @returns 数字字符串中小数部分的字符个数。
      */
-    static getDecimalNumberDigitsOf(
+    static getFloatNumberDigitsOf(
         numberString: string): number
     {
         let dotIndex = numberString.indexOf(".");
@@ -122,14 +182,14 @@ export class StringUtil
      * @param integerNumberDigits 指定的整数部分位数。
      * @returns 返回整数部分补足“0”的数字字符串。
      */
-    static complementZeroToIntegerNumberDigitsTo(
+    static complementZeroAtIntegerCharsLeftTo(
         numberString: string,
         integerNumberDigits: number): string
     {
         let newString = numberString;
         let integerNumberDigitsNeedComplement
             = integerNumberDigits
-            - StringUtil.getIntegerNumberDigitsOf(newString);
+            - StringUtil.getIntegerCharsCountOf(newString);
         while (integerNumberDigitsNeedComplement > 0)
         {
             newString = "0" + newString;
@@ -144,14 +204,14 @@ export class StringUtil
      * @param integerNumberDigits 指定的小数部分位数。
      * @returns 返回整数部分补足“0”的数字字符串。
      */
-    static complementZeroToDecimalNumberDigitsTo(
+    static complementZeroAtFloatCharsRightTo(
         numberString: string,
         decimalNumberDigits: number): string
     {
         let newString = numberString;
         let decimalNumberDigitsNeedComplement
             = decimalNumberDigits
-            - StringUtil.getDecimalNumberDigitsOf(newString);
+            - StringUtil.getFloatNumberDigitsOf(newString);
         while (decimalNumberDigitsNeedComplement > 0)
         {
             newString = newString + "0";
@@ -246,12 +306,12 @@ export class StringUtil
                 let charB = strB[charIndex];
                 if (charA != charB)
                 {
-                    let charAIntValue = parseInt(charA);
+                    let charAIntValue = strA.charCodeAt(charIndex);
                     // A-Z
                     if (charAIntValue >= 65
                         && charAIntValue <= 90)
                     {
-                        let charBIntValue = parseInt(charB);
+                        let charBIntValue = strB.charCodeAt(charIndex);
                         if (charBIntValue != (charAIntValue + 32))
                         {
                             return false;
@@ -261,7 +321,7 @@ export class StringUtil
                     else if (charAIntValue >= 97
                         && charAIntValue <= 122)
                     {
-                        let charBIntValue = parseInt(charB);
+                        let charBIntValue = strB.charCodeAt(charIndex);
                         if (charBIntValue != (charAIntValue - 32))
                         {
                             return false;
@@ -645,7 +705,18 @@ export class StringUtil
         return newString;
     }
 
-    static toFormatString(formatter: string | null, ...values:any[]): string
+
+    /**
+     * 根据指定的格式化字符串，格式化指定的值。
+     * @param formatter 指定的字符串格式，支持格式有：
+     * %%，百分号；
+     * “%x1.x2d”，“%x1.x2i”或“%x1.x2f”，
+     * 其中x1表示要展示的整数位数，“0”或“不指定”表示不需要限制位数，不足时左侧补“0”，
+     * x2表示要展示的浮点数位数，“0”或“不指定”表示不需要限制位数，不足时右侧补“0”。
+     * @param values 要进行格式化的值。
+     * @returns format 格式化后的字符串。
+     */
+    static toFormatString(formatter: string | null, ...values: any[]): string
     {
         if (StringUtil.isEmpty(formatter))
         {
@@ -654,26 +725,232 @@ export class StringUtil
 
         formatter = formatter!;
 
-        let formatString = formatter;
+        const Placeholder_Escape_Char = "%";
+        const Placeholder_Type_Char_Percent = "%";
+        const Placeholder_Type_Char_Decimal = "d";
+        const Placeholder_Type_Char_Integer = "i";
+        const Placeholder_Type_Char_Float = "f";
+        const Placeholder_Type_Char_String = "s";
+
+        ////////////////////////////////////////////////
+        // 1/2，查找对应的占位符，并设置对应的填充值：
+        ////////////////////////////////////////////////
+        let placeholderRanges = new Array<StringRange>();
+        let placeholderValues = new Array<string>();
+        const charsCount = formatter.length;
+        for (let charIndex = 0;
+            charIndex < charsCount;
+            charIndex++)
         {
-            const formatterPlaceholderEscapeCharacter = "%";
-            
-            const formatterPlaceholderPercent = formatterPlaceholderEscapeCharacter + formatterPlaceholderEscapeCharacter
-            const formatterPlaceholderDecimal = formatterPlaceholderEscapeCharacter + "d";
-            const formatterPlaceholderFloat = formatterPlaceholderEscapeCharacter + "f";
+            let character = formatter.charAt(charIndex);
+            if (character == Placeholder_Escape_Char)
+            {
+                let placeholderRange: StringRange | null = null;
+                let placeholderEscapeCharBeginIndex = charIndex;
+                let placeholderEscapeCharEndIndex
+                    = placeholderEscapeCharBeginIndex
+                    + Placeholder_Escape_Char.length;
+                for (let placeholderBodyCharIndex = placeholderEscapeCharBeginIndex + 1;
+                    placeholderBodyCharIndex < charsCount;
+                    placeholderBodyCharIndex++)
+                {
+                    let placeholderBodyChar = formatter.charAt(placeholderBodyCharIndex);
+                    // 如果格式符号字符，为数字，则继续查找。
+                    if (StringUtil.isNumberChar(placeholderBodyChar, true))
+                    {
+                        continue;
+                    }
+                    let placeholderTypeCharBeginIndex = placeholderBodyCharIndex;
+                    // 如果格式符号字符，为转义字符，则尝试结束查找。
+                    if (StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Percent, true))
+                    {
+                        let placeholderParamLength
+                            = placeholderTypeCharBeginIndex
+                            - placeholderEscapeCharEndIndex;
+                        if (placeholderParamLength == 0)
+                        {
+                            ////////////////////////////////////////////////
+                            // !!!
+                            placeholderRange
+                                = new StringRange(
+                                    placeholderEscapeCharBeginIndex,
+                                    placeholderTypeCharBeginIndex
+                                    + Placeholder_Type_Char_Percent.length
+                                    - placeholderEscapeCharBeginIndex);
+                            placeholderRanges.push(placeholderRange);
+                            placeholderValues.push("%");
+                            // !!!
+                            ////////////////////////////////////////////////
+                        }
+                        // !!!
+                        charIndex
+                            = placeholderEscapeCharBeginIndex
+                            + Placeholder_Escape_Char.length
+                            + placeholderParamLength
+                            + Placeholder_Type_Char_Percent.length
+                            - 1;
+                        // !!!
+                        break;
+                        // !!!
+                    }
+                    // 如果格式符号字符，为整数符号，则尝试结束查找。
+                    else if (StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Decimal, true)
+                        || StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Integer, true)
+                        // 如果格式符号字符，为浮点数符号，则尝试结束查找。
+                        || StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Float, true))
+                    {
+                        let value: number | null = null;
+                        let placeholderIndex = placeholderRanges.length;
+                        if (values != null
+                            && placeholderIndex < values.length)
+                        {
+                            let valueObject = values[placeholderIndex];
+                            if (typeof valueObject == "number")
+                            {
+                                value = valueObject as number;
+                            }
+                            else if (typeof valueObject == "string")
+                            {
+                                value = StringUtil.parseToFloat(valueObject);
+                            }
+                            else
+                            {
+                                value = 0;
+                            }
+                        }
 
-            // 去除转义后的“%”：
-            formatString = StringUtil.replaceAllKeywordIn(
-                formatString,
-                formatterPlaceholderPercent,
-                formatterPlaceholderEscapeCharacter)!;
+                        let placeholderTypeChar
+                            = StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Decimal, true)
+                                ? Placeholder_Type_Char_Decimal
+                                : (StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Integer, true)
+                                    ? Placeholder_Type_Char_Integer
+                                    : Placeholder_Type_Char_Float);
 
-            // 替换“%d”：
-            let decimalPlaceholderRanges = StringUtil.getRangesOfKeywordIn(
-                formatString,
-                formatterPlaceholderDecimal,
-                true);
+                        if (value != null)
+                        {
+                            let valueString: string = StringUtil.Empty;
+                            let placeholderParamString
+                                = formatter.substring(
+                                    placeholderEscapeCharEndIndex,
+                                    placeholderTypeCharBeginIndex);
+                            if (StringUtil.isEmpty(placeholderParamString))
+                            {
+                                valueString = value.toString();
+                            }
+                            else
+                            {
+                                let floatCharsCount
+                                    = StringUtil.getFloatNumberDigitsOf(placeholderParamString);
+                                if (floatCharsCount > 0)
+                                {
+                                    valueString = value.toFixed(floatCharsCount);
+                                }
+                                let decimalCharsCount
+                                    = StringUtil.getIntegerCharsCountOf(placeholderParamString);
+                                if (decimalCharsCount > 0)
+                                {
+                                    valueString = StringUtil.complementZeroAtIntegerCharsLeftTo(
+                                        valueString,
+                                        decimalCharsCount);
+                                }
+                            }
+                            ////////////////////////////////////////////////
+                            // !!!
+                            placeholderRange
+                                = new StringRange(
+                                    placeholderEscapeCharBeginIndex,
+                                    placeholderTypeCharBeginIndex
+                                    + placeholderTypeChar.length
+                                    - placeholderEscapeCharBeginIndex);
+                            placeholderRanges.push(placeholderRange);
+                            placeholderValues.push(valueString);
+                            // !!!
+                            ////////////////////////////////////////////////
+                        }
+
+                        // !!!
+                        charIndex
+                            = placeholderBodyCharIndex
+                            + placeholderTypeChar.length
+                            - 1;
+                        // !!!
+                        break;
+                        // !!!
+                    }
+                    // 如果格式符号字符，为字符串符号，则尝试结束查找。
+                    else if (StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_String, true))
+                    {
+                        let placeholderParamLength
+                            = placeholderTypeCharBeginIndex
+                            - placeholderEscapeCharEndIndex;
+                        if (placeholderParamLength == 0)
+                        {
+                            let valueString: string | null = null;
+                            let placeholderIndex = placeholderRanges.length;
+                            if (values != null
+                                && placeholderIndex < values.length)
+                            {
+                                let valueObject = values[placeholderIndex];
+                                if (typeof valueObject == "string")
+                                {
+                                    valueString = valueObject;
+                                }
+                                else
+                                {
+                                    valueString
+                                        = valueObject != null
+                                            ? valueObject?.toString()
+                                            : StringUtil.Empty;
+                                }
+                            }
+
+                            if (valueString != null)
+                            {
+                                ////////////////////////////////////////////////
+                                // !!!
+                                placeholderRange
+                                    = new StringRange(
+                                        placeholderEscapeCharBeginIndex,
+                                        placeholderTypeCharBeginIndex
+                                        + Placeholder_Type_Char_String.length
+                                        - placeholderEscapeCharBeginIndex);
+                                placeholderRanges.push(placeholderRange);
+                                placeholderValues.push(valueString);
+                                // !!!
+                                ////////////////////////////////////////////////
+                            }
+                        }
+                        // !!!
+                        charIndex
+                            = placeholderEscapeCharBeginIndex
+                            + Placeholder_Escape_Char.length
+                            + placeholderParamLength
+                            + Placeholder_Type_Char_Percent.length
+                            - 1;
+                        // !!!
+                        break;
+                        // !!!
+                    }
+                }
+                if (placeholderRange == null)
+                {
+                    // !!!
+                    charIndex = charsCount - 1;
+                    // !!!
+                }
+            }
         }
-        return formatString;
+
+        ////////////////////////////////////////////////
+        // 2/2，使用对应的填充值，替换格式占位符：
+        ////////////////////////////////////////////////
+        if (placeholderRanges.length > 0)
+        {
+            formatter = StringUtil.replaceKeywordsInRangesWithStringsSpecifiedIn(
+                formatter,
+                placeholderRanges,
+                placeholderValues);
+        }
+        return formatter!;
     }
 }
