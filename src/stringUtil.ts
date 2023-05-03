@@ -6,6 +6,9 @@
 
 import { ArrayUtil } from "./arrayUtil.js";
 import { StringRange } from "./model/stringRange.js"
+import { NumberUtil } from "./numberUtil.js";
+import { NumberStringInfo } from "./model/numberStringInfo.js";
+import { NumberRoundType } from "./constants/numberRoundType.js";
 
 export class StringUtil
 {
@@ -25,6 +28,65 @@ export class StringUtil
     // 数值（Number）操作相关。
     ////////////////////////////////////////////////
     ////////////////////////////////////////////////
+
+
+    /**
+     * 判断指定的字符，是否为“数字字符”。
+     * @param character 指定的字符。
+     * @param [isIncludeDot] 是否包含“小数点”字符，默认为：false。
+     * @returns 如果指定的字符为“数字字符”，则返回：true，否则返回：false。
+     */
+    static isNumberChar(
+        character: string | null,
+        isIncludeDot: boolean = false): boolean
+    {
+        if (character == null
+            || character.length < 1)
+        {
+            return false;
+        }
+        let characterCode = character.charCodeAt(0);
+        if (characterCode >= 48
+            && characterCode <= 57)
+        {
+            return true;
+        }
+        else if (characterCode == 46
+            && isIncludeDot)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * 判断指定的字符，是否为“英文字母字符”。
+     * @param character 指定的字符。
+     * @returns 如果指定的字符为“英文字母字符”，则返回：true，否则返回：false。 
+     */
+    static isAlphabetChar(
+        character: string | null): boolean
+    {
+        if (character == null
+            || character.length < 1)
+        {
+            return false;
+        }
+
+        let characterCode = character.charCodeAt(0);
+        if (characterCode >= 65
+            && characterCode <= 90)
+        {
+            return true;
+        }
+        if (characterCode >= 97
+            && characterCode <= 122)
+        {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * 尝试转换字符串为整数数值。
@@ -89,7 +151,7 @@ export class StringUtil
      * @param numberString 指定的数字字符串。
      * @returns 数字字符串中整数部分的字符个数。
      */
-    static getIntegerNumberDigitsOf(
+    static getIntegerCharsCountOf(
         numberString: string): number
     {
         let dotIndex = numberString.indexOf(".");
@@ -105,7 +167,7 @@ export class StringUtil
      * @param numberString 指定的数字字符串。
      * @returns 数字字符串中小数部分的字符个数。
      */
-    static getDecimalNumberDigitsOf(
+    static getFloatNumberDigitsOf(
         numberString: string): number
     {
         let dotIndex = numberString.indexOf(".");
@@ -117,19 +179,55 @@ export class StringUtil
     };
 
     /**
+     * 获取数字字符串中整数和小数部分的字符串信息。
+     * @param numberString 指定的数字字符串。
+     * @returns 返回数字字符串中整数和小数部分的字符串信息。
+     */
+    static getNumberStringInfo(numberString: string | null): NumberStringInfo
+    {
+        if (StringUtil.isEmpty(numberString))
+        {
+            return new NumberStringInfo();
+        }
+
+        numberString = numberString!;
+
+        let integerString: string = StringUtil.Empty;
+        let floatString: string = StringUtil.Empty;
+
+        let dotIndex = numberString.indexOf(".");
+        if (dotIndex < 0)
+        {
+            integerString = numberString;
+        }
+        else
+        {
+            integerString = numberString.substring(0, dotIndex);
+            floatString = numberString.substring(dotIndex + 1);
+        }
+
+        let numberStringInfo = new NumberStringInfo(
+            dotIndex,
+            integerString,
+            floatString);
+        { }
+        return numberStringInfo;
+    }
+
+    /**
      * 补充“0”到指定的数字字符串中，直到整数部分的字符个数大于等于指定的整数位数。
      * @param numberString 指定的数字字符串。
      * @param integerNumberDigits 指定的整数部分位数。
      * @returns 返回整数部分补足“0”的数字字符串。
      */
-    static complementZeroToIntegerNumberDigitsTo(
+    static complementZeroAtIntegerCharsLeftTo(
         numberString: string,
         integerNumberDigits: number): string
     {
         let newString = numberString;
         let integerNumberDigitsNeedComplement
             = integerNumberDigits
-            - StringUtil.getIntegerNumberDigitsOf(newString);
+            - StringUtil.getIntegerCharsCountOf(newString);
         while (integerNumberDigitsNeedComplement > 0)
         {
             newString = "0" + newString;
@@ -144,20 +242,81 @@ export class StringUtil
      * @param integerNumberDigits 指定的小数部分位数。
      * @returns 返回整数部分补足“0”的数字字符串。
      */
-    static complementZeroToDecimalNumberDigitsTo(
+    static complementZeroAtFloatCharsRightTo(
         numberString: string,
-        decimalNumberDigits: number): string
+        floatNumberDigits: number): string
     {
         let newString = numberString;
-        let decimalNumberDigitsNeedComplement
-            = decimalNumberDigits
-            - StringUtil.getDecimalNumberDigitsOf(newString);
-        while (decimalNumberDigitsNeedComplement > 0)
+        let floatNumberDigitsNeedComplement
+            = floatNumberDigits
+            - StringUtil.getFloatNumberDigitsOf(newString);
+        if (newString.indexOf(".") < 0)
+        {
+            newString = newString + ".";
+        }
+        while (floatNumberDigitsNeedComplement > 0)
         {
             newString = newString + "0";
-            decimalNumberDigitsNeedComplement--;
+            floatNumberDigitsNeedComplement--;
         }
         return newString;
+    }
+
+    /**
+     * 将指定的数字字符串转换为指定位数的小数位数的数字字符串。
+     * @param numberString 指定的数字字符串。
+     * @param floatNumberDigits 指定的小数位数。
+     * @returns 返回指定位数的小数位数的数字字符串。
+     */
+    static stringByFixedFloat(
+        numberObject: string | number | null,
+        floatNumberDigits: number,
+        numberRoundType: NumberRoundType = NumberRoundType.Round): string
+    {
+        let numberValue = 0;
+        if (numberObject != null)
+        {
+            if (typeof (numberObject) == "number")
+            {
+                numberValue = numberObject as number;
+            }
+            else if (typeof (numberObject) == "string")
+            {
+                numberValue = parseFloat(numberObject as string);
+            }
+        }
+        let numberFixed = NumberUtil.numberByFixed(
+            numberValue,
+            floatNumberDigits,
+            numberRoundType);
+        let numberStringFixed = numberFixed.toString();
+        let numberStringInfo = StringUtil.getNumberStringInfo(numberStringFixed);
+        if (floatNumberDigits > 0)
+        {
+            if (StringUtil.isEmpty(numberStringInfo.floatString))
+            {
+                numberStringFixed = numberStringFixed + ".";
+                for (let floatNumberDigit = 0;
+                    floatNumberDigit < floatNumberDigits;
+                    floatNumberDigit++)
+                {
+                    numberStringFixed = numberStringFixed + "0";
+                }
+            }
+            else
+            {
+                numberStringFixed = StringUtil.complementZeroAtFloatCharsRightTo(
+                    numberStringFixed,
+                    floatNumberDigits);
+            }
+        }
+        else
+        {
+            // !!!
+            numberStringFixed = numberStringInfo.integerString;
+            // !!!
+        }
+        return numberStringFixed;
     }
 
     ////////////////////////////////////////////////
@@ -246,12 +405,12 @@ export class StringUtil
                 let charB = strB[charIndex];
                 if (charA != charB)
                 {
-                    let charAIntValue = parseInt(charA);
+                    let charAIntValue = strA.charCodeAt(charIndex);
                     // A-Z
                     if (charAIntValue >= 65
                         && charAIntValue <= 90)
                     {
-                        let charBIntValue = parseInt(charB);
+                        let charBIntValue = strB.charCodeAt(charIndex);
                         if (charBIntValue != (charAIntValue + 32))
                         {
                             return false;
@@ -261,7 +420,7 @@ export class StringUtil
                     else if (charAIntValue >= 97
                         && charAIntValue <= 122)
                     {
-                        let charBIntValue = parseInt(charB);
+                        let charBIntValue = strB.charCodeAt(charIndex);
                         if (charBIntValue != (charAIntValue - 32))
                         {
                             return false;
@@ -643,5 +802,375 @@ export class StringUtil
             }
         }
         return newString;
+    }
+
+
+    /**
+     * 根据指定的格式化字符串，格式化指定的值。
+     * @param formatter 指定的字符串格式，支持格式有：
+     * %%，百分号；
+     * “%x1.x2d”，“%x1.x2i”或“%x1.x2f”，
+     * 其中x1表示要展示的整数位数，“0”或“不指定”表示不需要限制位数，不足时左侧补“0”，
+     * x2表示要展示的浮点数位数，“0”或“不指定”表示不需要限制位数，不足时右侧补“0”。
+     * @param values 要进行格式化的值。
+     * @returns format 格式化后的字符串。
+     */
+    static format(formatter: string | null, ...values: any[]): string
+    {
+        if (StringUtil.isEmpty(formatter))
+        {
+            return StringUtil.Empty;
+        }
+
+        formatter = formatter!;
+
+        const Placeholder_Escape_Char = "%";
+        const Placeholder_Type_Char_Percent = "%";
+        const Placeholder_Type_Char_Decimal = "d";
+        const Placeholder_Type_Char_Integer = "i";
+        const Placeholder_Type_Char_Float = "f";
+        const Placeholder_Type_Char_String = "s";
+
+        ////////////////////////////////////////////////
+        // 1/2，查找对应的占位符，并设置对应的填充值：
+        ////////////////////////////////////////////////
+        let placeholderRanges = new Array<StringRange>();
+        let placeholderValues = new Array<string>();
+        let currentObjectValuesIndex = 0;
+        const charsCount = formatter.length;
+        for (let charIndex = 0;
+            charIndex < charsCount;
+            charIndex++)
+        {
+            let character = formatter.charAt(charIndex);
+            if (character == Placeholder_Escape_Char)
+            {
+                let placeholderRange: StringRange | null = null;
+                let placeholderEscapeCharBeginIndex = charIndex;
+                let placeholderEscapeCharEndIndex
+                    = placeholderEscapeCharBeginIndex
+                    + Placeholder_Escape_Char.length;
+                for (let placeholderBodyCharIndex = placeholderEscapeCharBeginIndex + 1;
+                    placeholderBodyCharIndex < charsCount;
+                    placeholderBodyCharIndex++)
+                {
+                    let placeholderBodyChar = formatter.charAt(placeholderBodyCharIndex);
+                    // 如果格式符号字符，为数字，则继续查找。
+                    if (StringUtil.isNumberChar(placeholderBodyChar, true))
+                    {
+                        continue;
+                    }
+                    let placeholderTypeCharBeginIndex = placeholderBodyCharIndex;
+                    // 如果格式符号字符，为转义字符，则尝试结束查找。
+                    if (StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Percent, true))
+                    {
+                        let placeholderParamLength
+                            = placeholderTypeCharBeginIndex
+                            - placeholderEscapeCharEndIndex;
+                        if (placeholderParamLength == 0)
+                        {
+                            ////////////////////////////////////////////////
+                            // !!!
+                            placeholderRange
+                                = new StringRange(
+                                    placeholderEscapeCharBeginIndex,
+                                    placeholderTypeCharBeginIndex
+                                    + Placeholder_Type_Char_Percent.length
+                                    - placeholderEscapeCharBeginIndex);
+                            placeholderRanges.push(placeholderRange);
+                            placeholderValues.push("%");
+                            // !!!
+                            ////////////////////////////////////////////////
+                        }
+                        // !!!
+                        charIndex
+                            = placeholderEscapeCharBeginIndex
+                            + Placeholder_Escape_Char.length
+                            + placeholderParamLength
+                            + Placeholder_Type_Char_Percent.length
+                            - 1;
+                        // !!!
+                        break;
+                        // !!!
+                    }
+                    ////////////////////////////////////////////////
+                    // 格式占位符类型字符，为整数符号“%n.nd”或“%n.ni”：
+                    ////////////////////////////////////////////////
+                    else if (StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Decimal, true)
+                        || StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Integer, true))
+                    {
+                        let value: number | null = null;
+                        if (values != null
+                            && currentObjectValuesIndex < values.length)
+                        {
+                            let valueObject = values[currentObjectValuesIndex];
+                            // !!!
+                            currentObjectValuesIndex++;
+                            // !!!
+                            if (typeof valueObject == "number")
+                            {
+                                value = valueObject as number;
+                            }
+                            else if (typeof valueObject == "string")
+                            {
+                                value = StringUtil.parseToFloat(valueObject);
+                            }
+                            else
+                            {
+                                value = 0;
+                            }
+                        }
+
+                        let placeholderTypeChar
+                            = StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Decimal, true)
+                                ? Placeholder_Type_Char_Decimal
+                                : Placeholder_Type_Char_Integer;
+
+                        if (value != null)
+                        {
+                            let valueString: string = StringUtil.Empty;
+                            let placeholderParamString
+                                = formatter.substring(
+                                    placeholderEscapeCharEndIndex,
+                                    placeholderTypeCharBeginIndex);
+                            {
+                                let integerCharsCountMin = -1;
+                                let integerCharsCountMax = -1;
+                                // 整数类型的占位符，浮点数的位数永远为“0”
+                                let floatCharsCount = 0;
+                                let numberStringInfo
+                                    = StringUtil.getNumberStringInfo(placeholderParamString);
+                                if (StringUtil.isNotEmpty(numberStringInfo.integerString))
+                                {
+                                    integerCharsCountMin
+                                        = this.parseToInt(numberStringInfo.integerString);
+                                }
+                                if (StringUtil.isNotEmpty(numberStringInfo.floatString))
+                                {
+                                    integerCharsCountMax
+                                        = this.parseToInt(numberStringInfo.floatString);
+                                }
+
+                                // !!!
+                                valueString
+                                    = StringUtil.stringByFixedFloat(
+                                        value,
+                                        floatCharsCount);
+                                // !!!
+                                if (integerCharsCountMin > 0)
+                                {
+                                    valueString = StringUtil.complementZeroAtIntegerCharsLeftTo(
+                                        valueString,
+                                        integerCharsCountMin);
+                                }
+                                if (integerCharsCountMax > 0)
+                                {
+                                    if (valueString.length > integerCharsCountMax)
+                                    {
+                                        valueString = valueString.substring(
+                                            valueString.length - integerCharsCountMax);
+                                    }
+                                }
+                            }
+                            ////////////////////////////////////////////////
+                            // !!!
+                            placeholderRange
+                                = new StringRange(
+                                    placeholderEscapeCharBeginIndex,
+                                    placeholderTypeCharBeginIndex
+                                    + placeholderTypeChar.length
+                                    - placeholderEscapeCharBeginIndex);
+                            placeholderRanges.push(placeholderRange);
+                            placeholderValues.push(valueString);
+                            // !!!
+                            ////////////////////////////////////////////////
+                        }
+
+                        // !!!
+                        charIndex
+                            = placeholderBodyCharIndex
+                            + placeholderTypeChar.length
+                            - 1;
+                        // !!!
+                        break;
+                        // !!!
+                    }
+                    ////////////////////////////////////////////////
+                    // 格式占位符类型字符，为浮点数符号“%n.nf”：
+                    ////////////////////////////////////////////////
+                    else if (StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Float, true))
+                    {
+                        let value: number | null = null;
+                        if (values != null
+                            && currentObjectValuesIndex < values.length)
+                        {
+                            let valueObject = values[currentObjectValuesIndex];
+                            // !!!
+                            currentObjectValuesIndex++;
+                            // !!!
+                            if (typeof valueObject == "number")
+                            {
+                                value = valueObject as number;
+                            }
+                            else if (typeof valueObject == "string")
+                            {
+                                value = StringUtil.parseToFloat(valueObject);
+                            }
+                            else
+                            {
+                                value = 0;
+                            }
+                        }
+
+                        let placeholderTypeChar
+                            = Placeholder_Type_Char_Float;
+                        if (value != null)
+                        {
+                            let valueString: string = StringUtil.Empty;
+                            let placeholderParamString
+                                = formatter.substring(
+                                    placeholderEscapeCharEndIndex,
+                                    placeholderTypeCharBeginIndex);
+                            if (StringUtil.isEmpty(placeholderParamString))
+                            {
+                                valueString = value.toString();
+                            }
+                            else
+                            {
+                                let integerCharsCount = -1;
+                                let floatCharsCount = -1;
+                                let numberStringInfo
+                                    = StringUtil.getNumberStringInfo(placeholderParamString);
+                                if (numberStringInfo != null)
+                                {
+                                    if (StringUtil.isNotEmpty(numberStringInfo.integerString))
+                                    {
+                                        integerCharsCount
+                                            = this.parseToInt(numberStringInfo.integerString);
+                                    }
+                                    if (StringUtil.isNotEmpty(numberStringInfo.floatString))
+                                    {
+                                        floatCharsCount
+                                            = this.parseToInt(numberStringInfo.floatString);
+                                    }
+                                }
+                                if (floatCharsCount >= 0)
+                                {
+                                    valueString
+                                        = StringUtil.stringByFixedFloat(
+                                            value,
+                                            floatCharsCount);
+                                }
+                                else
+                                {
+                                    valueString = value.toString();
+                                }
+                                if (integerCharsCount > 0)
+                                {
+                                    valueString = StringUtil.complementZeroAtIntegerCharsLeftTo(
+                                        valueString,
+                                        integerCharsCount);
+                                }
+                            }
+                            ////////////////////////////////////////////////
+                            // !!!
+                            placeholderRange
+                                = new StringRange(
+                                    placeholderEscapeCharBeginIndex,
+                                    placeholderTypeCharBeginIndex
+                                    + placeholderTypeChar.length
+                                    - placeholderEscapeCharBeginIndex);
+                            placeholderRanges.push(placeholderRange);
+                            placeholderValues.push(valueString);
+                            // !!!
+                            ////////////////////////////////////////////////
+                        }
+
+                        // !!!
+                        charIndex
+                            = placeholderBodyCharIndex
+                            + placeholderTypeChar.length
+                            - 1;
+                        // !!!
+                        break;
+                        // !!!
+                    }
+                    // 如果格式符号字符，为字符串符号，则尝试结束查找。
+                    else if (StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_String, true))
+                    {
+                        let placeholderParamLength
+                            = placeholderTypeCharBeginIndex
+                            - placeholderEscapeCharEndIndex;
+                        if (placeholderParamLength == 0)
+                        {
+                            let valueString: string | null = null;
+                            if (values != null
+                                && currentObjectValuesIndex < values.length)
+                            {
+                                let valueObject = values[currentObjectValuesIndex];
+                                // !!!
+                                currentObjectValuesIndex++;
+                                // !!!
+                                if (typeof valueObject == "string")
+                                {
+                                    valueString = valueObject;
+                                }
+                                else
+                                {
+                                    valueString
+                                        = valueObject != null
+                                            ? valueObject?.toString()
+                                            : StringUtil.Empty;
+                                }
+                            }
+
+                            if (valueString != null)
+                            {
+                                ////////////////////////////////////////////////
+                                // !!!
+                                placeholderRange
+                                    = new StringRange(
+                                        placeholderEscapeCharBeginIndex,
+                                        placeholderTypeCharBeginIndex
+                                        + Placeholder_Type_Char_String.length
+                                        - placeholderEscapeCharBeginIndex);
+                                placeholderRanges.push(placeholderRange);
+                                placeholderValues.push(valueString);
+                                // !!!
+                                ////////////////////////////////////////////////
+                            }
+                        }
+                        // !!!
+                        charIndex
+                            = placeholderEscapeCharBeginIndex
+                            + Placeholder_Escape_Char.length
+                            + placeholderParamLength
+                            + Placeholder_Type_Char_Percent.length
+                            - 1;
+                        // !!!
+                        break;
+                        // !!!
+                    }
+                }
+                if (placeholderRange == null)
+                {
+                    // !!!
+                    charIndex = charsCount - 1;
+                    // !!!
+                }
+            }
+        }
+
+        ////////////////////////////////////////////////
+        // 2/2，使用对应的填充值，替换格式占位符：
+        ////////////////////////////////////////////////
+        if (placeholderRanges.length > 0)
+        {
+            formatter = StringUtil.replaceKeywordsInRangesWithStringsSpecifiedIn(
+                formatter,
+                placeholderRanges,
+                placeholderValues);
+        }
+        return formatter!;
     }
 }

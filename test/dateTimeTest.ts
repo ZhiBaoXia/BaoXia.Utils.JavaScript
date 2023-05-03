@@ -95,6 +95,36 @@ export class DateTimeTest extends TestCase
                 {
                     assert(dateTimeCaption == "23-4-26 04:30:01.123");
                 }
+
+                ////////////////////////////////////////////////
+                // ISO时间字符串相关测试：
+                ////////////////////////////////////////////////
+
+                // 时间戳“1682899200000”，
+                // 对应的ISO时间字符串为：2023-05-01 08:00:00+08:00 。
+                // 对应的零时区时间字符串为： 2023-05-01 00:00:00Z 。
+                dateTimeA = new DateTime(1682899200000);
+                {
+                    let localTimeZone = -1 * new Date().getTimezoneOffset();
+
+                    assert(dateTimeA.year == 2023);
+                    assert(dateTimeA.month == 5);
+                    assert(dateTimeA.day == 1);
+                    let localHour = Math.floor(localTimeZone / 60);
+                    assert(dateTimeA.hour == localHour);
+                    let localMinute = Math.floor(localTimeZone % 60);
+                    assert(dateTimeA.minute == localMinute);
+                    assert(dateTimeA.second == 0);
+                    assert(dateTimeA.millisecond == 0);
+                }
+                let dateTimeISOStirngWithLocalTimeZone = dateTimeA.toISOString();
+                {
+                    assert(dateTimeISOStirngWithLocalTimeZone == "2023-05-01T08:00:00.000+08:00");
+                }
+                let dateTimeISOStirngWithZeroTimeZone = dateTimeA.toISOString(false);
+                {
+                    assert(dateTimeISOStirngWithZeroTimeZone == "2023-05-01T00:00:00.000Z");
+                }
             });
     }
 }

@@ -18,6 +18,22 @@ export class DateTime
 
     _date: Date;
 
+    get timeZone(): number
+    {
+        let timezoneOffsetMinutes = this._date.getTimezoneOffset();
+        let timezone = Math.floor(-1 * timezoneOffsetMinutes / 60);
+        { }
+        return timezone;
+    }
+
+    get timeZoneMinutes(): number
+    {
+        let timezoneOffsetMinutes = this._date.getTimezoneOffset();
+        let timezoneMinutes = Math.round(-1 * timezoneOffsetMinutes % 60);
+        { }
+        return timezoneMinutes;
+    }
+
     get year(): number
     {
         return this._date.getFullYear();
@@ -826,7 +842,7 @@ export class DateTime
             {
                 let formatterPlaceholderLength = formatterPlaceholderRange.charsCount;
                 {
-                    dateFieldCaption = StringUtil.complementZeroToIntegerNumberDigitsTo(
+                    dateFieldCaption = StringUtil.complementZeroAtIntegerCharsLeftTo (
                         dateFieldCaptionOriginal!,
                         formatterPlaceholderLength);
                     if (isRemoveLeftCharsByPlaceholder
@@ -987,10 +1003,26 @@ export class DateTime
 
     /**
      * 将当前时间对象，转为 ISO 格式的字符串。
+     * @param isUseLocalTimeZone 是否使用本地时区，默认为：true，。
      * @returns ISO 格式的当前时间对象字符串。
      */
-    toISOString(): string
+    toISOString(isUseLocalTimeZone: boolean = true): string
     {
-        return this._date.toISOString();
+        let dateTimeString = StringUtil.Empty;
+        if (isUseLocalTimeZone)
+        {
+            let timezoneString
+                = StringUtil.format(
+                    "%2d:%2d",
+                    this.timeZone,
+                    this.timeZoneMinutes);
+            dateTimeString = this.toString(
+                "yyyy-MM-ddTHH:mm:ss.fff+" + timezoneString);
+        }
+        else
+        {
+            dateTimeString = this._date.toISOString();
+        }
+        return dateTimeString;
     }
 }
