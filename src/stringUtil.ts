@@ -893,11 +893,11 @@ export class StringUtil
                         break;
                         // !!!
                     }
-                    // 如果格式符号字符，为整数符号，则尝试结束查找。
+                    ////////////////////////////////////////////////
+                    // 格式占位符类型字符，为整数符号“%n.nd”或“%n.ni”：
+                    ////////////////////////////////////////////////
                     else if (StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Decimal, true)
-                        || StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Integer, true)
-                        // 如果格式符号字符，为浮点数符号，则尝试结束查找。
-                        || StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Float, true))
+                        || StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Integer, true))
                     {
                         let value: number | null = null;
                         if (values != null
@@ -924,10 +924,106 @@ export class StringUtil
                         let placeholderTypeChar
                             = StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Decimal, true)
                                 ? Placeholder_Type_Char_Decimal
-                                : (StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Integer, true)
-                                    ? Placeholder_Type_Char_Integer
-                                    : Placeholder_Type_Char_Float);
+                                : Placeholder_Type_Char_Integer;
 
+                        if (value != null)
+                        {
+                            let valueString: string = StringUtil.Empty;
+                            let placeholderParamString
+                                = formatter.substring(
+                                    placeholderEscapeCharEndIndex,
+                                    placeholderTypeCharBeginIndex);
+                            {
+                                let integerCharsCountMin = -1;
+                                let integerCharsCountMax = -1;
+                                // 整数类型的占位符，浮点数的位数永远为“0”
+                                let floatCharsCount = 0;
+                                let numberStringInfo
+                                    = StringUtil.getNumberStringInfo(placeholderParamString);
+                                if (StringUtil.isNotEmpty(numberStringInfo.integerString))
+                                {
+                                    integerCharsCountMin
+                                        = this.parseToInt(numberStringInfo.integerString);
+                                }
+                                if (StringUtil.isNotEmpty(numberStringInfo.floatString))
+                                {
+                                    integerCharsCountMax
+                                        = this.parseToInt(numberStringInfo.floatString);
+                                }
+
+                                // !!!
+                                valueString
+                                    = StringUtil.stringByFixedFloat(
+                                        value,
+                                        floatCharsCount);
+                                // !!!
+                                if (integerCharsCountMin > 0)
+                                {
+                                    valueString = StringUtil.complementZeroAtIntegerCharsLeftTo(
+                                        valueString,
+                                        integerCharsCountMin);
+                                }
+                                if (integerCharsCountMax > 0)
+                                {
+                                    if (valueString.length > integerCharsCountMax)
+                                    {
+                                        valueString = valueString.substring(
+                                            valueString.length - integerCharsCountMax);
+                                    }
+                                }
+                            }
+                            ////////////////////////////////////////////////
+                            // !!!
+                            placeholderRange
+                                = new StringRange(
+                                    placeholderEscapeCharBeginIndex,
+                                    placeholderTypeCharBeginIndex
+                                    + placeholderTypeChar.length
+                                    - placeholderEscapeCharBeginIndex);
+                            placeholderRanges.push(placeholderRange);
+                            placeholderValues.push(valueString);
+                            // !!!
+                            ////////////////////////////////////////////////
+                        }
+
+                        // !!!
+                        charIndex
+                            = placeholderBodyCharIndex
+                            + placeholderTypeChar.length
+                            - 1;
+                        // !!!
+                        break;
+                        // !!!
+                    }
+                    ////////////////////////////////////////////////
+                    // 格式占位符类型字符，为浮点数符号“%n.nf”：
+                    ////////////////////////////////////////////////
+                    else if (StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Float, true))
+                    {
+                        let value: number | null = null;
+                        if (values != null
+                            && currentObjectValuesIndex < values.length)
+                        {
+                            let valueObject = values[currentObjectValuesIndex];
+                            // !!!
+                            currentObjectValuesIndex++;
+                            // !!!
+                            if (typeof valueObject == "number")
+                            {
+                                value = valueObject as number;
+                            }
+                            else if (typeof valueObject == "string")
+                            {
+                                value = StringUtil.parseToFloat(valueObject);
+                            }
+                            else
+                            {
+                                value = 0;
+                            }
+                        }
+
+                        let placeholderTypeChar
+                            = Placeholder_Type_Char_Float;
                         if (value != null)
                         {
                             let valueString: string = StringUtil.Empty;
