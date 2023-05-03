@@ -7,6 +7,8 @@
 import { ArrayUtil } from "./arrayUtil.js";
 import { StringRange } from "./model/stringRange.js"
 import { NumberUtil } from "./numberUtil.js";
+import { NumberStringInfo } from "./model/numberStringInfo.js";
+import { NumberRoundType } from "./constants/numberRoundType.js";
 
 export class StringUtil
 {
@@ -177,6 +179,42 @@ export class StringUtil
     };
 
     /**
+     * 获取数字字符串中整数和小数部分的字符串信息。
+     * @param numberString 指定的数字字符串。
+     * @returns 返回数字字符串中整数和小数部分的字符串信息。
+     */
+    static getNumberStringInfo(numberString: string | null): NumberStringInfo
+    {
+        if (StringUtil.isEmpty(numberString))
+        {
+            return new NumberStringInfo();
+        }
+
+        numberString = numberString!;
+
+        let integerString: string = StringUtil.Empty;
+        let floatString: string = StringUtil.Empty;
+
+        let dotIndex = numberString.indexOf(".");
+        if (dotIndex < 0)
+        {
+            integerString = numberString;
+        }
+        else
+        {
+            integerString = numberString.substring(0, dotIndex);
+            floatString = numberString.substring(dotIndex + 1);
+        }
+
+        let numberStringInfo = new NumberStringInfo(
+            dotIndex,
+            integerString,
+            floatString);
+        { }
+        return numberStringInfo;
+    }
+
+    /**
      * 补充“0”到指定的数字字符串中，直到整数部分的字符个数大于等于指定的整数位数。
      * @param numberString 指定的数字字符串。
      * @param integerNumberDigits 指定的整数部分位数。
@@ -206,18 +244,79 @@ export class StringUtil
      */
     static complementZeroAtFloatCharsRightTo(
         numberString: string,
-        decimalNumberDigits: number): string
+        floatNumberDigits: number): string
     {
         let newString = numberString;
-        let decimalNumberDigitsNeedComplement
-            = decimalNumberDigits
+        let floatNumberDigitsNeedComplement
+            = floatNumberDigits
             - StringUtil.getFloatNumberDigitsOf(newString);
-        while (decimalNumberDigitsNeedComplement > 0)
+        if (newString.indexOf(".") < 0)
+        {
+            newString = newString + ".";
+        }
+        while (floatNumberDigitsNeedComplement > 0)
         {
             newString = newString + "0";
-            decimalNumberDigitsNeedComplement--;
+            floatNumberDigitsNeedComplement--;
         }
         return newString;
+    }
+
+    /**
+     * 将指定的数字字符串转换为指定位数的小数位数的数字字符串。
+     * @param numberString 指定的数字字符串。
+     * @param floatNumberDigits 指定的小数位数。
+     * @returns 返回指定位数的小数位数的数字字符串。
+     */
+    static stringByFixedFloat(
+        numberObject: string | number | null,
+        floatNumberDigits: number,
+        numberRoundType: NumberRoundType = NumberRoundType.Round): string
+    {
+        let numberValue = 0;
+        if (numberObject != null)
+        {
+            if (typeof (numberObject) == "number")
+            {
+                numberValue = numberObject as number;
+            }
+            else if (typeof (numberObject) == "string")
+            {
+                numberValue = parseFloat(numberObject as string);
+            }
+        }
+        let numberFixed = NumberUtil.numberByFixed(
+            numberValue,
+            floatNumberDigits,
+            numberRoundType);
+        let numberStringFixed = numberFixed.toString();
+        let numberStringInfo = StringUtil.getNumberStringInfo(numberStringFixed);
+        if (floatNumberDigits > 0)
+        {
+            if (StringUtil.isEmpty(numberStringInfo.floatString))
+            {
+                numberStringFixed = numberStringFixed + ".";
+                for (let floatNumberDigit = 0;
+                    floatNumberDigit < floatNumberDigits;
+                    floatNumberDigit++)
+                {
+                    numberStringFixed = numberStringFixed + "0";
+                }
+            }
+            else
+            {
+                numberStringFixed = StringUtil.complementZeroAtFloatCharsRightTo(
+                    numberStringFixed,
+                    floatNumberDigits);
+            }
+        }
+        else
+        {
+            // !!!
+            numberStringFixed = numberStringInfo.integerString;
+            // !!!
+        }
+        return numberStringFixed;
     }
 
     ////////////////////////////////////////////////
@@ -716,7 +815,7 @@ export class StringUtil
      * @param values 要进行格式化的值。
      * @returns format 格式化后的字符串。
      */
-    static toFormatString(formatter: string | null, ...values: any[]): string
+    static format(formatter: string | null, ...values: any[]): string
     {
         if (StringUtil.isEmpty(formatter))
         {
@@ -737,6 +836,7 @@ export class StringUtil
         ////////////////////////////////////////////////
         let placeholderRanges = new Array<StringRange>();
         let placeholderValues = new Array<string>();
+        let currentObjectValuesIndex = 0;
         const charsCount = formatter.length;
         for (let charIndex = 0;
             charIndex < charsCount;
@@ -800,11 +900,13 @@ export class StringUtil
                         || StringUtil.isEquals(placeholderBodyChar, Placeholder_Type_Char_Float, true))
                     {
                         let value: number | null = null;
-                        let placeholderIndex = placeholderRanges.length;
                         if (values != null
-                            && placeholderIndex < values.length)
+                            && currentObjectValuesIndex < values.length)
                         {
-                            let valueObject = values[placeholderIndex];
+                            let valueObject = values[currentObjectValuesIndex];
+                            // !!!
+                            currentObjectValuesIndex++;
+                            // !!!
                             if (typeof valueObject == "number")
                             {
                                 value = valueObject as number;
@@ -839,19 +941,39 @@ export class StringUtil
                             }
                             else
                             {
-                                let floatCharsCount
-                                    = StringUtil.getFloatNumberDigitsOf(placeholderParamString);
-                                if (floatCharsCount > 0)
+                                let integerCharsCount = -1;
+                                let floatCharsCount = -1;
+                                let numberStringInfo
+                                    = StringUtil.getNumberStringInfo(placeholderParamString);
+                                if (numberStringInfo != null)
                                 {
-                                    valueString = value.toFixed(floatCharsCount);
+                                    if (StringUtil.isNotEmpty(numberStringInfo.integerString))
+                                    {
+                                        integerCharsCount
+                                            = this.parseToInt(numberStringInfo.integerString);
+                                    }
+                                    if (StringUtil.isNotEmpty(numberStringInfo.floatString))
+                                    {
+                                        floatCharsCount
+                                            = this.parseToInt(numberStringInfo.floatString);
+                                    }
                                 }
-                                let decimalCharsCount
-                                    = StringUtil.getIntegerCharsCountOf(placeholderParamString);
-                                if (decimalCharsCount > 0)
+                                if (floatCharsCount >= 0)
+                                {
+                                    valueString
+                                        = StringUtil.stringByFixedFloat(
+                                            value,
+                                            floatCharsCount);
+                                }
+                                else
+                                {
+                                    valueString = value.toString();
+                                }
+                                if (integerCharsCount > 0)
                                 {
                                     valueString = StringUtil.complementZeroAtIntegerCharsLeftTo(
                                         valueString,
-                                        decimalCharsCount);
+                                        integerCharsCount);
                                 }
                             }
                             ////////////////////////////////////////////////
@@ -886,11 +1008,13 @@ export class StringUtil
                         if (placeholderParamLength == 0)
                         {
                             let valueString: string | null = null;
-                            let placeholderIndex = placeholderRanges.length;
                             if (values != null
-                                && placeholderIndex < values.length)
+                                && currentObjectValuesIndex < values.length)
                             {
-                                let valueObject = values[placeholderIndex];
+                                let valueObject = values[currentObjectValuesIndex];
+                                // !!!
+                                currentObjectValuesIndex++;
+                                // !!!
                                 if (typeof valueObject == "string")
                                 {
                                     valueString = valueObject;

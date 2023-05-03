@@ -32,16 +32,16 @@ export class NumberUtil
     /**
      * 根据指定的小数精度（位数），对指定的数值进行取整。
      * @param numberValue 指定的数值。
-     * @param decimalPrecision 指定的小数精度（位数）。
+     * @param floatPrecision 指定的小数精度（位数）。
      * @param numberRoundType 指定的取整类型，默认为：NumberRoundType.Round，四舍五入。
      * @returns 取整后的数值。
      */
     public static numberByFixed(
         numberValue: number,
-        decimalPrecision: number,
+        floatPrecision: number,
         numberRoundType: NumberRoundType = NumberRoundType.Round): number
     {
-        let pow = Math.pow(10, decimalPrecision);
+        let pow = Math.pow(10, floatPrecision);
 
         switch (numberRoundType)
         {

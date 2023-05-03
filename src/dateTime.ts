@@ -1012,7 +1012,7 @@ export class DateTime
         if (isUseLocalTimeZone)
         {
             let timezoneString
-                = StringUtil.toFormatString(
+                = StringUtil.format(
                     "%2d:%2d",
                     this.timeZone,
                     this.timeZoneMinutes);
