@@ -15,6 +15,10 @@ export class Uri
 
     static readonly PathQueryDelimiter: string = "?";
 
+    static readonly QueryParamsDelimiter: string = "&";
+    
+    static readonly QueryParamValudDelimiter: string = "=";
+
     static readonly QueryFragmentDelimiter: string = "#";
 
 
@@ -186,7 +190,7 @@ export class Uri
 
     path: string | null = null;
 
-    _query: string | null = null;
+    protected _query: string | null = null;
 
     get query(): string | null
     {
@@ -211,7 +215,7 @@ export class Uri
         query = query!;
 
         let queryParameters = new Map<string, string>();
-        let queryParameterStrings = query.split("&");
+        let queryParameterStrings = query.split(Uri.QueryParamsDelimiter);
         for (let queryParameterString of queryParameterStrings)
         {
             if (StringUtil.isEmpty(queryParameterString))
@@ -219,7 +223,7 @@ export class Uri
                 continue;
             }
 
-            let queryParameterNameValue = queryParameterString.split("=");
+            let queryParameterNameValue = queryParameterString.split(Uri.QueryParamValudDelimiter);
             let queryParameterName = queryParameterNameValue[0];
             if (StringUtil.isEmpty(queryParameterName))
             {
@@ -240,7 +244,7 @@ export class Uri
 
     queryParameters: Map<string, string> | null = null;
 
-    _fragment: string | null = null;
+    protected _fragment: string | null = null;
 
     get fragment(): string | null
     {
@@ -269,7 +273,7 @@ export class Uri
         fragment = fragment!;
 
         let fragmentParameters = new Map<string, string>();
-        let fragmentParameterStrings = fragment.split("&");
+        let fragmentParameterStrings = fragment.split(Uri.QueryParamsDelimiter);
         for (let fragmentParameterString of fragmentParameterStrings)   
         {
             if (StringUtil.isEmpty(fragmentParameterString))
@@ -277,7 +281,7 @@ export class Uri
                 continue;
             }
 
-            let fragmentParameterNameValue = fragmentParameterString.split("=");
+            let fragmentParameterNameValue = fragmentParameterString.split(Uri.QueryParamValudDelimiter);
             let fragmentParameterName = fragmentParameterNameValue[0];
             if (StringUtil.isEmpty(fragmentParameterName))
             {
@@ -316,5 +320,15 @@ export class Uri
         absoluteUri: string | null = null)
     {
         this.absoluteUri = absoluteUri;
+    }
+
+    toString(): string
+    {
+        return StringUtil.emptyOr(this.absoluteUri);
+    }
+
+    toJson(): string | null
+    {
+        return this.absoluteUri;
     }
 }

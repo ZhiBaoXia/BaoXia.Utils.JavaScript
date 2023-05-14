@@ -126,7 +126,7 @@ export class CookieUtil
             return null;
         }
 
-        var cookieKeyValues = new Map<string, string>();
+        let cookieKeyValues = new Map<string, string>();
         for (let cookieIndex = 0;
             cookieIndex < sourceCookieStrings.length;
             cookieIndex++)
