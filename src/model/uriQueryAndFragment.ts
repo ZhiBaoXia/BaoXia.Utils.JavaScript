@@ -1,6 +1,6 @@
 
 import { StringUtil } from "../stringUtil.js"
-import { Uri } from "./uri.js";
+import { UriPathDelimiter } from "../constant/uriPathDelimiter.js";
 /**
  * Uri查询参数和锚点部分。
  */
@@ -31,7 +31,7 @@ export class UriQueryAndFragment
                 = this.queryBeginCharIndex
                 + (this.isIncludeDelimiter
                     ? 0
-                    : Uri.PathQueryDelimiter.length);
+                    : UriPathDelimiter.PathToQuery.length);
         }
         else if (this.fragmentBeginCharIndex >= 0
             && (this.queryBeginCharIndex < 0
@@ -41,7 +41,7 @@ export class UriQueryAndFragment
                 = this.fragmentBeginCharIndex
                 + (this.isIncludeDelimiter
                     ? 0
-                    : Uri.QueryFragmentDelimiter.length);
+                    : UriPathDelimiter.QueryParamToFragment.length);
         }
         return beginCharIndex;
     }

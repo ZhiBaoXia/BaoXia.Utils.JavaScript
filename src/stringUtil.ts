@@ -8,7 +8,7 @@ import { ArrayUtil } from "./arrayUtil.js";
 import { StringRange } from "./model/stringRange.js"
 import { NumberUtil } from "./numberUtil.js";
 import { NumberStringInfo } from "./model/numberStringInfo.js";
-import { NumberRoundType } from "./constants/numberRoundType.js";
+import { NumberRoundType } from "./constant/numberRoundType.js";
 
 export class StringUtil
 {
@@ -769,6 +769,24 @@ export class StringUtil
         }
         return false;
     };
+
+    /**
+     * 是否指定的字符串包含指定的关键字。
+     * @param str 指定的字符串。
+     * @param keyword 指定的关键字。
+     * @param [isIgnoreCase] 查找时是否忽略大小写，默认为： false 。
+     * @returns 当指定的字符串包含指定的关键字时，返回：true，否则返回：false。
+     */
+    static isContainsKeywordIn(
+        str: string | null,
+        keyword: string | null,
+        isIgnoreCase: boolean = false): boolean
+    {
+        return this.indexOfKeywordIn(
+            str,
+            keyword,
+            isIgnoreCase) >= 0;
+    }
 
     /**
      * 获取指定字符串的左边指定长度的子字符串。
@@ -1589,4 +1607,5 @@ export class StringUtil
 
         return finalString;
     }
+
 }

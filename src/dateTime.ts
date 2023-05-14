@@ -1,5 +1,5 @@
 
-import { DateTimeField } from "./constants/dateTimeField.js"
+import { DateTimeField } from "./constant/dateTimeField.js"
 import { StringRange } from "./model/stringRange.js";
 import { DateTimeSpan } from "./model/dateTimeSpan.js"
 import { StringUtil } from "./stringUtil.js";
@@ -1032,5 +1032,14 @@ export class DateTime
             dateTimeString = this._date.toISOString();
         }
         return dateTimeString;
+    }
+
+    /**
+     * 将当前时间对象，转为 JSON 格式的字符串。
+     * @returns 当前当前时间对象，对应的 JSON 格式的字符串。
+     */
+    toJSON(): string | null
+    {
+        return this.toISOString();
     }
 }
