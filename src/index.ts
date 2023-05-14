@@ -1,3 +1,4 @@
+import  * as Model from "./model/index.js"
 import { ObjectUtil } from "./objectUtil.js"
 import { ArrayUtil } from "./arrayUtil.js"
 import { StringUtil } from "./stringUtil.js"
@@ -10,6 +11,7 @@ import { TestProject } from "./unitTest/testProject.js"
 
 export 
 {
+    Model,
     ObjectUtil,
     ArrayUtil,
     StringUtil,
