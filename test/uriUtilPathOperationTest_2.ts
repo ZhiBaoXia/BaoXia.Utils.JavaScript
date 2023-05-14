@@ -71,8 +71,41 @@ export class UriUtilPathOperationTest_2 extends TestCase
             + path
             + (StringUtil.isNotEmpty(query) + Model.Uri.PathQueryDelimiter + query)
             + (StringUtil.isNotEmpty(fragment) + Model.Uri.QueryFragmentDelimiter + fragment);
-    
-            
 
-        }
+        const pathsNeedAppened = [
+            null,
+            "",
+            "/",
+            "/game",
+            "/game/fps",
+            "/game/fps/cod"
+        ]
+
+        const queryParamsNeedAppened = [
+            null,
+            "",
+            //
+            "keyword=cod",
+            "keyword=cod&type=fps",
+            //
+            "keyword=cod#color=blue",
+            "keyword=cod&type=fps#color=blue",
+            //
+            "?keyword=cod",
+            "?keyword=cod&type=fps",
+            //
+            "?keyword=cod#color=blue",
+            "?keyword=cod&type=fps#color=blue"
+        ];
+
+        const fragmentParamsNeedAppened = [
+            null,
+            "",
+            "level=1",
+            "level=1&attribute=fire",
+            //
+            "#level=1",
+            "#level=1&attribute=fire"
+        ];
+    }
 } 
