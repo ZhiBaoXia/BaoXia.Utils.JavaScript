@@ -6,7 +6,8 @@ import { StringUtilFormatTest } from "./stringUtilFormatTest.js";
 import { ArrayUtilTest } from "./arrayUtilTest.js";
 import { DateTimeTest } from "./dateTimeTest.js";
 import { UriUtilParseTest } from "./uriUtilParseTest.js";
-import { UriUtilPathOperationTest } from "./uriUtilPathOperationTest.js";
+import { UriUtilPathOperationTest_1 } from "./uriUtilPathOperationTest_1.js";
+import { UriUtilPathOperationTest_2 } from "./uriUtilPathOperationTest_2.js";
 import { CookieUtilTest } from "./cookieUtilTest.js";
 
 
@@ -19,7 +20,8 @@ let testProject = new TestProject(
         new ArrayUtilTest(),
         new DateTimeTest(),
         new UriUtilParseTest(),
-        new UriUtilPathOperationTest(),
+        new UriUtilPathOperationTest_1(),
+        new UriUtilPathOperationTest_2(),
         new CookieUtilTest()
     ]);
 // !!!

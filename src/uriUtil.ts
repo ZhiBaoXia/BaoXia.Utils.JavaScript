@@ -104,7 +104,7 @@ export class UriUtil
                 = uriString.substring(
                     uriQueryBeginCharIndex);
         }
-        else if (uriFragmentBeginCharIndex >= 0)
+        else if (uriQueryFragmentDelimiterIndex >= 0)
         {
             uriFragmentBeginCharIndex
                 = isIncludeDelimiter
@@ -118,7 +118,7 @@ export class UriUtil
         {
             return null;
         }
-        
+
         var uriQueryAndFragment = new UriQueryAndFragment(
             uriQuery,
             uriQueryBeginCharIndex,
@@ -173,45 +173,47 @@ export class UriUtil
         // 拼接路径：
         uriString = StringUtil.joinStringsWithDelimiter(
             Uri.HostPathDelimiter,
-            false,
+            true,
             uriString,
             pathNeedAppend);
 
-        let uriQuery
+        let queryInUrString
             = uriQueryAndFragment?.query;
         let isUriQueryNotEmpty
-            = StringUtil.isNotEmpty(uriQuery);
+            = StringUtil.isNotEmpty(queryInUrString);
+        let queryInPathNeedAppend
+            = uriQueryAndFragmentInPathNeedAppend?.query;
         let isUriQueryInPathNeedAppendNotEmpty
-            = StringUtil.isNotEmpty(uriQueryAndFragmentInPathNeedAppend?.query);
+            = StringUtil.isNotEmpty(queryInPathNeedAppend);
         if (isUriQueryNotEmpty
-            && isUriQueryNotEmpty)
+            && isUriQueryInPathNeedAppendNotEmpty)
         {
-            var uriQueryInPathNeedAppend
+            queryInPathNeedAppend
                 = StringUtil.trimLeftKeywordIn(
-                    uriQueryAndFragmentInPathNeedAppend!.query,
+                    queryInPathNeedAppend!,
                     Uri.PathQueryDelimiter);
-            uriQuery
+            queryInUrString
                 = StringUtil.joinStringsWithDelimiter(
                     Uri.QueryParamsDelimiter,
                     true,
-                    uriQuery!,
-                    uriQueryInPathNeedAppend);
+                    queryInUrString!,
+                    queryInPathNeedAppend);
         }
         else if (isUriQueryInPathNeedAppendNotEmpty)
         {
-            uriQuery = uriQueryAndFragmentInPathNeedAppend!.query;
+            queryInUrString = queryInPathNeedAppend!;
+            isUriQueryNotEmpty = true;
         }
 
-        isUriQueryNotEmpty = StringUtil.isNotEmpty(uriQuery);
         if (isUriQueryNotEmpty)
         {
             // 拼接路径和查询参数：
-            uriString 
-            = StringUtil.joinStringsWithDelimiter(
-                Uri.HostPathDelimiter,
-                true,
-                uriString,
-                uriQuery!);
+            uriString
+                = StringUtil.joinStringsWithDelimiter(
+                    Uri.PathQueryDelimiter,
+                    true,
+                    uriString,
+                    queryInUrString!);
         }
 
         let uriFragment = uriQueryAndFragment?.fragment;
@@ -220,12 +222,12 @@ export class UriUtil
         let isUriFragmentInPathNeedAppendNotEmpty
             = StringUtil.isNotEmpty(uriQueryAndFragmentInPathNeedAppend?.fragment);
         if (isUriFragmentNotEmpty
-            && isUriFragmentNotEmpty)
+            && isUriFragmentInPathNeedAppendNotEmpty)
         {
             var uriFragmentInPathNeedAppend
                 = StringUtil.trimLeftKeywordIn(
                     uriQueryAndFragmentInPathNeedAppend!.fragment,
-                    Uri.PathQueryDelimiter);
+                    Uri.QueryFragmentDelimiter);
             uriFragment
                 = StringUtil.joinStringsWithDelimiter(
                     Uri.QueryParamsDelimiter,
@@ -240,12 +242,12 @@ export class UriUtil
         if (StringUtil.isNotEmpty(uriFragment))
         {
             // 拼接路径（包含查询参数）和锚点：
-            uriString 
-            = StringUtil.joinStringsWithDelimiter(
-                Uri.QueryFragmentDelimiter,
-                true,
-                uriString,
-                uriFragment!);
+            uriString
+                = StringUtil.joinStringsWithDelimiter(
+                    Uri.QueryFragmentDelimiter,
+                    true,
+                    uriString,
+                    uriFragment!);
         }
 
         return uriString;
@@ -311,11 +313,11 @@ export class UriUtil
 
         let uriQueryAndFragment
             = this.getUriQueryAndFragmentFrom(uriString);
-        let uriFragment: string | null = null;
+        let fragmentInUri: string | null = null;
         if (uriQueryAndFragment != null
             && uriQueryAndFragment.fragmentBeginCharIndex >= 0)
         {
-            uriFragment
+            fragmentInUri
                 = uriString.substring(
                     uriQueryAndFragment.fragmentBeginCharIndex);
             uriString
@@ -323,6 +325,21 @@ export class UriUtil
                     0,
                     uriQueryAndFragment.fragmentBeginCharIndex);
         }
+
+        var uriQueryAndFragmentInQueryParamsNeedAppend
+            = this.getUriQueryAndFragmentFrom(queryParams);
+        var fragmentInQueryParamsNeedAppend: string | null = null;
+        if (uriQueryAndFragmentInQueryParamsNeedAppend != null
+            && uriQueryAndFragmentInQueryParamsNeedAppend.fragmentBeginCharIndex >= 0)
+        {
+            fragmentInQueryParamsNeedAppend
+                = uriQueryAndFragmentInQueryParamsNeedAppend.fragment;
+            queryParams
+                = queryParams.substring(
+                    0,
+                    uriQueryAndFragmentInQueryParamsNeedAppend.fragmentBeginCharIndex);
+        }
+
         let queryParamsDelimiter = Uri.PathQueryDelimiter;
         if (uriQueryAndFragment != null
             && uriQueryAndFragment.queryBeginCharIndex >= 0)
@@ -340,14 +357,39 @@ export class UriUtil
                 true,
                 uriString,
                 queryParams);
-        if (StringUtil.isNotEmpty(uriFragment))
+
+        var isFragmentInUriNotEmpty 
+        = StringUtil.isNotEmpty(fragmentInUri);
+        var isFragmentInQueryParamsNeedAppendNotEmpty
+         = StringUtil.isNotEmpty(fragmentInQueryParamsNeedAppend);
+        if (isFragmentInUriNotEmpty
+            && isFragmentInQueryParamsNeedAppendNotEmpty)
+        {
+            fragmentInQueryParamsNeedAppend
+                = StringUtil.trimLeftKeywordIn(
+                    fragmentInQueryParamsNeedAppend,
+                    Uri.QueryFragmentDelimiter);
+            fragmentInUri
+                = StringUtil.joinStringsWithDelimiter(
+                    Uri.QueryParamsDelimiter,
+                    true,
+                    fragmentInUri!,
+                    fragmentInQueryParamsNeedAppend);
+        }
+        else if (isFragmentInQueryParamsNeedAppendNotEmpty)
+        {
+            fragmentInUri = fragmentInQueryParamsNeedAppend;
+            isFragmentInUriNotEmpty = true;
+        }
+
+        if (isFragmentInUriNotEmpty)
         {
             uriString
                 = StringUtil.joinStringsWithDelimiter(
                     Uri.QueryFragmentDelimiter,
                     true,
                     uriString,
-                    uriFragment!);
+                    fragmentInUri!);
         }
         return uriString;
     }
