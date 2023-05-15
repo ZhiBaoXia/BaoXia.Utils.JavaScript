@@ -8,7 +8,7 @@ import { ArrayUtil } from "./arrayUtil.js";
 import { StringRange } from "./model/stringRange.js"
 import { NumberUtil } from "./numberUtil.js";
 import { NumberStringInfo } from "./model/numberStringInfo.js";
-import { NumberRoundType } from "./constants/numberRoundType.js";
+import { NumberRoundType } from "./constant/numberRoundType.js";
 
 export class StringUtil
 {
@@ -84,6 +84,49 @@ export class StringUtil
             && characterCode <= 122)
         {
             return true;
+        }
+        return false;
+    }
+
+    /**
+     * 判断指定的字符是否相等。
+     * @param charA 指定的字符A。
+     * @param charB 指定的字符B。
+     * @param [isIgnoreCase] 是否忽略大小写，默认为：false。
+     * @returns 如果指定的字符相等，则返回：true，否则返回：false。
+     */
+    static isSameChar(
+        charA: number,
+        charB: number,
+        isIgnoreCase: boolean = false): boolean
+    {
+        if (charA == charB)
+        {
+            return true;
+        }
+        if (!isIgnoreCase)
+        {
+            return false;
+        }
+        // "A-Z"：65-90
+        if (charA >= 65
+            && charA <= 90)
+        {
+            // "a-z"：97-122
+            if (charB == charA + 32)
+            {
+                return true;
+            }
+        }
+        // "a-z"：97-122
+        else if (charA >= 97
+            && charA <= 122)
+        {
+            // "A-Z"：65-90
+            if (charB == charA - 32)
+            {
+                return true;
+            }
         }
         return false;
     }
@@ -330,9 +373,10 @@ export class StringUtil
      * @param str 指定的字符串对象。
      * @returns 如果指定的字符串对象为“null”，或“空字符串”，则返回：true，否则返回：false。
      */
-    static isEmpty(str: string | null): boolean
+    static isEmpty(str: string | null | undefined): boolean
     {
-        if (str == null
+        if (typeof (str) == "undefined"
+            || str == null
             || str.length < 1)
         {
             return true;
@@ -345,9 +389,37 @@ export class StringUtil
      * @param str 指定的字符串对象。
      * @returns 如果指定的字符串对象不为“null”，或“空字符串”，则返回：true，否则返回：false。
      */
-    static isNotEmpty(str: string | null): boolean
+    static isNotEmpty(str: string | null | undefined): boolean
     {
         return !StringUtil.isEmpty(str);
+    }
+
+    /**
+     * 返回指定字符串，或“Empty”。
+     * @param str 指定的字符串对象。
+     * @returns 指定的字符串对象不为“null”时返回：指定的字符串，否则返回：StringUtil.Empty。
+     */
+    static emptyOr(str: string | null): string
+    {
+        if (str == null)
+        {
+            str = StringUtil.Empty;
+        }
+        return str;
+    }
+
+    /**
+     * 返回指定字符串的长度。
+     * @param str 指定的字符串对象。
+     * @returns 指定的字符串对象不为“null”时返回：指定字符串的长度，否则返回：0 。
+     */
+    static lengthOf(str: string | null): number
+    {
+        if (str == null)
+        {
+            return 0;
+        }
+        return str!.length;
     }
 
     /**
@@ -447,19 +519,116 @@ export class StringUtil
         return true;
     }
 
+    static isSameCharsFromIndexIn(
+        stringA: string | null,
+        stringACompareBeginCharIndex: number,
+        stringB: string | null,
+        stringBCompareBeginCharIndex: number,
+
+        compareCharsCount: number,
+        isIgnoreCase: boolean = false,
+        isNullEqualsEmpty = true): boolean
+    {
+        if (stringA == null
+            && stringB == null)
+        {
+            return true;
+        }
+        if (stringA == null)
+        {
+            if (isNullEqualsEmpty
+                && stringB!.length < 1)
+            {
+                return true;
+            }
+            return false;
+        }
+        if (stringB == null)
+        {
+            if (isNullEqualsEmpty
+                && stringA!.length < 1)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        let stringACompareCharsCount = compareCharsCount;
+        if (stringACompareBeginCharIndex < 0)
+        {
+            stringACompareCharsCount += stringACompareBeginCharIndex;
+            stringACompareBeginCharIndex = 0;
+        }
+        let stringBCompareCharsCount = compareCharsCount;
+        if (stringBCompareBeginCharIndex < 0)
+        {
+            stringBCompareCharsCount += stringBCompareBeginCharIndex;
+            stringBCompareBeginCharIndex = 0;
+        }
+        if (stringACompareCharsCount != stringBCompareCharsCount)
+        {
+            return false;
+        }
+
+        compareCharsCount = stringACompareCharsCount;
+        if (compareCharsCount < 1)
+        {
+            return true;
+        }
+
+        stringA = stringA!;
+        stringB = stringB!;
+
+        let stringACompareEndCharIndex
+            = stringACompareBeginCharIndex
+            + compareCharsCount;
+        if (stringACompareEndCharIndex > stringA.length)
+        {
+            return false;
+        }
+        let stringBCompareEndCharIndex
+            = stringBCompareBeginCharIndex
+            + compareCharsCount;
+        if (stringBCompareEndCharIndex > stringB.length)
+        {
+            return false;
+        }
+
+        for (let charIndex = 0;
+            charIndex < compareCharsCount;
+            charIndex++)
+        {
+            let charCodeA
+                = stringA.charCodeAt(stringACompareBeginCharIndex + charIndex);
+            let charCodeB
+                = stringB.charCodeAt(stringBCompareBeginCharIndex + charIndex);
+
+            if (!StringUtil.isSameChar(
+                charCodeA,
+                charCodeB,
+                isIgnoreCase))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * 获取指定关键字，在指定的字符串中，第一次出现的索引值。
      * @param str 指定的字符串。
      * @param keyword 要查找的关键字。
      * @param [isIgnoreCase] 可选参数，查找时是否忽略大小写，默认为：false。
      * @param [firstCharIndexToSearch] 可选参数，指定查找范围的第一个字符索引值，默认为：0。
+     * @param [lastCharIndexToSearch] 可选参数，指定查找范围的最后一个字符索引值，默认为：-1，表示不限制。
      * @returns 查找到指定的关键字时，返回关键字在指定字符串中的第一次出现的索引值，如果查找不到指定的关键字，则返回：-1。
      */
     static indexOfKeywordIn(
         str: string | null,
         keyword: string | null,
         isIgnoreCase: boolean = false,
-        firstCharIndexToSearch = 0): number
+        firstCharIndexToSearch = 0,
+        lastCharIndexToSearch = -1): number
     {
         if (StringUtil.isEmpty(str)
             || StringUtil.isEmpty(keyword))
@@ -470,24 +639,31 @@ export class StringUtil
         str = str!;
         keyword = keyword!;
 
-        if ((firstCharIndexToSearch + keyword.length) > str.length)
+        if (firstCharIndexToSearch < 0)
         {
-            return -1;
+            firstCharIndexToSearch = 0;
         }
-        if (firstCharIndexToSearch > 0)
+        if (lastCharIndexToSearch < 0)
         {
-            str = str.substring(firstCharIndexToSearch);
+            lastCharIndexToSearch = str.length;
         }
-
-        if (isIgnoreCase)
+        let maxCharIndexToSearch = lastCharIndexToSearch + 1 - keyword.length;
+        for (let charIndex = firstCharIndexToSearch;
+            charIndex <= maxCharIndexToSearch;
+            charIndex++)
         {
-            str = str.toLowerCase();
-            keyword = keyword.toLowerCase();
+            if (StringUtil.isSameCharsFromIndexIn(
+                str,
+                charIndex,
+                keyword,
+                0,
+                keyword.length,
+                isIgnoreCase))
+            {
+                return charIndex;
+            }
         }
-
-        let indexOfKeyword = str.indexOf(keyword);
-        { }
-        return indexOfKeyword;
+        return -1;
     }
 
     /**
@@ -502,7 +678,8 @@ export class StringUtil
         str: string | null,
         keyword: string | null,
         isIgnoreCase: boolean = false,
-        firstCharIndexToSearch = 0): number
+        firstCharIndexToSearch = 0,
+        lastCharIndexToSearch = -1): number
     {
         if (StringUtil.isEmpty(str)
             || StringUtil.isEmpty(keyword))
@@ -513,24 +690,30 @@ export class StringUtil
         str = str!;
         keyword = keyword!;
 
-        if ((firstCharIndexToSearch + keyword.length) > str.length)
+        if (firstCharIndexToSearch < 0)
         {
-            return -1;
+            firstCharIndexToSearch = 0;
         }
-        if (firstCharIndexToSearch > 0)
+        if (lastCharIndexToSearch < 0)
         {
-            str = str.substring(firstCharIndexToSearch);
+            lastCharIndexToSearch = str.length;
         }
-
-        if (isIgnoreCase)
+        for (let charIndex = lastCharIndexToSearch + 1 - keyword.length;
+            charIndex >= firstCharIndexToSearch;
+            charIndex--)
         {
-            str = str.toLowerCase();
-            keyword = keyword.toLowerCase();
+            if (StringUtil.isSameCharsFromIndexIn(
+                str,
+                charIndex,
+                keyword,
+                0,
+                keyword.length,
+                isIgnoreCase))
+            {
+                return charIndex;
+            }
         }
-
-        let indexOfKeyword = str.lastIndexOf(keyword);
-        { }
-        return indexOfKeyword;
+        return -1;
     }
 
     /**
@@ -548,7 +731,11 @@ export class StringUtil
         if (StringUtil.indexOfKeywordIn(
             str,
             keyword,
-            isIgnoreCase) == 0)
+            isIgnoreCase,
+            0,
+            keyword != null
+                ? keyword.length - 1
+                : 0) == 0)
         {
             return true;
         }
@@ -568,10 +755,13 @@ export class StringUtil
         isIgnoreCase: boolean = false): boolean
     {
         let lastIndexOfKeyword
-            = StringUtil.indexOfKeywordIn(
+            = StringUtil.lastIndexOfKeywordIn(
                 str,
                 keyword,
-                isIgnoreCase);
+                isIgnoreCase,
+                (str != null && keyword != null)
+                    ? str.length - keyword.length
+                    : 0);
         if (lastIndexOfKeyword >= 0
             && (lastIndexOfKeyword + keyword!.length) == str!.length)
         {
@@ -579,6 +769,204 @@ export class StringUtil
         }
         return false;
     };
+
+    /**
+     * 是否指定的字符串包含指定的关键字。
+     * @param str 指定的字符串。
+     * @param keyword 指定的关键字。
+     * @param [isIgnoreCase] 查找时是否忽略大小写，默认为： false 。
+     * @returns 当指定的字符串包含指定的关键字时，返回：true，否则返回：false。
+     */
+    static isContainsKeywordIn(
+        str: string | null,
+        keyword: string | null,
+        isIgnoreCase: boolean = false): boolean
+    {
+        return this.indexOfKeywordIn(
+            str,
+            keyword,
+            isIgnoreCase) >= 0;
+    }
+
+    /**
+     * 获取指定字符串的左边指定长度的子字符串。
+     * @param str 指定的字符串。
+     * @param leftLength 指定长度。
+     * @returns 返回指定字符串的左边指定长度的子字符串。
+     */
+    static left(str: string | null, leftLength: number): string
+    {
+        if (StringUtil.isEmpty(str))
+        {
+            return StringUtil.Empty;
+        }
+
+        str = str!;
+
+        if (leftLength >= str!.length)
+        {
+            leftLength = str.length;
+        }
+        if (leftLength <= 0)
+        {
+            return StringUtil.Empty;
+        }
+        let leftSubstring = str.substring(0, leftLength);
+        { }
+        return leftSubstring;
+    }
+
+    /**
+     * 获取指定字符串的右边指定长度的子字符串。
+     * @param str 指定的字符串。
+     * @param rightLength 指定长度。
+     * @returns 返回指定字符串的右边指定长度的子字符串。
+     */
+    static right(str: string | null, rightLength: number): string
+    {
+        if (StringUtil.isEmpty(str))
+        {
+            return StringUtil.Empty;
+        }
+
+        str = str!;
+
+        if (rightLength >= str!.length)
+        {
+            rightLength = str.length;
+        }
+        if (rightLength <= 0)
+        {
+            return StringUtil.Empty;
+        }
+        let rightSubstring = str.substring(str.length - rightLength);
+        { }
+        return rightSubstring;
+    }
+
+    /**
+     * 移除指定字符串左边的关键字。
+     * @param str 指定的字符串。
+     * @param keywordsNeedTrimed 需要被移除的关键字数组。
+     * @param [isIgnoreCase] 可选参数，查找时是否忽略大小写，默认为：false。
+     * @returns 返回移除指定字符串左边的关键字后的字符串。
+     */
+    static trimLeftKeywordsIn(
+        str: string | null,
+        keywordsNeedTrimed: Array<string>,
+        isIgnoreCase: boolean = false): string
+    {
+        if (StringUtil.isEmpty(str))
+        {
+            return StringUtil.Empty;
+        }
+
+        str = str!;
+
+        if (ArrayUtil.isEmpty(keywordsNeedTrimed))
+        {
+            return str;
+        }
+
+        for (let keywordNeedTrimed of keywordsNeedTrimed)
+        {
+            if (StringUtil.isBeginWithKeywordIn(
+                str,
+                keywordNeedTrimed,
+                isIgnoreCase))
+            {
+                str = str.substring(keywordNeedTrimed.length);
+            }
+        }
+
+        return str;
+    }
+
+    /**
+     * 移除指定字符串左边的关键字。
+     * @param str 指定的字符串。
+     * @param keywordsNeedTrimed 需要被移除的关键字。
+     * @param [isIgnoreCase] 可选参数，查找时是否忽略大小写，默认为：false。
+     * @returns 返回移除指定字符串左边的关键字后的字符串。
+     */
+    static trimLeftKeywordIn(
+        str: string | null,
+        keywordNeedTrimed: string | null,
+        isIgnoreCase: boolean = false): string
+    {
+        if (StringUtil.isEmpty(keywordNeedTrimed))
+        {
+            return StringUtil.emptyOr(str);
+        }
+
+        return this.trimLeftKeywordsIn(
+            str,
+            [keywordNeedTrimed!],
+            isIgnoreCase);
+    }
+
+    /**
+     * 移除指定字符串右边的关键字。
+     * @param str 指定的字符串。
+     * @param keywordsNeedTrimed 需要被移除的关键字数组。
+     * @param [isIgnoreCase] 可选参数，查找时是否忽略大小写，默认为：false。
+     * @returns 返回移除指定字符串右边的关键字后的字符串。
+     */
+    static trimRightKeywordsIn(
+        str: string | null,
+        keywordsNeedTrimed: Array<string>,
+        isIgnoreCase: boolean = false): string
+    {
+        if (StringUtil.isEmpty(str))
+        {
+            return StringUtil.Empty;
+        }
+
+        str = str!;
+
+        if (ArrayUtil.isEmpty(keywordsNeedTrimed))
+        {
+            return str;
+        }
+
+        for (let keywordNeedTrimed of keywordsNeedTrimed)
+        {
+            if (StringUtil.isEndWithKeywordIn(
+                str,
+                keywordNeedTrimed,
+                isIgnoreCase))
+            {
+                str = str.substring(
+                    0,
+                    str.length - keywordNeedTrimed.length);
+            }
+        }
+
+        return str;
+    }
+
+    /**
+     * 移除指定字符串右边的关键字。
+     * @param str 指定的字符串。
+     * @param keywordsNeedTrimed 需要被移除的关键字。
+     * @param [isIgnoreCase] 可选参数，查找时是否忽略大小写，默认为：false。
+     * @returns 返回移除指定字符串右边的关键字后的字符串。
+     */
+    static trimRightKeywordIn(
+        str: string | null,
+        keywordNeedTrimed: string,
+        isIgnoreCase: boolean = false): string
+    {
+        if (StringUtil.isEmpty(keywordNeedTrimed))
+        {
+            return StringUtil.emptyOr(str);
+        }
+
+        return this.trimRightKeywordsIn(
+            str,
+            [keywordNeedTrimed!],
+            isIgnoreCase);
+    }
 
     /**
      * 获取指定关键字，在指定字符串中出现的全部区域信息数组。
@@ -803,7 +1191,6 @@ export class StringUtil
         }
         return newString;
     }
-
 
     /**
      * 根据指定的格式化字符串，格式化指定的值。
@@ -1173,4 +1560,52 @@ export class StringUtil
         }
         return formatter!;
     }
+
+    /**
+     * 使用指定的分隔符连接指定的字符串数组。
+     * @param delimiter 指定的连接分隔符。
+     * @param isDelimiterConsecutiveDisable 是否允许连续的分隔符，在“连接处”出现。 
+     * @param strings 要进行连接的字符串数组。
+     * @returns 使用指定的分隔符连接指定字符串数组后，生成的最终字符串。
+     */
+    static joinStringsWithDelimiter(
+        delimiter: string | null,
+        isDelimiterConsecutiveDisable: boolean,
+        ...strings: string[]): string
+    {
+        let finalString = StringUtil.Empty;
+        if (ArrayUtil.isEmpty(strings))
+        {
+            return finalString;
+        }
+
+        let isDelimiterNotEmpty = StringUtil.isNotEmpty(delimiter);
+        for (let str of strings)
+        {
+            if (isDelimiterNotEmpty
+                && finalString.length > 0)
+            {
+                if (isDelimiterConsecutiveDisable)
+                {
+                    delimiter = delimiter!;
+                    while (finalString.endsWith(delimiter))
+                    {
+                        StringUtil.right
+                        finalString = finalString.substring(
+                            0,
+                            finalString.length - delimiter.length);
+                    }
+                    while (str.startsWith(delimiter))
+                    {
+                        str = str.substring(delimiter.length);
+                    }
+                }
+                finalString += delimiter;
+            }
+            finalString += str;
+        }
+
+        return finalString;
+    }
+
 }

@@ -107,6 +107,26 @@ export class StringUtilTest extends TestCase
                 ////////////////////////////////////////////////
                 {
                     const originalString = "0123Abc0123Abc";
+
+                    let leftSubstring = StringUtil.left(originalString, 0);
+                    {
+                        assert(leftSubstring == StringUtil.Empty);
+                    }
+                    leftSubstring = StringUtil.left(originalString, 3);
+                    {
+                        assert(leftSubstring == "012");
+                    }
+
+                    let rightSubstring = StringUtil.right(originalString, 0);
+                    {
+                        assert(rightSubstring == StringUtil.Empty);
+                    }
+                    rightSubstring = StringUtil.right(originalString, 3);
+                    {
+                        assert(rightSubstring == "Abc");
+                    }
+
+
                     let newString = StringUtil.replaceAllKeywordIn(
                         originalString,
                         "0123",

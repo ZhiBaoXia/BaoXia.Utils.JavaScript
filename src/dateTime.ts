@@ -1,5 +1,5 @@
 
-import { DateTimeField } from "./constants/dateTimeField.js"
+import { DateTimeField } from "./constant/dateTimeField.js"
 import { StringRange } from "./model/stringRange.js";
 import { DateTimeSpan } from "./model/dateTimeSpan.js"
 import { StringUtil } from "./stringUtil.js";
@@ -16,7 +16,7 @@ export class DateTime
     // @自身属性
     ////////////////////////////////////////////////
 
-    _date: Date;
+    protected _date: Date;
 
     get timeZone(): number
     {
@@ -122,6 +122,14 @@ export class DateTime
     ////////////////////////////////////////////////
     // @类方法
     ////////////////////////////////////////////////
+
+    /**
+     * 此时此刻的时间对象。
+     */
+    static get now(): DateTime
+    {
+        return new DateTime();
+    }
 
     /**
      * 根据指定的比较精度，比较两个时间对象的“早晚”，当“dateTimeA”早于“dateTimeB”时返回“-1”；当“dateTimeA”晚于“dateTimeB”时返回“1”；当“dateTimeA”等于“dateTimeB”时返回“0”。
@@ -318,7 +326,7 @@ export class DateTime
      */
     addMonths(months: number): DateTime
     {
-        var dateTime = this.addYears(Math.floor(months / 12))
+        let dateTime = this.addYears(Math.floor(months / 12))
         {
             dateTime.month = Math.round(months) % 12;
         }
@@ -535,7 +543,7 @@ export class DateTime
         dateTimeField: DateTimeField,
         offset: number): DateTime
     {
-        var dateTime = new DateTime(this);
+        let dateTime = new DateTime(this);
         switch (dateTimeField)
         {
             case DateTimeField.Year:
@@ -577,7 +585,7 @@ export class DateTime
      */
     dateTimeByAddYears(years: number): DateTime
     {
-        var dateTime = new DateTime(this);
+        let dateTime = new DateTime(this);
         {
             dateTime.addYears(years);
         }
@@ -591,7 +599,7 @@ export class DateTime
      */
     dateTimeByAddMonths(months: number): DateTime
     {
-        var dateTime = new DateTime(this);
+        let dateTime = new DateTime(this);
         {
             dateTime.addMonths(months);
         }
@@ -605,7 +613,7 @@ export class DateTime
      */
     dateTimeByAddDays(days: number): DateTime
     {
-        var dateTime = new DateTime(this);
+        let dateTime = new DateTime(this);
         {
             dateTime.addDays(days);
         }
@@ -619,7 +627,7 @@ export class DateTime
      */
     dateTimeByAddHours(hours: number): DateTime
     {
-        var dateTime = new DateTime(this);
+        let dateTime = new DateTime(this);
         {
             dateTime.addHours(hours);
         }
@@ -633,7 +641,7 @@ export class DateTime
      */
     dateTimeByAddMinutes(minutes: number): DateTime
     {
-        var dateTime = new DateTime(this);
+        let dateTime = new DateTime(this);
         {
             dateTime.addMinutes(minutes);
         }
@@ -647,7 +655,7 @@ export class DateTime
      */
     dateTimeByAddSeconds(seconds: number): DateTime
     {
-        var dateTime = new DateTime(this);
+        let dateTime = new DateTime(this);
         {
             dateTime.addSeconds(seconds);
         }
@@ -661,7 +669,7 @@ export class DateTime
      */
     dateTimeByAddMilliseconds(milliseconds: number): DateTime
     {
-        var dateTime = new DateTime(this);
+        let dateTime = new DateTime(this);
         {
             dateTime.addMilliseconds(milliseconds);
         }
@@ -674,7 +682,7 @@ export class DateTime
      */
     dateTimeAtBeginOfDay(): DateTime
     {
-        var dateTime = new DateTime(this);
+        let dateTime = new DateTime(this);
         {
             dateTime.hour = 0;
             dateTime.minute = 0;
@@ -690,7 +698,7 @@ export class DateTime
      */
     dateTimeAtEndOfDay(): DateTime
     {
-        var dateTime = this.dateTimeAtBeginOfDay();
+        let dateTime = this.dateTimeAtBeginOfDay();
         {
             dateTime.addDays(1);
         }
@@ -703,7 +711,7 @@ export class DateTime
      */
     dateTimeAtBeginOfWeek(): DateTime
     {
-        var dateTime = this.dateTimeAtBeginOfDay();
+        let dateTime = this.dateTimeAtBeginOfDay();
         {
             dateTime.addDays(-dateTime.weekday);
         }
@@ -716,7 +724,7 @@ export class DateTime
      */
     dateTimeAtEndOfWeek(): DateTime
     {
-        var dateTime = this.dateTimeAtEndOfDay();
+        let dateTime = this.dateTimeAtEndOfDay();
         {
             dateTime.addDays(6 - dateTime.weekday);
         }
@@ -729,7 +737,7 @@ export class DateTime
      */
     dateTimeAtBeginOfMonth(): DateTime
     {
-        var dateTime = this.dateTimeAtBeginOfDay();
+        let dateTime = this.dateTimeAtBeginOfDay();
         {
             dateTime.day = 1;
         }
@@ -742,7 +750,7 @@ export class DateTime
      */
     dateTimeAtEndOfMonth(): DateTime
     {
-        var dateTime = this.dateTimeAtBeginOfMonth();
+        let dateTime = this.dateTimeAtBeginOfMonth();
         {
             dateTime.month += 1;
         }
@@ -755,7 +763,7 @@ export class DateTime
      */
     dateTimeAtBeginOfQuarter(): DateTime
     {
-        var dateTime = this.dateTimeAtBeginOfMonth();
+        let dateTime = this.dateTimeAtBeginOfMonth();
         {
             dateTime.month = Math.floor((dateTime.month - 1) / 3) * 3 + 1;
         }
@@ -768,7 +776,7 @@ export class DateTime
      */
     dateTimeAtEndOfQuarter(): DateTime
     {
-        var dateTime = this.dateTimeAtBeginOfQuarter();
+        let dateTime = this.dateTimeAtBeginOfQuarter();
         {
             dateTime.month += 3;
         }
@@ -781,7 +789,7 @@ export class DateTime
      */
     dateTimeAtBeginOfYear(): DateTime
     {
-        var dateTime = this.dateTimeAtBeginOfDay();
+        let dateTime = this.dateTimeAtBeginOfDay();
         {
             dateTime.month = 1;
             dateTime.day = 1;
@@ -795,7 +803,7 @@ export class DateTime
      */
     dateTimeAtEndOfYear(): DateTime
     {
-        var dateTime = this.dateTimeAtBeginOfYear();
+        let dateTime = this.dateTimeAtBeginOfYear();
         {
             dateTime.year += 1;
         }
@@ -810,7 +818,7 @@ export class DateTime
      * @param isRemoveLeftCharsByPlaceholder 是否依据日期格式化占位符移除时间字段左边的字符，默认为：false。
      * @returns 使用给定的模板和日期字段标题替换后的日期字符串。 
      */
-    _replaceDateFormatterPlaceholderInFormatter(
+    protected replaceDateFormatterPlaceholderInFormatter(
         stringFormatter: string | null,
         formatterPlaceholder: string | null,
         dateFieldCaption: string | null,
@@ -886,7 +894,7 @@ export class DateTime
         let yearFormatterPlaceholder = "y";
         let yearFieldCaption = this.year.toString();
         stringFormatter
-            = this._replaceDateFormatterPlaceholderInFormatter(
+            = this.replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
                 yearFormatterPlaceholder,
                 yearFieldCaption,
@@ -898,7 +906,7 @@ export class DateTime
         let monthFormatterPlaceholder = "M";
         let monthFieldCaption = this.month.toString();
         stringFormatter
-            = this._replaceDateFormatterPlaceholderInFormatter(
+            = this.replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
                 monthFormatterPlaceholder,
                 monthFieldCaption);
@@ -909,7 +917,7 @@ export class DateTime
         let dayFormatterPlaceholder = "d";
         let dayFieldCaption = this.day.toString();
         stringFormatter
-            = this._replaceDateFormatterPlaceholderInFormatter(
+            = this.replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
                 dayFormatterPlaceholder,
                 dayFieldCaption);
@@ -928,7 +936,7 @@ export class DateTime
             weekdayFieldCaption = weekdayCaptions[weekdayIndex];
         }
         stringFormatter
-            = this._replaceDateFormatterPlaceholderInFormatter(
+            = this.replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
                 weekdayFormatterPlaceholder,
                 weekdayFieldCaption);
@@ -939,7 +947,7 @@ export class DateTime
         let hourIn24FormatterPlaceholder = "H";
         let hourIn24FieldCaption = this.hour.toString();
         stringFormatter
-            = this._replaceDateFormatterPlaceholderInFormatter(
+            = this.replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
                 hourIn24FormatterPlaceholder,
                 hourIn24FieldCaption);
@@ -955,7 +963,7 @@ export class DateTime
         }
         let hourIn12FieldCaption = hourIn12.toString();
         stringFormatter
-            = this._replaceDateFormatterPlaceholderInFormatter(
+            = this.replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
                 hourIn12FormatterPlaceholder,
                 hourIn12FieldCaption);
@@ -966,7 +974,7 @@ export class DateTime
         let minuteFormatterPlaceholder = "m";
         let minuteFieldCaption = this.minute.toString();
         stringFormatter
-            = this._replaceDateFormatterPlaceholderInFormatter(
+            = this.replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
                 minuteFormatterPlaceholder,
                 minuteFieldCaption);
@@ -977,7 +985,7 @@ export class DateTime
         let secondFormatterPlaceholder = "s";
         let secondFieldCaption = this.second.toString();
         stringFormatter
-            = this._replaceDateFormatterPlaceholderInFormatter(
+            = this.replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
                 secondFormatterPlaceholder,
                 secondFieldCaption);
@@ -989,7 +997,7 @@ export class DateTime
         let millisecondFormatterPlaceholder = "f";
         let millisecondFieldCaption = this.millisecond.toString();
         stringFormatter
-            = this._replaceDateFormatterPlaceholderInFormatter(
+            = this.replaceDateFormatterPlaceholderInFormatter(
                 stringFormatter,
                 millisecondFormatterPlaceholder,
                 millisecondFieldCaption);
@@ -1024,5 +1032,14 @@ export class DateTime
             dateTimeString = this._date.toISOString();
         }
         return dateTimeString;
+    }
+
+    /**
+     * 将当前时间对象，转为 JSON 格式的字符串。
+     * @returns 当前当前时间对象，对应的 JSON 格式的字符串。
+     */
+    toJSON(): string | null
+    {
+        return this.toISOString();
     }
 }

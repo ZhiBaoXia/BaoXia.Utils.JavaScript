@@ -1,5 +1,5 @@
 
-import { NumberRoundType } from "./constants/numberRoundType.js";
+import { NumberRoundType } from "./constant/numberRoundType.js";
 
 export class NumberUtil
 {
