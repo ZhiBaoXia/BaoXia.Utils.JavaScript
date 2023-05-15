@@ -1,4 +1,4 @@
-import { DateTimeFieldConverter } from "../constants/dateTimeFieldConverter.js";
+import { DateTimeFieldConverter } from "../constant/dateTimeFieldConverter.js";
 
 export class DateTimeSpan
 {

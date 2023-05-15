@@ -1,7 +1,7 @@
 
 import { TestCase, UriUtil, StringUtil } from "../src/index.js";
 
-export class UriUtilTest extends TestCase
+export class UriUtilParseTest extends TestCase
 {
     ////////////////////////////////////////////////
     // @测试函数
@@ -9,7 +9,7 @@ export class UriUtilTest extends TestCase
 
     constructor()
     {
-        super("UriUtil Test",
+        super("UriUtilParseTest Test",
             (assert, assertFalse) =>
             {
                 let uriString = "www.baidu.com";

@@ -246,4 +246,78 @@ export class ArrayUtil
         }
         return lastArray;
     }
+
+
+    /**
+     * 枚举二维数组中的所有元素的组合。
+     * @param toReceiveItems 接收当前所有元素的一种组合。
+     * @param itemArrays 要进行枚举的二维元素数组。
+     */
+    static enumerateItemInItemArraysTo(
+        toReceiveItems: (items: any[]) => void,
+        ...itemArrays: any[][])
+    {
+        if (ArrayUtil.isEmpty(itemArrays))
+        {
+            return;
+        }
+
+        let itemArraysCount = itemArrays.length;
+        let allItemCombinationsCount = 0;
+        let itemArrayCurrentItemIndexes = new Array<number>();
+        let itemArrayCurrentItems = new Array<any>();
+        for (let itemArray of itemArrays)
+        {
+            let itemArrayLength = itemArray.length;
+            if (itemArrayLength <= 0)
+            {
+                return;
+            }
+
+            allItemCombinationsCount
+                = allItemCombinationsCount == 0
+                    ? itemArrayLength
+                    : allItemCombinationsCount * itemArrayLength;
+            // !!!
+            itemArrayCurrentItemIndexes.push(-1);
+            itemArrayCurrentItems.push(null);
+            // !!!
+        }
+        for (let itemIndex = 0;
+            itemIndex < allItemCombinationsCount;
+            itemIndex++)
+        {
+            ////////////////////////////////////////////////
+            // 1/2，更新各个数组的当前元素索引值：
+            ////////////////////////////////////////////////
+            for (let itemArrayIndex = 0;
+                itemArrayIndex < itemArraysCount;
+                itemArrayIndex++)
+            {
+                let itemArray = itemArrays[itemArrayIndex];
+                let itemsCount = itemArray.length;
+                let itemIndex = itemArrayCurrentItemIndexes[itemArrayIndex];
+                if ((itemIndex + 1) < itemsCount)
+                {
+                    itemIndex++;
+                    itemArrayCurrentItemIndexes[itemArrayIndex] = itemIndex;
+                    itemArrayCurrentItems = itemArray[itemIndex];
+                    break;
+                }
+                else
+                {
+                    itemIndex = 0;
+                    itemArrayCurrentItemIndexes[itemArrayIndex] = itemIndex;
+                    itemArrayCurrentItems = itemArray[itemIndex];
+                }
+            }
+
+            ////////////////////////////////////////////////
+            // 2/2，回调当前的元素组合：
+            ////////////////////////////////////////////////
+            // !!!
+            toReceiveItems(itemArrayCurrentItems);
+            // !!!
+        }
+    }
 }
