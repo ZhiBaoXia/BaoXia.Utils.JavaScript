@@ -9,6 +9,7 @@ import { DateTimeField } from "./constant/dateTimeField.js"
 import { UriUtil } from "./uriUtil.js"
 import { CookieUtil } from "./cookieUtil.js"
 import { JsonUtil } from "./jsonUtil.js"
+import { Thenable } from "./thenable.js"
 import { TestCase } from "./unitTest/testCase.js"
 import { TestProject } from "./unitTest/testProject.js"
 
@@ -25,6 +26,7 @@ export
     UriUtil,
     CookieUtil,
     JsonUtil,
+    Thenable,
     TestCase,
     TestProject
 }
