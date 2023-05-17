@@ -5,7 +5,7 @@ import { ThenableState } from "./constant/thenableState.js";
 // @ThenableState
 ////////////////////////////////////////////////
 
-export class Thenable<ThenableParamType>
+export class Thenable<ErrorType, ThenableParamType>
 {
     ////////////////////////////////////////////////
     // @自身属性
@@ -13,9 +13,9 @@ export class Thenable<ThenableParamType>
 
     protected _state: ThenableState = ThenableState.Working;
 
-    protected _callback: ((error: any, callbackParam: ThenableParamType | null) => void) | null = null;
+    protected _callback: ((error: ErrorType, callbackParam: ThenableParamType | null) => void) | null = null;
 
-    error: any = null;
+    error: ErrorType | null = null;
 
     callbackParam: ThenableParamType | null = null;
 
@@ -40,7 +40,7 @@ export class Thenable<ThenableParamType>
         }
     }
 
-    setResult(error: any, callbackParam: ThenableParamType | null | undefined): void
+    setResult(error: ErrorType, callbackParam: ThenableParamType | null | undefined): void
     {
         if (this._state != ThenableState.Working)
         {
@@ -62,7 +62,7 @@ export class Thenable<ThenableParamType>
         // !!!
     }
 
-    then(callback: (error: any, callbackParam: ThenableParamType | null) => void | null): void
+    then(callback: (error: ErrorType, callbackParam: ThenableParamType | null) => void | null): void
     {
         this._callback = callback;
 
