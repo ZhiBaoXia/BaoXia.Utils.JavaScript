@@ -1,5 +1,6 @@
 
 import { TestProject } from "../src/index.js"
+import { ObjectUtilTest } from "./objectUtilTest.js";
 import { StringUtilTest } from "./stringUtilTest.js";
 import { StringUtilIndexOfTest } from "./stringUtilIndexOfTest.js";
 import { StringUtilFormatTest } from "./stringUtilFormatTest.js";
@@ -15,6 +16,7 @@ import { JsonUtilTest } from "./jsonUtilTest.js";
 let testProject = new TestProject(
     "BaoXia.Utils.Javascript",
     [
+        new ObjectUtilTest(),
         new StringUtilTest(),
         new StringUtilIndexOfTest(),
         new StringUtilFormatTest(),

@@ -13,7 +13,7 @@ export class Thenable<ErrorType, ThenableParamType>
 
     protected _state: ThenableState = ThenableState.Working;
 
-    protected _callback: ((error: ErrorType, callbackParam: ThenableParamType | null) => void) | null = null;
+    protected _callback: ((error: ErrorType | null, callbackParam: ThenableParamType | null) => void) | null = null;
 
     error: ErrorType | null = null;
 
@@ -33,7 +33,7 @@ export class Thenable<ErrorType, ThenableParamType>
         this._state = ThenableState.Thenableed;
         // !!!
 
-        let callback = this._callback
+        let callback = this._callback;
         if (callback != null)
         {
             callback(this.error, this.callbackParam);
@@ -62,7 +62,7 @@ export class Thenable<ErrorType, ThenableParamType>
         // !!!
     }
 
-    then(callback: (error: ErrorType, callbackParam: ThenableParamType | null) => void | null): void
+    then(callback: (error: ErrorType | null, callbackParam: ThenableParamType | null) => void | null): void
     {
         this._callback = callback;
 
