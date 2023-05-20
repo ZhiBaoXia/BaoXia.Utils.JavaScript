@@ -32,6 +32,18 @@ export class JsonUtilTest extends TestCase
 
                     assert(testObjectB.createTime!.isEquals(testObjectA.createTime!));
                 }
+
+                let testObjectBWithJSON = JSON.parse(testObjectAJson!);
+                let testObjectBWithJsonUtilConvert
+                    = JsonUtil.parseOrConvertValue<JsonUtilTestModel>(testObjectBWithJSON);
+                {
+                    assert(testObjectBWithJsonUtilConvert != null);
+                    //
+                    testObjectBWithJsonUtilConvert = testObjectBWithJsonUtilConvert!;
+                    //
+                    assert(testObjectBWithJsonUtilConvert.createTime instanceof DateTime);
+                    assert(testObjectBWithJsonUtilConvert.createTime!.isEquals(testObjectA.createTime!));
+                }
             });
     }
 }

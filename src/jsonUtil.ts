@@ -1,6 +1,8 @@
 import { StringUtil } from "./stringUtil.js"
 import { JsonUtilPropertyNameSuffixKeyword } from "./constant/jsonUtilPropertyNameSuffixKeyword.js"
 import { DateTime } from "./dateTime.js";
+import { ObjectUtil } from "./objectUtil.js";
+import { ObjectPropertyInfo } from "./model/objectPropertyInfo.js";
 
 export class JsonUtil
 {
@@ -35,6 +37,73 @@ export class JsonUtil
                     return value;
                 });
         return object as ObjectType;
+    }
+
+    /**
+     * 解析指定的 JSON 字符串，或转换模型对象的值到BaoXia工具集的模型。
+     * @param json 指定的JSON字符串或模型对象。
+     * @returns 返回解析后的对象，或转换属性值为BaoXia工具集模型后的对象。
+     */
+    static parseOrConvertValue<ObjectType>(jsonOrObject: string | object | null): ObjectType | null
+    {
+        if (jsonOrObject == null)
+        {
+            return null;
+        }
+        if (typeof (jsonOrObject) === "string")
+        {
+            return JsonUtil.parse(jsonOrObject);
+        }
+        if (typeof (jsonOrObject) != "object")
+        {
+            return null;
+        }
+
+        let propertyInfesNeedConvertDateTimeProperty
+            = new Array<ObjectPropertyInfo>();
+        ObjectUtil.enumerateAllPropertiesOf(
+            jsonOrObject,
+            (propertyOwnerName: string | null,
+                propertyOwner: any,
+                propertyName: string,
+                propertyValue: any) =>
+            {
+                if (propertyName.endsWith(JsonUtilPropertyNameSuffixKeyword.DateTime))
+                {
+                    propertyInfesNeedConvertDateTimeProperty.push(
+                        new ObjectPropertyInfo(
+                            propertyOwner,
+                            propertyName,
+                            propertyValue));
+                }
+            });
+        for (var propertyInfoNeedConvertDateTimeProperty
+            of
+            propertyInfesNeedConvertDateTimeProperty)
+        {
+            let propertyOwner = propertyInfoNeedConvertDateTimeProperty.owner;
+            let propertyName = propertyInfoNeedConvertDateTimeProperty.propertyName;
+            if (propertyOwner == null
+                || StringUtil.isEmpty(propertyName))
+            {
+                continue;
+            }
+            let propertyValue = propertyInfoNeedConvertDateTimeProperty.propertyValue;
+            if (typeof (propertyValue) != "string"
+                || StringUtil.isEmpty(propertyValue))
+            {
+                continue;
+            }
+
+            propertyOwner = propertyOwner!;
+            propertyName = propertyName!;
+            propertyValue = propertyValue as string;
+
+            // !!!
+            propertyOwner[propertyName] = new DateTime(propertyValue);
+            // !!!
+        }
+        return jsonOrObject as ObjectType;
     }
 
     /**

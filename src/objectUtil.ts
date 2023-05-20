@@ -66,7 +66,7 @@ export class ObjectUtil
     {
         let objectPropertyInfoStack = new Array<ObjectPropertyInfo>()
         //
-        objectPropertyInfoStack.push(new ObjectPropertyInfo(null, objectItem));
+        objectPropertyInfoStack.push(new ObjectPropertyInfo(null, null, objectItem));
         //
 
         while (objectPropertyInfoStack.length > 0)
@@ -87,10 +87,10 @@ export class ObjectUtil
                         && propertyValue !== null)
                     {
                         objectPropertyInfoStack.push(
-                            {
-                                propertyName: propertyName,
-                                propertyValue: propertyValue
-                            });
+                            new ObjectPropertyInfo(
+                                null,
+                                propertyName, 
+                                propertyValue));
                     }
                     else
                     {
