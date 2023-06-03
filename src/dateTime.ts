@@ -124,12 +124,23 @@ export class DateTime
     ////////////////////////////////////////////////
 
     /**
+     * 时间对象的最小值。
+     */
+    static Min = new DateTime(0);
+
+    /**
+     * 事件对象的最大值，在 JavaScript 中，Date 对象最大支持的日期为“100,000,000 天之后的时间”，即“2^53-1 毫秒之后的时间”（从 Unix 纪元开始计算），它对应的时间戳是： 8,640,000,000,000,000 。 
+     */
+    static Max = new DateTime(8640000000000000);
+
+    /**
      * 此时此刻的时间对象。
      */
-    static get now(): DateTime
+    static get Now(): DateTime
     {
         return new DateTime();
     }
+
 
     /**
      * 根据指定的比较精度，比较两个时间对象的“早晚”，当“dateTimeA”早于“dateTimeB”时返回“-1”；当“dateTimeA”晚于“dateTimeB”时返回“1”；当“dateTimeA”等于“dateTimeB”时返回“0”。
@@ -850,7 +861,7 @@ export class DateTime
             {
                 let formatterPlaceholderLength = formatterPlaceholderRange.charsCount;
                 {
-                    dateFieldCaption = StringUtil.complementZeroAtIntegerCharsLeftTo (
+                    dateFieldCaption = StringUtil.complementZeroAtIntegerCharsLeftTo(
                         dateFieldCaptionOriginal!,
                         formatterPlaceholderLength);
                     if (isRemoveLeftCharsByPlaceholder
@@ -881,11 +892,11 @@ export class DateTime
      * @returns 指定模板结构的当前时间对象字符串。
      */
     toString(
-        stringFormatter: string | null): string
+        stringFormatter: string | null = null): string
     {
         if (StringUtil.isEmpty(stringFormatter))
         {
-            return StringUtil.Empty;
+            return this.toISOString();
         }
 
         ////////////////////////////////////////////////
@@ -1038,7 +1049,7 @@ export class DateTime
      * 将当前时间对象，转为 JSON 格式的字符串。
      * @returns 当前当前时间对象，对应的 JSON 格式的字符串。
      */
-    toJSON(): string | null
+    toJSON(): string
     {
         return this.toISOString();
     }

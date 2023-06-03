@@ -1,6 +1,6 @@
 {
   "name": "@baoxia/utils.javascript",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "BaoXia Software Javascript Utils Set，includes commonly used utility components such as StringUtil, ArrayUtil, DateTime.",
   "type": "module",
   "files": [
@@ -8,9 +8,9 @@
   ],
   "main": "lib/index.js",
   "scripts": {
-    "clear": "node ./buildUtil/clearBuildDirectory.js",
+    "test": "npm run clear & tsc -p tsconfig.test.json && node debug/test/index.js",
     "build": "npm run clear & tsc -p tsconfig.json",
-    "test": "npm run clear & tsc -p tsconfig.test.json && node lib_test/test/index.js",
+    "clear": "node ./buildUtil/clearBuildDirectory.js",
     "prepublish": "npm run build"
   },
   "repository": {

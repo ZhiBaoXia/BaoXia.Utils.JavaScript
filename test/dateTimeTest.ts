@@ -125,6 +125,8 @@ export class DateTimeTest extends TestCase
                 {
                     assert(dateTimeISOStirngWithZeroTimeZone == "2023-05-01T00:00:00.000Z");
                 }
+
+                assert(dateTimeA.toISOString() == dateTimeA.toString());
             });
     }
 }

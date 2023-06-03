@@ -40,6 +40,7 @@ export class ObjectUtil
     {
         return ObjectUtil.isNotUndefinedOrNull(obj);
     }
+
     /**
  * 判断指定的对象是否为“undefined”或“null”。
  * @param obj 指定的对象。
@@ -49,7 +50,6 @@ export class ObjectUtil
     {
         return ObjectUtil.isUndefinedOrNull(obj);
     }
-
 
     /**
      * 枚举指定对象中的所有属性，包括对象属性的属性。
@@ -89,7 +89,7 @@ export class ObjectUtil
                         objectPropertyInfoStack.push(
                             new ObjectPropertyInfo(
                                 null,
-                                propertyName, 
+                                propertyName,
                                 propertyValue));
                     }
                     else
@@ -103,5 +103,22 @@ export class ObjectUtil
                 }
             }
         }
+    }
+
+    /**
+     * 通过浅拷贝，克隆指定的对象。
+     * @param obj 指定的对象。
+     * @returns 返回克隆的对象。
+     */
+    static cloneObject<ObjectType>(obj: ObjectType | null): ObjectType | null
+    {
+        if (obj == null)
+        {
+            return null;
+        }
+
+        let objectCloned = Object.assign({}, obj);
+        {}
+        return objectCloned;
     }
 }

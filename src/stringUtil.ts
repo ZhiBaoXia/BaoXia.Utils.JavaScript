@@ -845,6 +845,130 @@ export class StringUtil
     }
 
     /**
+     * 获取在指定字符串中位于指定关键字左侧的子字符串，没有查找到关键字时，返回整个指定字符串。
+     * @param str 指定的字符串。
+     * @param keyword 指定的关键字。
+     * @param [isIgnoreCase] 可选参数，查找时是否忽略大小写，默认为：false。
+     * @returns 返回在指定字符串中位于指定关键字左侧的子字符串，没有查找到关键字时，返回整个指定字符串。
+     */
+    static substringBefore(
+        str: string | null,
+        keyword: string | null,
+        isIgnoreCase: boolean = false): string
+    {
+        if (StringUtil.isEmpty(str))
+        {
+            return StringUtil.Empty;
+        }
+
+        str = str!;
+
+        let substring = str;
+        let indexOfKeyword = StringUtil.indexOfKeywordIn(
+            str,
+            keyword,
+            isIgnoreCase);
+        if (indexOfKeyword >= 0)
+        {
+            substring = str.substring(0, indexOfKeyword);
+        }
+        return substring;
+    }
+
+    /**
+     * 获取在指定字符串中位于指定关键字（最后一次出现）左侧的子字符串，没有查找到关键字时，返回整个指定字符串。
+     * @param str 指定的字符串。
+     * @param keyword 指定的关键字。
+     * @param [isIgnoreCase] 可选参数，查找时是否忽略大小写，默认为：false。
+     * @returns 返回在指定字符串中位于指定关键字（最后一次出现）左侧的子字符串，没有查找到关键字时，返回整个指定字符串。
+     */
+    static substringBeforeLast(
+        str: string | null,
+        keyword: string | null,
+        isIgnoreCase: boolean = false): string
+    {
+        if (StringUtil.isEmpty(str))
+        {
+            return StringUtil.Empty;
+        }
+
+        str = str!;
+
+        let substring = str;
+        let lastIndexOfKeyword = StringUtil.lastIndexOfKeywordIn(
+            str,
+            keyword,
+            isIgnoreCase);
+        if (lastIndexOfKeyword >= 0)
+        {
+            substring = str.substring(0, lastIndexOfKeyword);
+        }
+        return substring;
+    }
+
+    /**
+     * 获取在指定字符串中位于指定关键字右侧的子字符串，没有查找到关键字时，返回整个指定字符串。
+     * @param str 指定的字符串。
+     * @param keyword 指定的关键字。
+     * @param [isIgnoreCase] 可选参数，查找时是否忽略大小写，默认为：false。
+     * @returns 返回在指定字符串中位于指定关键字右侧的子字符串，没有查找到关键字时，返回整个指定字符串。
+     */
+    static substringAfter(
+        str: string | null,
+        keyword: string | null,
+        isIgnoreCase: boolean = false): string
+    {
+        if (StringUtil.isEmpty(str))
+        {
+            return StringUtil.Empty;
+        }
+
+        str = str!;
+
+        let substring = str;
+        let indexOfKeyword = StringUtil.indexOfKeywordIn(
+            str,
+            keyword,
+            isIgnoreCase);
+        if (indexOfKeyword >= 0)
+        {
+            substring = str.substring(indexOfKeyword + keyword!.length);
+        }
+        return substring;
+    }
+
+    /**
+     * 获取在指定字符串中位于指定关键字（最后一次出现）右侧的子字符串，没有查找到关键字时，返回整个指定字符串。
+     * @param str 指定的字符串。
+     * @param keyword 指定的关键字。
+     * @param [isIgnoreCase] 可选参数，查找时是否忽略大小写，默认为：false。
+     * @returns 返回在指定字符串中位于指定关键字（最后一次出现）右侧的子字符串，没有查找到关键字时，返回整个指定字符串。
+     */
+    static substringAfterLast(
+        str: string | null,
+        keyword: string | null,
+        isIgnoreCase: boolean = false): string
+    {
+        if (StringUtil.isEmpty(str))
+        {
+            return StringUtil.Empty;
+        }
+
+        str = str!;
+
+        let substring = str;
+        let lastIndexOfKeyword = StringUtil.lastIndexOfKeywordIn(
+            str,
+            keyword,
+            isIgnoreCase);
+        if (lastIndexOfKeyword >= 0)
+        {
+            substring = str.substring(lastIndexOfKeyword + keyword!.length);
+        }
+        return substring;
+    }
+
+    /**
      * 移除指定字符串左边的关键字。
      * @param str 指定的字符串。
      * @param keywordsNeedTrimed 需要被移除的关键字数组。
