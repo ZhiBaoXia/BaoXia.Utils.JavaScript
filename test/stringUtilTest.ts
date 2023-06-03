@@ -126,6 +126,40 @@ export class StringUtilTest extends TestCase
                         assert(rightSubstring == "Abc");
                     }
 
+                    leftSubstring = StringUtil.substringBefore(originalString, "Abc");
+                    {
+                        assert(leftSubstring == "0123");
+                    }
+                    leftSubstring = StringUtil.substringBefore(originalString, "abc", true);
+                    {
+                        assert(leftSubstring == "0123");
+                    }
+                    leftSubstring = StringUtil.substringBeforeLast(originalString, "Abc");
+                    {
+                        assert(leftSubstring == "0123Abc0123");
+                    }
+                    leftSubstring = StringUtil.substringBeforeLast(originalString, "abc", true);
+                    {
+                        assert(leftSubstring == "0123Abc0123");
+                    }
+
+                    rightSubstring = StringUtil.substringAfter(originalString, "Abc");
+                    {
+                        assert(rightSubstring == "0123Abc");
+                    }
+                    rightSubstring = StringUtil.substringAfter(originalString, "abc", true);
+                    {
+                        assert(rightSubstring == "0123Abc");
+                    }
+                    rightSubstring = StringUtil.substringAfterLast(originalString, "Abc");
+                    {
+                        assert(rightSubstring == "");
+                    }
+                    rightSubstring = StringUtil.substringAfterLast(originalString, "abc", true);
+                    {
+                        assert(rightSubstring == "");
+                    }
+
 
                     let newString = StringUtil.replaceAllKeywordIn(
                         originalString,
@@ -200,7 +234,7 @@ export class StringUtilTest extends TestCase
                         // !!!   
                     }
                 }
-                
+
             });
     }
 }

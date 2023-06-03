@@ -8,9 +8,9 @@
   ],
   "main": "lib/index.js",
   "scripts": {
-    "clear": "node ./buildUtil/clearBuildDirectory.js",
+    "test": "npm run clear & tsc -p tsconfig.test.json && node debug/test/index.js",
     "build": "npm run clear & tsc -p tsconfig.json",
-    "test": "npm run clear & tsc -p tsconfig.test.json && node lib_test/test/index.js",
+    "clear": "node ./buildUtil/clearBuildDirectory.js",
     "prepublish": "npm run build"
   },
   "repository": {
