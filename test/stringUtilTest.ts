@@ -107,6 +107,43 @@ export class StringUtilTest extends TestCase
                 ////////////////////////////////////////////////
                 {
                     const originalString = "0123Abc0123Abc";
+                    const originalString_Copied = originalString + StringUtil.Empty;
+                    const originalString_LowerCase = originalString.toLowerCase();
+
+                    if (StringUtil.isEquals(originalString, originalString_Copied))
+                    {
+                        assert(true);
+                    }
+                    if (!StringUtil.isNotEquals(originalString, originalString_Copied))
+                    {
+                        assert(true);
+                    }
+                    if (StringUtil.isEquals(originalString, originalString_LowerCase, true))
+                    {
+                        assert(true);
+                    }
+                    if (!StringUtil.isNotEquals(originalString, originalString_LowerCase, true))
+                    {
+                        assert(true);
+                    }
+                    
+                    if (StringUtil.isEqualsIgnoreCase(originalString, originalString_Copied))
+                    {
+                        assert(true);
+                    }
+                    if (!StringUtil.isNotEqualsIgnoreCase(originalString, originalString_Copied))
+                    {
+                        assert(true);
+                    }
+                    if (StringUtil.isEqualsIgnoreCase(originalString, originalString_LowerCase))
+                    {
+                        assert(true);
+                    }
+                    if (!StringUtil.isNotEqualsIgnoreCase(originalString, originalString_LowerCase))
+                    {
+                        assert(true);
+                    }
+
 
                     let leftSubstring = StringUtil.left(originalString, 0);
                     {
@@ -233,8 +270,41 @@ export class StringUtilTest extends TestCase
                         assert(newString == "DefDefDefDef")
                         // !!!   
                     }
-                }
 
+                    newString = StringUtil.joinStringsWithDelimiter(
+                        ",",
+                        true,
+                        "0",
+                        "1",
+                        "2",);
+                    {
+                        // !!!
+                        assert(newString == "0,1,2")
+                        // !!!   
+                    }
+
+                    newString = StringUtil.joinStringsWithDelimiter(
+                        ",",
+                        true,
+                        "0,",
+                        ",1,",
+                        ",2",);
+                    {
+                        // !!!
+                        assert(newString == "0,1,2")
+                        // !!!   
+                    }
+
+                    newString = StringUtil.joinStringsWithDelimiter(
+                        ",",
+                        true,
+                        ["0", "1", "2"]);
+                    {
+                        // !!!
+                        assert(newString == "0,1,2")
+                        // !!!   
+                    }
+                }
             });
     }
 }

@@ -18,7 +18,8 @@ export class ArrayUtil
      */
     static isEmpty(items: Array<any> | null): boolean
     {
-        if (items == null
+        if (items == undefined
+            || items == null
             || items.length <= 0)
         {
             return true;

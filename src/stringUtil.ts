@@ -37,10 +37,11 @@ export class StringUtil
      * @returns 如果指定的字符为“数字字符”，则返回：true，否则返回：false。
      */
     static isNumberChar(
-        character: string | null,
+        character: string | null | undefined,
         isIncludeDot: boolean = false): boolean
     {
         if (character == null
+            || character == undefined
             || character.length < 1)
         {
             return false;
@@ -66,9 +67,10 @@ export class StringUtil
      * @returns 如果指定的字符为“英文字母字符”，则返回：true，否则返回：false。 
      */
     static isAlphabetChar(
-        character: string | null): boolean
+        character: string | null | undefined): boolean
     {
         if (character == null
+            || character == undefined
             || character.length < 1)
         {
             return false;
@@ -138,13 +140,14 @@ export class StringUtil
      * @returns 转换成功时，返回：对应的整数数值，否则返回：0。
      */
     static parseToInt(
-        anyObject: string | null,
+        anyObject: string | null | undefined,
         defaultValue: number = 0): number
     {
         let intValue = defaultValue;
         try
         {
-            if (anyObject != null)
+            if (anyObject != null
+                && anyObject != undefined)
             {
                 intValue = parseInt(anyObject);
                 if (isNaN(intValue))
@@ -167,13 +170,14 @@ export class StringUtil
      * @returns 转换成功时，返回：对应的浮点数值，否则返回：0.0。
      */
     static parseToFloat(
-        anyObject: string | null,
+        anyObject: string | null | undefined,
         defaultValue: number = 0.0): number
     {
         let floatValue = defaultValue;
         try
         {
-            if (anyObject != null)
+            if (anyObject != null
+                && anyObject != undefined)
             {
                 floatValue = parseFloat(anyObject);
                 if (isNaN(floatValue))
@@ -226,7 +230,7 @@ export class StringUtil
      * @param numberString 指定的数字字符串。
      * @returns 返回数字字符串中整数和小数部分的字符串信息。
      */
-    static getNumberStringInfo(numberString: string | null): NumberStringInfo
+    static getNumberStringInfo(numberString: string | null | undefined): NumberStringInfo
     {
         if (StringUtil.isEmpty(numberString))
         {
@@ -375,7 +379,7 @@ export class StringUtil
      */
     static isEmpty(str: string | null | undefined): boolean
     {
-        if (typeof (str) == "undefined"
+        if (str == undefined
             || str == null
             || str.length < 1)
         {
@@ -399,9 +403,11 @@ export class StringUtil
      * @param str 指定的字符串对象。
      * @returns 指定的字符串对象不为“null”时返回：指定的字符串，否则返回：StringUtil.Empty。
      */
-    static emptyOr(str: string | null): string
+    static emptyOr(str: string | null | undefined): string
     {
-        if (str == null)
+        if (str == null
+            || str == undefined
+            || str.length < 1)
         {
             str = StringUtil.Empty;
         }
@@ -413,13 +419,14 @@ export class StringUtil
      * @param str 指定的字符串对象。
      * @returns 指定的字符串对象不为“null”时返回：指定字符串的长度，否则返回：0 。
      */
-    static lengthOf(str: string | null): number
+    static lengthOf(str: string | null | undefined): number
     {
-        if (str == null)
+        if (str == null
+            || str == undefined)
         {
             return 0;
         }
-        return str!.length;
+        return str.length;
     }
 
     /**
@@ -431,8 +438,8 @@ export class StringUtil
      * @returns 如果指定的两个字符串相同，则返回：true，否则返回：false。 
      */
     static isEquals(
-        strA: string | null,
-        strB: string | null,
+        strA: string | null | undefined,
+        strB: string | null | undefined,
         isIgnoreCase: boolean = false,
         isNullEqualsEmpty = true): boolean
     {
@@ -440,19 +447,19 @@ export class StringUtil
         {
             return true;
         }
-        if (strA == null)
+        if (StringUtil.isEmpty(strA))
         {
-            if (strB!.length <= 0
-                && isNullEqualsEmpty)
+            if (isNullEqualsEmpty
+                && StringUtil.isEmpty(strB))
             {
                 return true;
             }
             return false;
         }
-        if (strB == null)
+        if (StringUtil.isEmpty(strB))
         {
-            if (strA!.length <= 0
-                && isNullEqualsEmpty)
+            if (isNullEqualsEmpty
+                && StringUtil.isEmpty(strA))
             {
                 return true;
             }
@@ -519,34 +526,106 @@ export class StringUtil
         return true;
     }
 
-    static isSameCharsFromIndexIn(
-        stringA: string | null,
-        stringACompareBeginCharIndex: number,
-        stringB: string | null,
-        stringBCompareBeginCharIndex: number,
+    /**
+     * 判断指定的两个字符串，是否不相同。
+     * @param strA 指定的字符串A。
+     * @param strB 指定的字符串B。
+     * @param [isIgnoreCase] 可选参数，比较时是否忽略大小写，默认为：false。
+     * @param [isNullEqualsEmpty] 可选参数，是否判定“null”值等同于“空字符串”，默认为：true。
+     * @returns 如果指定的两个字符串相同，则返回：true，否则返回：false。 
+     */
+    static isNotEquals(
+        strA: string | null | undefined,
+        strB: string | null | undefined,
+        isIgnoreCase: boolean = false,
+        isNullEqualsEmpty = true): boolean
+    {
+        return !StringUtil.isEquals(
+            strA,
+            strB,
+            isIgnoreCase,
+            isNullEqualsEmpty);
+    }
 
+
+    /**
+     * 忽略大小写的，判断指定的两个字符串，是否相同。
+     * @param strA 指定的字符串A。
+     * @param strB 指定的字符串B。
+     * @param [isNullEqualsEmpty] 可选参数，是否判定“null”值等同于“空字符串”，默认为：true。
+     * @returns 如果指定的两个字符串相同，则返回：true，否则返回：false。 
+     */
+    static isEqualsIgnoreCase(
+        strA: string | null | undefined,
+        strB: string | null | undefined,
+        isNullEqualsEmpty = true): boolean
+    {
+        return StringUtil.isEquals(
+            strA,
+            strB,
+            true,
+            isNullEqualsEmpty);
+    }
+
+
+    /**
+     * 忽略大小写的，判断指定的两个字符串，是否不相同。
+     * @param strA 指定的字符串A。
+     * @param strB 指定的字符串B。
+     * @param [isNullEqualsEmpty] 可选参数，是否判定“null”值等同于“空字符串”，默认为：true。
+     * @returns 如果指定的两个字符串相同，则返回：true，否则返回：false。 
+     */
+    static isNotEqualsIgnoreCase(
+        strA: string | null | undefined,
+        strB: string | null | undefined,
+        isNullEqualsEmpty = true): boolean
+    {
+        return !StringUtil.isEquals(
+            strA,
+            strB,
+            true,
+            isNullEqualsEmpty);
+    }
+
+    /**
+     * 字符串A中指定的局部字符串，是否和字符串B中指定的局部字符串相同。
+     * @param stringA 指定的字符串A。
+     * @param stringACompareBeginCharIndex 指定的字符串A中，要比较的局部字符串的起始字符索引值。
+     * @param stringB 指定的字符串B。
+     * @param stringBCompareBeginCharIndex 指定的字符串B中，要比较的局部字符串的起始字符索引值。 
+     * @param compareCharsCount 指定的要比较的字符个数。
+     * @param isIgnoreCase 可选参数，比较时是否忽略大小写，默认为：false。
+     * @param isNullEqualsEmpty 可选参数，是否判定“null”值等同于“空字符串”，默认为：true。
+     * @returns 如果指定的两个字符串相同，则返回：true，否则返回：false。
+     */
+    static isSameCharsFromIndexIn(
+        stringA: string | null | undefined,
+        stringACompareBeginCharIndex: number,
+        stringB: string | null | undefined,
+        stringBCompareBeginCharIndex: number,
+        //
         compareCharsCount: number,
         isIgnoreCase: boolean = false,
         isNullEqualsEmpty = true): boolean
     {
-        if (stringA == null
-            && stringB == null)
+        if ((stringA == null || stringA == undefined)
+            && (stringB == null || stringB == undefined))
         {
             return true;
         }
-        if (stringA == null)
+        if (StringUtil.isEmpty(stringA))
         {
             if (isNullEqualsEmpty
-                && stringB!.length < 1)
+                && StringUtil.isEmpty(stringB))
             {
                 return true;
             }
             return false;
         }
-        if (stringB == null)
+        if (StringUtil.isEmpty(stringB))
         {
             if (isNullEqualsEmpty
-                && stringA!.length < 1)
+                && StringUtil.isEmpty(stringA))
             {
                 return true;
             }
@@ -624,8 +703,8 @@ export class StringUtil
      * @returns 查找到指定的关键字时，返回关键字在指定字符串中的第一次出现的索引值，如果查找不到指定的关键字，则返回：-1。
      */
     static indexOfKeywordIn(
-        str: string | null,
-        keyword: string | null,
+        str: string | null | undefined,
+        keyword: string | null | undefined,
         isIgnoreCase: boolean = false,
         firstCharIndexToSearch = 0,
         lastCharIndexToSearch = -1): number
@@ -675,8 +754,8 @@ export class StringUtil
      * @returns 查找到指定的关键字时，返回关键字在指定字符串中的最后一次出现的索引值，如果查找不到指定的关键字，则返回：-1。
      */
     static lastIndexOfKeywordIn(
-        str: string | null,
-        keyword: string | null,
+        str: string | null | undefined,
+        keyword: string | null | undefined,
         isIgnoreCase: boolean = false,
         firstCharIndexToSearch = 0,
         lastCharIndexToSearch = -1): number
@@ -724,8 +803,8 @@ export class StringUtil
      * @returns 当指定的字符串是以指定的关键字开头开头时，返回：true，否则返回：false。
      */
     static isBeginWithKeywordIn(
-        str: string | null,
-        keyword: string | null,
+        str: string | null | undefined,
+        keyword: string | null | undefined,
         isIgnoreCase: boolean = false): boolean
     {
         if (StringUtil.indexOfKeywordIn(
@@ -750,8 +829,8 @@ export class StringUtil
      * @returns 当指定的字符串是以指定的关键字结尾时，返回：true，否则返回：false。
      */
     static isEndWithKeywordIn(
-        str: string | null,
-        keyword: string | null,
+        str: string | null | undefined,
+        keyword: string | null | undefined,
         isIgnoreCase: boolean = false): boolean
     {
         let lastIndexOfKeyword
@@ -778,8 +857,8 @@ export class StringUtil
      * @returns 当指定的字符串包含指定的关键字时，返回：true，否则返回：false。
      */
     static isContainsKeywordIn(
-        str: string | null,
-        keyword: string | null,
+        str: string | null | undefined,
+        keyword: string | null | undefined,
         isIgnoreCase: boolean = false): boolean
     {
         return this.indexOfKeywordIn(
@@ -794,7 +873,7 @@ export class StringUtil
      * @param leftLength 指定长度。
      * @returns 返回指定字符串的左边指定长度的子字符串。
      */
-    static left(str: string | null, leftLength: number): string
+    static left(str: string | null | undefined, leftLength: number): string
     {
         if (StringUtil.isEmpty(str))
         {
@@ -822,7 +901,7 @@ export class StringUtil
      * @param rightLength 指定长度。
      * @returns 返回指定字符串的右边指定长度的子字符串。
      */
-    static right(str: string | null, rightLength: number): string
+    static right(str: string | null | undefined, rightLength: number): string
     {
         if (StringUtil.isEmpty(str))
         {
@@ -852,8 +931,8 @@ export class StringUtil
      * @returns 返回在指定字符串中位于指定关键字左侧的子字符串，没有查找到关键字时，返回整个指定字符串。
      */
     static substringBefore(
-        str: string | null,
-        keyword: string | null,
+        str: string | null | undefined,
+        keyword: string | null | undefined,
         isIgnoreCase: boolean = false): string
     {
         if (StringUtil.isEmpty(str))
@@ -883,8 +962,8 @@ export class StringUtil
      * @returns 返回在指定字符串中位于指定关键字（最后一次出现）左侧的子字符串，没有查找到关键字时，返回整个指定字符串。
      */
     static substringBeforeLast(
-        str: string | null,
-        keyword: string | null,
+        str: string | null | undefined,
+        keyword: string | null | undefined,
         isIgnoreCase: boolean = false): string
     {
         if (StringUtil.isEmpty(str))
@@ -914,8 +993,8 @@ export class StringUtil
      * @returns 返回在指定字符串中位于指定关键字右侧的子字符串，没有查找到关键字时，返回整个指定字符串。
      */
     static substringAfter(
-        str: string | null,
-        keyword: string | null,
+        str: string | null | undefined,
+        keyword: string | null | undefined,
         isIgnoreCase: boolean = false): string
     {
         if (StringUtil.isEmpty(str))
@@ -945,8 +1024,8 @@ export class StringUtil
      * @returns 返回在指定字符串中位于指定关键字（最后一次出现）右侧的子字符串，没有查找到关键字时，返回整个指定字符串。
      */
     static substringAfterLast(
-        str: string | null,
-        keyword: string | null,
+        str: string | null | undefined,
+        keyword: string | null | undefined,
         isIgnoreCase: boolean = false): string
     {
         if (StringUtil.isEmpty(str))
@@ -976,7 +1055,7 @@ export class StringUtil
      * @returns 返回移除指定字符串左边的关键字后的字符串。
      */
     static trimLeftKeywordsIn(
-        str: string | null,
+        str: string | null | undefined,
         keywordsNeedTrimed: Array<string>,
         isIgnoreCase: boolean = false): string
     {
@@ -1014,8 +1093,8 @@ export class StringUtil
      * @returns 返回移除指定字符串左边的关键字后的字符串。
      */
     static trimLeftKeywordIn(
-        str: string | null,
-        keywordNeedTrimed: string | null,
+        str: string | null | undefined,
+        keywordNeedTrimed: string | null | undefined,
         isIgnoreCase: boolean = false): string
     {
         if (StringUtil.isEmpty(keywordNeedTrimed))
@@ -1037,7 +1116,7 @@ export class StringUtil
      * @returns 返回移除指定字符串右边的关键字后的字符串。
      */
     static trimRightKeywordsIn(
-        str: string | null,
+        str: string | null | undefined,
         keywordsNeedTrimed: Array<string>,
         isIgnoreCase: boolean = false): string
     {
@@ -1077,8 +1156,8 @@ export class StringUtil
      * @returns 返回移除指定字符串右边的关键字后的字符串。
      */
     static trimRightKeywordIn(
-        str: string | null,
-        keywordNeedTrimed: string,
+        str: string | null | undefined,
+        keywordNeedTrimed: string | undefined,
         isIgnoreCase: boolean = false): string
     {
         if (StringUtil.isEmpty(keywordNeedTrimed))
@@ -1101,8 +1180,8 @@ export class StringUtil
      * @returns 返回指定关键字，在指定字符串中出现的全部区域信息数组。
      */
     static getRangesOfKeywordIn(
-        str: string | null,
-        keyword: string | null,
+        str: string | null | undefined,
+        keyword: string | null | undefined,
         isIgnoreCase: boolean = false,
         firstCharIndexToSearch = 0): Array<StringRange>
     {
@@ -1165,17 +1244,25 @@ export class StringUtil
      * @returns 使用指定的字符串替换指定的关键字后的字符串。
      */
     static replaceKeywordsInRangesWithStringsSpecifiedIn(
-        str: string | null,
+        str: string | null | undefined,
         substringRanges: StringRange[] | null,
         newSubstringsSpecified: string[] | null,
         isUseLastNewSubstringsSpecifiedToRange = false): string | null
     {
         if (StringUtil.isEmpty(str))
         {
+            if (str == undefined)
+            {
+                return null;
+            }
             return str;
         }
         if (ArrayUtil.isEmpty(substringRanges))
         {
+            if (str == undefined)
+            {
+                return null;
+            }
             return str;
         }
 
@@ -1253,9 +1340,9 @@ export class StringUtil
      * @returns 返回替换成功的关键字数量。
      */
     static replaceAllKeywordIn(
-        str: string | null,
-        keyword: string | null,
-        newValue: string | null,
+        str: string | null | undefined,
+        keyword: string | null | undefined,
+        newValue: string | null | undefined,
         isIgnoreCase: boolean = false): string | null
     {
         let keywordRanges
@@ -1266,10 +1353,18 @@ export class StringUtil
         if (keywordRanges.length < 1)
         {
             // 没有发现关键字时，返回原始字符串。
+            if (str == undefined)
+            {
+                str = null;
+            }
             return str;
         }
         if (StringUtil.isEmpty(newValue))
         {
+            if (str == undefined)
+            {
+                str = null;
+            }
             return str;
         }
 
@@ -1289,7 +1384,7 @@ export class StringUtil
      * @returns 返回替换成功的关键字数量。
      */
     static replaceAllKeywordInArrayIn(
-        str: string | null,
+        str: string | null | undefined,
         keywordArray: string[] | null,
         newValue: string | null,
         isIgnoreCase: boolean = false): string | null
@@ -1326,7 +1421,7 @@ export class StringUtil
      * @param values 要进行格式化的值。
      * @returns format 格式化后的字符串。
      */
-    static format(formatter: string | null, ...values: any[]): string
+    static format(formatter: string | null | undefined, ...values: any[]): string
     {
         if (StringUtil.isEmpty(formatter))
         {
@@ -1693,35 +1788,63 @@ export class StringUtil
      * @returns 使用指定的分隔符连接指定字符串数组后，生成的最终字符串。
      */
     static joinStringsWithDelimiter(
-        delimiter: string | null,
+        delimiter: string | null | undefined,
         isDelimiterConsecutiveDisable: boolean,
-        ...strings: string[]): string
+        ...strings: string[] | Array<string>[]): string
     {
         let finalString = StringUtil.Empty;
         if (ArrayUtil.isEmpty(strings))
         {
             return finalString;
         }
+        let finalStrings: Array<string>;
+        if (strings[0] instanceof Array)
+        {
+            if (strings.length == 1)
+            {
+                finalStrings = strings[0];
+            }
+            else
+            {
+                finalStrings = new Array<string>();
+                for (let stringArray of strings)
+                {
+                    if (stringArray instanceof Array)
+                    {
+                        finalStrings = finalStrings.concat(stringArray);
+                    }
+                    else if (typeof (stringArray) == 'string')
+                    {
+                        finalStrings.push(stringArray);
+                    }
+                }
+            }
+        }
+        else
+        {
+            finalStrings = strings as string[];
+        }
 
         let isDelimiterNotEmpty = StringUtil.isNotEmpty(delimiter);
-        for (let str of strings)
+        let finalDelimiter = isDelimiterNotEmpty
+            ? delimiter as string
+            : StringUtil.Empty;
+        for (let str of finalStrings)
         {
             if (isDelimiterNotEmpty
                 && finalString.length > 0)
             {
                 if (isDelimiterConsecutiveDisable)
                 {
-                    delimiter = delimiter!;
-                    while (finalString.endsWith(delimiter))
+                    while (finalString.endsWith(finalDelimiter))
                     {
-                        StringUtil.right
                         finalString = finalString.substring(
                             0,
-                            finalString.length - delimiter.length);
+                            finalString.length - finalDelimiter.length);
                     }
-                    while (str.startsWith(delimiter))
+                    while (str.startsWith(finalDelimiter))
                     {
-                        str = str.substring(delimiter.length);
+                        str = str.substring(finalDelimiter.length);
                     }
                 }
                 finalString += delimiter;
