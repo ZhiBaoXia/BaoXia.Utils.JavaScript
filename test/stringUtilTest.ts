@@ -304,6 +304,22 @@ export class StringUtilTest extends TestCase
                         assert(newString == "0,1,2")
                         // !!!   
                     }
+                    
+                    let testStrings = new Array<string>();
+                    {
+                        testStrings.push("0");
+                        testStrings.push("1");
+                        testStrings.push("2");
+                    }
+                    newString = StringUtil.joinStringsWithDelimiter(
+                        " ",
+                        true,
+                        testStrings);
+                    {
+                        // !!!
+                        assert(newString == "0 1 2")
+                        // !!!   
+                    }
                 }
             });
     }
