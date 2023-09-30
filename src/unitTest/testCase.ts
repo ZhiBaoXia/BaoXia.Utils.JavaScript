@@ -1,6 +1,5 @@
 
-import { ArrayUtil } from "../arrayUtil.js";
-import { AssertFailedError } from "./assertFailedError.js"
+import { AssertFailedError } from "./assertFailedError.js";
 
 ////////////////////////////////////////////////
 // TestCase
@@ -81,6 +80,11 @@ export class TestCase
         this.testRunable = testRunable;
     }
 
+	pretest()
+	{
+		this.didPretest();
+	}
+
     test(): any | null
     {
         try
@@ -95,4 +99,19 @@ export class TestCase
         }
         return null;
     }
+
+	tested()
+	{
+		this.didTested();
+	}
+
+	////////////////////////////////////////////////
+	// @事件节点
+	////////////////////////////////////////////////
+	
+	protected didPretest()
+	{}
+
+	protected didTested()
+	{}
 }

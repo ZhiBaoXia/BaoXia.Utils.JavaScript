@@ -1,8 +1,8 @@
 
-import { Uri } from "./model/uri.js";
-import { StringUtil } from "./stringUtil.js";
 import { UriPathDelimiter } from "./constant/uriPathDelimiter.js";
+import { Uri } from "./model/uri.js";
 import { UriQueryAndFragment } from "./model/uriQueryAndFragment.js";
+import { StringUtil } from "./stringUtil.js";
 
 export class UriUtil
 {
@@ -37,7 +37,7 @@ export class UriUtil
      * @returns 指定Uri字符串中的查询参数和锚点部分。
      */
     static getUriQueryAndFragmentFrom(
-        uriString: string | null,
+        uriString: string | null | undefined,
         isIncludeDelimiter: boolean = true): UriQueryAndFragment | null
     {
         if (StringUtil.isEmpty(uriString))
@@ -138,8 +138,8 @@ export class UriUtil
      * @returns 返回追加后的Uri字符串。
      */
     static appendPathToUri(
-        uriString: string | null,
-        pathNeedAppend: string | null): string
+        uriString: string | null | undefined,
+        pathNeedAppend: string | null | undefined): string
     {
         if (StringUtil.isEmpty(uriString))
         {
@@ -260,7 +260,7 @@ export class UriUtil
      * @returns 返回查询参数字符串。
      */
     static createQueryParamsStringWithMap(
-        queryParams: Map<string, string> | null): string
+        queryParams: Map<string, string> | null | undefined): string
     {
         if (queryParams == null)
         {
@@ -292,10 +292,11 @@ export class UriUtil
      * @returns 返回追加后的Uri字符串。
      */
     static appendQueryParamsToUri(
-        uriString: string | null,
-        queryParams: string | Map<string, string> | null): string
+        uriString: string | null | undefined,
+        queryParams: string | Map<string, string> | null | undefined): string
     {
-        if (queryParams == null)
+        if (queryParams == null
+			|| queryParams == undefined)
         {
             return StringUtil.emptyOr(uriString);
         }
@@ -402,10 +403,11 @@ export class UriUtil
      * @returns 返回追加后的Uri字符串。
      */
     static appendFragmentParamsToUri(
-        uriString: string | null,
-        fragmentParams: string | Map<string, string> | null): string
+        uriString: string | null | undefined,
+        fragmentParams: string | Map<string, string> | null | undefined): string
     {
-        if (fragmentParams == null)
+        if (fragmentParams == null
+			|| fragmentParams == undefined)
         {
             return StringUtil.emptyOr(uriString);
         }
