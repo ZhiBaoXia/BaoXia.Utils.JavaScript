@@ -529,6 +529,9 @@ export class StringUtil
 							return false;
 						}
 					}
+					// !!!
+					return false;
+					// !!!
 				}
 			}
 		}
