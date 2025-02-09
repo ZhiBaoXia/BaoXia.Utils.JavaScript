@@ -13,12 +13,13 @@ import { Thenable } from "./thenable.js"
 import { TestCase } from "./unitTest/testCase.js"
 import { TestProject } from "./unitTest/testProject.js"
 import { UriUtil } from "./uriUtil.js"
+import { ValueUtil } from "./valueUtil.js"
 
 export
 {
 	ArrayUtil, Constant, CookieUtil, DateTime,
 	DateTimeField, JsonUtil, LoopTask, Model,
 	ObjectUtil, PathUtil, StringUtil, TestCase,
-	TestProject, Thenable, UriUtil
+	TestProject, Thenable, UriUtil, ValueUtil
 }
 
