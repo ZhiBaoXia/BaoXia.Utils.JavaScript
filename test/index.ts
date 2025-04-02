@@ -13,6 +13,7 @@ import { StringUtilTest } from "./stringUtilTest.js";
 import { TestCaseAsyncTest } from "./testCaseAsyncTest.js";
 import { UriUtilParseTest } from "./uriUtilParseTest.js";
 import { UriUtilPathOperationTest } from "./uriUtilPathOperationTest.js";
+import { VersionInfoTest } from "./versionInfoTest.js";
 
 
 let testProject = new TestProject(
@@ -30,7 +31,8 @@ let testProject = new TestProject(
 		new UriUtilParseTest(),
 		new UriUtilPathOperationTest(),
 		new CookieUtilTest(),
-		new JsonUtilTest()
+		new JsonUtilTest(),
+		new VersionInfoTest()
 	]);
 // !!!
 await testProject.testAsync();
