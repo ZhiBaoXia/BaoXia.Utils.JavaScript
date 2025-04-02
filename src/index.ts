@@ -14,12 +14,14 @@ import { TestCase } from "./unitTest/testCase.js"
 import { TestProject } from "./unitTest/testProject.js"
 import { UriUtil } from "./uriUtil.js"
 import { ValueUtil } from "./valueUtil.js"
+import { VersionInfo } from "./versionInfo.js"
 
 export
 {
 	ArrayUtil, Constant, CookieUtil, DateTime,
 	DateTimeField, JsonUtil, LoopTask, Model,
 	ObjectUtil, PathUtil, StringUtil, TestCase,
-	TestProject, Thenable, UriUtil, ValueUtil
+	TestProject, Thenable, UriUtil, ValueUtil,
+	VersionInfo
 }
 

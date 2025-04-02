@@ -26,8 +26,8 @@ export class LoopTaskTest extends TestCaseAsync
 							let taskIntervalSeconds
 								= now.timeSpanBySubtract(lastTaskProcessBeginTime)
 									.totalSeconds;
-							// !!!
-							assert(taskIntervalSeconds <= taskIntervalSecondsMin);
+							// !!! 实际时间一定大于等于计划时间。 !!!
+							assert(taskIntervalSeconds >= taskIntervalSecondsMin);
 							// !!!
 							testResolve(void 0);
 							// !!!
