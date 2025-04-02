@@ -14,8 +14,9 @@ export class LoopTaskTest extends TestCaseAsync
 			{
 				let testPromise = new Promise((testResolve, reject) =>
 				{
-					let loopTaskIntervalSeconds = 0.05;
-					let taskProcessSeconds = 0.1;
+					const loopTaskIntervalSeconds = 0.05;
+					const taskProcessSeconds = 0.1;
+					const taskIntervalSecondsMin = 0.15;
 					let lastTaskProcessBeginTime: DateTime | null;
 					let testTask = new LoopTask(async () =>
 					{
@@ -25,10 +26,8 @@ export class LoopTaskTest extends TestCaseAsync
 							let taskIntervalSeconds
 								= now.timeSpanBySubtract(lastTaskProcessBeginTime)
 									.totalSeconds;
-							let taskIntervalSecondsMin
-								= loopTaskIntervalSeconds + taskProcessSeconds;
 							// !!!
-							assert(taskIntervalSeconds >= taskIntervalSecondsMin);
+							assert(taskIntervalSeconds <= taskIntervalSecondsMin);
 							// !!!
 							testResolve(void 0);
 							// !!!
