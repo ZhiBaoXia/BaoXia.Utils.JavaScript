@@ -344,7 +344,6 @@ export class UriUtil
 		{
 			queryParamsString = this.createQueryParamsStringWithMap(queryParams);
 		}
-
 		if (StringUtil.isEmpty(uriString))
 		{
 			return queryParamsString;
@@ -443,22 +442,26 @@ export class UriUtil
 	 */
 	static appendFragmentParamsToUri(
 		uriString: string | null | undefined,
-		fragmentParams: string | Map<string, string> | null | undefined): string
+		fragmentParams: string | Map<string, string> | Object | null | undefined): string
 	{
 		if (fragmentParams == null
 			|| fragmentParams == undefined)
 		{
 			return StringUtil.emptyOr(uriString);
 		}
-		if (typeof (fragmentParams) != "string")
+		
+		let fragmentParamsString: string;
+		if (typeof (fragmentParams) == "string")
 		{
-			fragmentParams = this.createQueryParamsStringWithMap(fragmentParams);
+			fragmentParamsString = fragmentParams as string;
 		}
-
-		fragmentParams = fragmentParams as string;
+		else
+		{
+			fragmentParamsString = this.createQueryParamsStringWithMap(fragmentParams);
+		}
 		if (StringUtil.isEmpty(uriString))
 		{
-			return fragmentParams;
+			return fragmentParamsString;
 		}
 
 		uriString = uriString!;
@@ -469,9 +472,9 @@ export class UriUtil
 		if (uriQueryAndFragment != null
 			&& uriQueryAndFragment.fragmentBeginCharIndex >= 0)
 		{
-			fragmentParams
+			fragmentParamsString
 				= StringUtil.trimLeftKeywordIn(
-					fragmentParams,
+					fragmentParamsString,
 					UriPathDelimiter.QueryParamToFragment);
 			fragmetnDelimiter
 				= UriPathDelimiter.QueryParams;
@@ -481,7 +484,7 @@ export class UriUtil
 				fragmetnDelimiter,
 				true,
 				uriString,
-				fragmentParams)
+				fragmentParamsString)
 
 		return uriString;
 	}
