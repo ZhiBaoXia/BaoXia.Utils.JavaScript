@@ -42,8 +42,12 @@ export class ArrayUtil
 	 * @param items 指定的数组。
 	 * @returns 返回数组中的第一个元素。
 	 */
-	static firstItemOf(items: Array<any>): any
+	static firstItemOf<ItemType>(items: Array<ItemType> | null | undefined): ItemType | null
 	{
+		if (!items)
+		{
+			return null;
+		}
 		if (items.length > 0)
 		{
 			return items[0];
@@ -56,8 +60,12 @@ export class ArrayUtil
 	 * @param items 指定的数组。
 	 * @returns 返回数组中的最后一个元素。
 	 */
-	static lastItemOf(items: Array<any>): any
+	static lastItemOf<ItemType>(items: Array<ItemType> | null | undefined): ItemType | null
 	{
+		if (!items)
+		{
+			return null;
+		}
 		if (items.length > 0)
 		{
 			return items[items.length - 1];
@@ -71,10 +79,11 @@ export class ArrayUtil
 	 * @param item 要添加的元素。
 	 * @returns 返回已添加的元素。
 	 */
-	static addItemTo(items: Array<any>, item: any): any
+	static addItemTo<ItemType>(items: Array<ItemType>, item: ItemType): ItemType
 	{
+		//
 		items.push(item);
-
+		//
 		return item;
 	}
 
@@ -85,10 +94,10 @@ export class ArrayUtil
 	 * @param newItems 要插入的新元素数组对象。
 	 * @returns 返回已插入的新元素数组。
 	 */
-	static insertItemsTo(
-		items: Array<any>,
+	static insertItemsTo<ItemType>(
+		items: Array<ItemType>,
 		insertIndex: number,
-		newItems: Array<any>): Array<any>
+		newItems: Array<ItemType>): Array<ItemType>
 	{
 		if (newItems != null
 			&& newItems.length > 0)
@@ -108,10 +117,10 @@ export class ArrayUtil
 	 * @param newItems 要插入的新元素对象。
 	 * @returns 返回已插入的新元素对象。
 	 */
-	static insertItemTo(
-		items: Array<any>,
+	static insertItemTo<ItemType>(
+		items: Array<ItemType>,
 		insertIndex: number,
-		newItem: any): any
+		newItem: ItemType): Array<ItemType>
 	{
 		items.splice(
 			insertIndex,
@@ -127,10 +136,10 @@ export class ArrayUtil
 	 * @param removeItemsCount 要移除范围的元素数量。
 	 * @returns 返回已删除的元素数组。
 	 */
-	static removeItemsInRangeFrom(
-		items: Array<any>,
+	static removeItemsInRangeFrom<ItemType>(
+		items: Array<ItemType>,
 		removeRangeBeginIndex: number,
-		removeItemsCount: number): Array<any> | null
+		removeItemsCount: number): Array<ItemType> | null
 	{
 		let removeRangeEndIndex
 			= removeRangeBeginIndex
@@ -167,7 +176,9 @@ export class ArrayUtil
 	 * @param itemIndex 要移除元素的索引值。
 	 * @returns 移除成功时，返回刚刚移除的元素，否则返回：null。
 	 */
-	static removeItemAt(items: Array<any>, itemIndex: number): any
+	static removeItemAt<ItemType>(
+		items: Array<ItemType>,
+		itemIndex: number): ItemType | null
 	{
 		if (itemIndex >= 0
 			&& itemIndex < items.length)
@@ -187,7 +198,7 @@ export class ArrayUtil
 	 * @param item 要移除的元素。
 	 * @returns item 移除成功时，返回刚刚移除的元素，否则返回：null。
 	 */
-	static removeItemFrom(items: Array<any>, item: any): any
+	static removeItemFrom<ItemType>(items: Array<ItemType>, item: ItemType): ItemType | null
 	{
 		let itemIndex = items.indexOf(item);
 		{ }
@@ -203,10 +214,10 @@ export class ArrayUtil
 	 * @param subarrayLength 指定范围的元素数量。
 	 * @returns 返回指定数组指定范围内的元素数组。
 	 */
-	static subarrayInRangeFrom(
-		items: Array<any>,
+	static subarrayInRangeFrom<ItemType>(
+		items: Array<ItemType>,
 		subarrayBeginIndex: number,
-		subarrayLength: number): Array<any> | null
+		subarrayLength: number): Array<ItemType> | null
 	{
 		let subarrayEndIndex
 			= subarrayBeginIndex
@@ -239,86 +250,12 @@ export class ArrayUtil
 	 * @param items 要清空元素的指定数组对象。
 	 * @returns items 已被移除的元素数组对象。
 	 */
-	static clearItems(items: Array<any>): Array<any>
+	static clearItems<ItemType>(items: Array<ItemType>): Array<ItemType>
 	{
 		let lastArray = items.slice(0, items.length);
 		{
 			items.length = 0;
 		}
 		return lastArray;
-	}
-
-
-	/**
-	 * 枚举二维数组中的所有元素的组合。
-	 * @param toReceiveItems 接收当前所有元素的一种组合。
-	 * @param itemArrays 要进行枚举的二维元素数组。
-	 */
-	static enumerateItemInItemArraysTo(
-		toReceiveItems: (items: any[]) => void,
-		...itemArrays: any[][])
-	{
-		if (ArrayUtil.isEmpty(itemArrays))
-		{
-			return;
-		}
-
-		let itemArraysCount = itemArrays.length;
-		let allItemCombinationsCount = 0;
-		let itemArrayCurrentItemIndexes = new Array<number>();
-		let itemArrayCurrentItems = new Array<any>();
-		for (let itemArray of itemArrays)
-		{
-			let itemArrayLength = itemArray.length;
-			if (itemArrayLength <= 0)
-			{
-				return;
-			}
-
-			allItemCombinationsCount
-				= allItemCombinationsCount == 0
-					? itemArrayLength
-					: allItemCombinationsCount * itemArrayLength;
-			// !!!
-			itemArrayCurrentItemIndexes.push(-1);
-			itemArrayCurrentItems.push(null);
-			// !!!
-		}
-		for (let itemIndex = 0;
-			itemIndex < allItemCombinationsCount;
-			itemIndex++)
-		{
-			////////////////////////////////////////////////
-			// 1/2，更新各个数组的当前元素索引值：
-			////////////////////////////////////////////////
-			for (let itemArrayIndex = 0;
-				itemArrayIndex < itemArraysCount;
-				itemArrayIndex++)
-			{
-				let itemArray = itemArrays[itemArrayIndex];
-				let itemsCount = itemArray.length;
-				let itemIndex = itemArrayCurrentItemIndexes[itemArrayIndex];
-				if ((itemIndex + 1) < itemsCount)
-				{
-					itemIndex++;
-					itemArrayCurrentItemIndexes[itemArrayIndex] = itemIndex;
-					itemArrayCurrentItems = itemArray[itemIndex];
-					break;
-				}
-				else
-				{
-					itemIndex = 0;
-					itemArrayCurrentItemIndexes[itemArrayIndex] = itemIndex;
-					itemArrayCurrentItems = itemArray[itemIndex];
-				}
-			}
-
-			////////////////////////////////////////////////
-			// 2/2，回调当前的元素组合：
-			////////////////////////////////////////////////
-			// !!!
-			toReceiveItems(itemArrayCurrentItems);
-			// !!!
-		}
 	}
 }
