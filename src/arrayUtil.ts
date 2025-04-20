@@ -76,15 +76,55 @@ export class ArrayUtil
 	/**
 	 * 添加元素到指定的数组对象。
 	 * @param items 指定的数组对象。
-	 * @param item 要添加的元素。
+	 * @param newItem 要添加的元素。
 	 * @returns 返回已添加的元素。
 	 */
-	static addItemTo<ItemType>(items: Array<ItemType>, item: ItemType): ItemType
+	static addItemTo<ItemType>(
+		items: Array<ItemType>,
+		newItem: ItemType): ItemType
 	{
 		//
-		items.push(item);
+		items.push(newItem);
 		//
-		return item;
+		return newItem;
+	}
+
+	/**
+	 * 添加元素集合到指定的数组对象。
+	 * @param items 指定的数组对象。
+	 * @param newItems 要添加的元素。
+	 * @returns 返回已添加的元素。
+	 */
+	static addItemsTo<ItemType>(
+		items: Array<ItemType>,
+		newItems: ItemType[]): ItemType[]
+	{
+		for (let item of newItems)
+		{
+			//
+			items.push(item);
+			//
+		}
+		return newItems;
+	}
+
+	/**
+	 * 在指定数组的指定位置上插入新的元素。
+	 * @param items 指定的数组对象。
+	 * @param insertIndex 要插入新元素的索引值。
+	 * @param newItems 要插入的新元素对象。
+	 * @returns 返回已插入的新元素对象。
+	 */
+	static insertItemTo<ItemType>(
+		items: Array<ItemType>,
+		insertIndex: number,
+		newItem: ItemType): Array<ItemType>
+	{
+		items.splice(
+			insertIndex,
+			0,
+			newItem);
+		return items;
 	}
 
 	/**
@@ -109,26 +149,7 @@ export class ArrayUtil
 		}
 		return newItems;
 	}
-
-	/**
-	 * 在指定数组的指定位置上插入新的元素。
-	 * @param items 指定的数组对象。
-	 * @param insertIndex 要插入新元素的索引值。
-	 * @param newItems 要插入的新元素对象。
-	 * @returns 返回已插入的新元素对象。
-	 */
-	static insertItemTo<ItemType>(
-		items: Array<ItemType>,
-		insertIndex: number,
-		newItem: ItemType): Array<ItemType>
-	{
-		items.splice(
-			insertIndex,
-			0,
-			newItem);
-		return items;
-	}
-
+	
 	/**
 	 * 移除指定数组内，指定范围内的元素。
 	 * @param items 指定的数组对象。
