@@ -63,6 +63,52 @@ export class StringUtil
 		return false;
 	}
 
+	/**
+	 * 判断指定的字符串，是否为“数字字符串”。
+	 * @param stringValue 指定的字符。
+	 * @param [isDecimalsEnable] 是否可以是小数，默认为：true。
+	 * @returns 如果指定的字符为“数字字符串”，则返回：true，否则返回：false。
+	 */
+	static isNumberString(
+		stringValue: string | null | undefined,
+		isDecimalsEnable: boolean = true
+	): boolean
+	{
+		if (!stringValue
+			|| stringValue.length < 1)
+		{
+			return false;
+		}
+
+		const stringValueLength = stringValue.length;
+		let indexOfDotChar = -1;
+		for (let charIndex = 0;
+			charIndex < stringValueLength;
+			charIndex++)
+		{
+			const character = stringValue[charIndex];
+			if (character == ".")
+			{
+				if (isDecimalsEnable != true)
+				{
+					return false;
+				}
+				if (indexOfDotChar < 0)
+				{
+					indexOfDotChar = charIndex;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else if (StringUtil.isNumberChar(character, false) != true)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
 	/**
 	 * 判断指定的字符，是否为“英文字母字符”。
@@ -91,6 +137,34 @@ export class StringUtil
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * 判断指定的字符串，是否为“英文字母字符串”。
+	 * @param stringValue 指定的字符。
+	 * @returns 如果指定的字符为“英文字母字符串”，则返回：true，否则返回：false。
+	 */
+	static isAlphabetString(
+		stringValue: string | null | undefined
+	): boolean
+	{
+		if (!stringValue
+			|| stringValue.length < 1)
+		{
+			return false;
+		}
+		const stringValueLength = stringValue.length;
+		for (let charIndex = 0;
+			charIndex < stringValueLength;
+			charIndex++)
+		{
+			const character = stringValue[charIndex];
+			if (StringUtil.isAlphabetChar(character) != true)
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
