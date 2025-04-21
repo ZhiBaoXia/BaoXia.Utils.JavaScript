@@ -895,6 +895,99 @@ export class StringUtil
 	}
 
 	/**
+	 * 计算字符串中指定键的出现次数。
+	 * @param stringValue 指定的字符串。
+	 * @param keywords 指定的关键词。
+	 * @param [isIgnoreCase] 是否忽略大小写，默认为：true。
+	 * @param [isKeywordsOverlapEnable] 是否允许关键词重叠计数，默认为：false。
+	 * @returns 返回字符串中指定键的出现次数。
+	 */
+	static countOfStringIn(
+		stringValue?: string | null,
+		keywords?: string | null,
+		isIgnoreCase: boolean = true,
+		isKeywordsOverlapEnable: boolean = false
+	): number
+	{
+		if (StringUtil.isEmpty(stringValue)
+			|| StringUtil.isEmpty(keywords))
+		{
+			return 0.0;
+		}
+
+		stringValue = stringValue!;
+		keywords = keywords!;
+
+		let keysCount = 0;
+		const keyLength = keywords.length;
+		let lastKeyEndIndex = 0;
+
+		while (true)
+		{
+			const indexOfKey = StringUtil.indexOfKeywordIn(
+				stringValue,
+				keywords,
+				isIgnoreCase,
+				lastKeyEndIndex);
+			if (indexOfKey >= 0)
+			{
+				keysCount++;
+				if (isKeywordsOverlapEnable)
+				{
+					lastKeyEndIndex = indexOfKey + 1;
+				} else
+				{
+					lastKeyEndIndex = indexOfKey + keyLength;
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
+		return keysCount;
+	}
+
+	/**
+	 * 计算字符串中匹配值的匹配进度值
+	 * @param stringValue 要搜索的字符串
+	 * @param matchValue 要匹配的关键字
+	 * @param isIgnoreCase 是否忽略大小写，默认为true
+	 * @param isMatchValueCharsOverlapEnable 是否允许匹配值字符重叠，默认为false
+	 * @returns 返回匹配进度值，范围在0到1之间
+	 */
+	static getMatchProgressValueIn(
+		stringValue?: string | null,
+		matchValue?: string | null,
+		isIgnoreCase: boolean = true,
+		isMatchValueCharsOverlapEnable: boolean = false)
+	{
+		if (StringUtil.isEmpty(stringValue)
+			|| StringUtil.isEmpty(matchValue))
+		{
+			return 0.0;
+		}
+
+		stringValue = stringValue!;
+		matchValue = matchValue!;
+
+		var searchKeysCount = StringUtil.countOfStringIn(
+			stringValue,
+			matchValue,
+			isIgnoreCase,
+			isMatchValueCharsOverlapEnable);
+		if (searchKeysCount < 0)
+		{
+			return 0;
+		}
+		var matchedProgressValue
+			= (matchValue.length * searchKeysCount)
+			/ stringValue.length;
+		{ }
+		return matchedProgressValue;
+	}
+
+	/**
 	 * 获取指定字符串的左边指定长度的子字符串。
 	 * @param str 指定的字符串。
 	 * @param leftLength 指定长度。
