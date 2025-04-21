@@ -11,6 +11,26 @@ export class StringUtilTest extends TestCase
 				// 字符串比较相关测试：
 				////////////////////////////////////////////////
 
+				// “isNumberString”测试：
+				{
+					assert(StringUtil.isNumberString("a123") == false);
+					assert(StringUtil.isNumberString("123a") == false);
+					assert(StringUtil.isNumberString("123") == true);
+					assert(StringUtil.isNumberString("123.0") == true);
+				}
+
+				// “isAlphabetString”测试：
+				{
+					assert(StringUtil.isAlphabetString("a123") == false);
+					assert(StringUtil.isAlphabetString("123a") == false);
+					assert(StringUtil.isAlphabetString("123") == false);
+					assert(StringUtil.isAlphabetString("123.0") == false);
+					assert(StringUtil.isAlphabetString("a") == true);
+					assert(StringUtil.isAlphabetString("A") == true);
+					assert(StringUtil.isAlphabetString("aA") == true);
+					assert(StringUtil.isAlphabetString("a啊") == false);
+				}
+
 				// “getMatchProgressValueIn”测试：
 				{
 					// 当任意一个字符串为空时，应返回 0。
@@ -32,11 +52,15 @@ export class StringUtilTest extends TestCase
 
 					// 当 isIgnoreCase 为 false 时，应处理大小写敏感情况。
 					matchProgressValue = StringUtil.getMatchProgressValueIn('Hello', 'hello', false);
-					assert(matchProgressValue == 5 / 5); // 当大小写匹配时应匹配成功
+					assert(matchProgressValue == 0);
+
+					// 当 isIgnoreCase 为 false 时，应处理大小写敏感情况。
+					matchProgressValue = StringUtil.getMatchProgressValueIn('Hello', 'hello', true);
+					assert(matchProgressValue == 5 / 5);
 
 					// 当启用重叠匹配时，应处理重叠匹配情况。
 					matchProgressValue = StringUtil.getMatchProgressValueIn('aaa', 'aa', true, true);
-					assert(matchProgressValue == 6 / 3); // (2 * 3) / 3
+					assert(matchProgressValue == 4 / 3); // (2 * 3) / 3
 
 					// 对于完全匹配的情况，应返回 1。
 					matchProgressValue = StringUtil.getMatchProgressValueIn('test', 'test');
