@@ -9,6 +9,7 @@ import { NumberRoundType } from "./constant/numberRoundType.js";
 import { NumberStringInfo } from "./model/numberStringInfo.js";
 import { StringRange } from "./model/stringRange.js";
 import { NumberUtil } from "./numberUtil.js";
+import { ObjectUtil } from "./objectUtil.js";
 
 export class StringUtil
 {
@@ -222,13 +223,7 @@ export class StringUtil
 	 */
 	static isString(object: unknown): boolean
 	{
-		if (object != null
-			&& object != undefined
-			&& typeof (object) == "string")
-		{
-			return true;
-		}
-		return false;
+		return ObjectUtil.isString(object);
 	}
 
 	/**

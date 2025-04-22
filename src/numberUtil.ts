@@ -1,5 +1,6 @@
 
 import { NumberRoundType } from "./constant/numberRoundType.js";
+import { ObjectUtil } from "./objectUtil.js";
 
 export class NumberUtil
 {
@@ -14,14 +15,14 @@ export class NumberUtil
  */
 	public static isNumber(value: any): boolean
 	{
-		return typeof value === 'number';
+		return ObjectUtil.isNumber(value);
 	}
-	
+
 	/**
-     * 将字符串解析为整数。
-     * @param value 要解析的字符串。
-     * @returns 如果解析成功返回对应的整数，如果解析失败返回 0。
-     */
+	 * 将字符串解析为整数。
+	 * @param value 要解析的字符串。
+	 * @returns 如果解析成功返回对应的整数，如果解析失败返回 0。
+	 */
 	public static parseInt(value: string): number
 	{
 		const parsedValue = parseInt(value);
@@ -29,14 +30,14 @@ export class NumberUtil
 	}
 
 	/**
-     * 将字符串解析为浮点数。
-     * @param value 要解析的字符串。
-     * @returns 如果解析成功返回对应的浮点数，如果解析失败返回 0。
-     */
+	 * 将字符串解析为浮点数。
+	 * @param value 要解析的字符串。
+	 * @returns 如果解析成功返回对应的浮点数，如果解析失败返回 0。
+	 */
 	public static parseNumber(value: string): number 
 	{
 		const parsedValue = parseFloat(value);
-		return isNaN(parsedValue)? 0 : parsedValue;
+		return isNaN(parsedValue) ? 0 : parsedValue;
 	}
 
 	/**
