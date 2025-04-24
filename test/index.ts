@@ -3,6 +3,7 @@ import { TestProject } from "../src/index.js";
 import { ArrayUtilTest } from "./arrayUtilTest.js";
 import { CookieUtilTest } from "./cookieUtilTest.js";
 import { DateTimeTest } from "./dateTimeTest.js";
+import { DelayTaskTest } from "./delayTaskTest.js";
 import { JsonUtilTest } from "./jsonUtilTest.js";
 import { LoopTaskTest } from "./loopTaskTest.js";
 import { ObjectUtilTest } from "./objectUtilTest.js";
@@ -34,7 +35,8 @@ let testProject = new TestProject(
 		new CookieUtilTest(),
 		new JsonUtilTest(),
 		new VersionInfoTest(),
-		new RecursionUtilTest()
+		new RecursionUtilTest(),
+		new DelayTaskTest()
 	]);
 // !!!
 await testProject.testAsync();

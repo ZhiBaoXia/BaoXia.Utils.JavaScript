@@ -1,6 +1,5 @@
-import { TestCase, PathUtil, DateTime, StringUtil } from "../src/index.js";
-import { JsonUtilTestModel } from "./model/jsonUtilTestModel.js"
-import { JsonUtil } from "../src/index.js";
+import { DateTime, JsonUtil, StringUtil, TestCase } from "../src/index.js";
+import { JsonUtilTestModel } from "./model/jsonUtilTestModel.js";
 
 export class JsonUtilTest extends TestCase
 {
