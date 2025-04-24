@@ -1,5 +1,5 @@
-import { VersionInfo } from "../src/versionInfo.js";
 import { TestCase } from "../src/index.js";
+import { VersionInfo } from "../src/versionInfo.js";
 
 export class VersionInfoTest extends TestCase
 {

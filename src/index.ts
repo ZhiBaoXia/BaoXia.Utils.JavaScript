@@ -3,6 +3,7 @@ import { DateTimeField } from "./constant/dateTimeField.js"
 import * as Constant from "./constant/index.js"
 import { CookieUtil } from "./cookieUtil.js"
 import { DateTime } from "./dateTime.js"
+import { DelayTask } from "./delayTask.js"
 import { JsonUtil } from "./jsonUtil.js"
 import { LoopTask } from "./loopTask.js"
 import * as Model from "./model/index.js"
@@ -20,7 +21,7 @@ import { VersionInfo } from "./versionInfo.js"
 export
 {
 	ArrayUtil, Constant, CookieUtil, DateTime,
-	DateTimeField, JsonUtil, LoopTask, Model,
+	DateTimeField, DelayTask, JsonUtil, LoopTask, Model,
 	ObjectUtil, PathUtil, RecursionUtil, StringUtil, TestCase,
 	TestProject, Thenable, UriUtil, ValueUtil,
 	VersionInfo
