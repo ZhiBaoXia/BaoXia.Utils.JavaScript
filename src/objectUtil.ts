@@ -1,5 +1,4 @@
 import { ObjectPropertyInfo } from "./model/objectPropertyInfo.js";
-import { StringUtil } from "./stringUtil.js";
 
 export class ObjectUtil
 {

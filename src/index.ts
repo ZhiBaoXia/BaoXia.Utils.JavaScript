@@ -8,6 +8,7 @@ import { LoopTask } from "./loopTask.js"
 import * as Model from "./model/index.js"
 import { ObjectUtil } from "./objectUtil.js"
 import { PathUtil } from "./pathUtil.js"
+import { RecursionUtil } from "./recursionUtil.js"
 import { StringUtil } from "./stringUtil.js"
 import { Thenable } from "./thenable.js"
 import { TestCase } from "./unitTest/testCase.js"
@@ -20,7 +21,7 @@ export
 {
 	ArrayUtil, Constant, CookieUtil, DateTime,
 	DateTimeField, JsonUtil, LoopTask, Model,
-	ObjectUtil, PathUtil, StringUtil, TestCase,
+	ObjectUtil, PathUtil, RecursionUtil, StringUtil, TestCase,
 	TestProject, Thenable, UriUtil, ValueUtil,
 	VersionInfo
 }
