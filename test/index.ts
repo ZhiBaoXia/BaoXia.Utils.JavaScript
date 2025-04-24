@@ -7,6 +7,7 @@ import { JsonUtilTest } from "./jsonUtilTest.js";
 import { LoopTaskTest } from "./loopTaskTest.js";
 import { ObjectUtilTest } from "./objectUtilTest.js";
 import { PathUtilTest } from "./pathUtilTest.js";
+import { RecursionUtilTest } from "./recursionUtilTest.js";
 import { StringUtilFormatTest } from "./stringUtilFormatTest.js";
 import { StringUtilIndexOfTest } from "./stringUtilIndexOfTest.js";
 import { StringUtilTest } from "./stringUtilTest.js";
@@ -32,7 +33,8 @@ let testProject = new TestProject(
 		new UriUtilPathOperationTest(),
 		new CookieUtilTest(),
 		new JsonUtilTest(),
-		new VersionInfoTest()
+		new VersionInfoTest(),
+		new RecursionUtilTest()
 	]);
 // !!!
 await testProject.testAsync();
