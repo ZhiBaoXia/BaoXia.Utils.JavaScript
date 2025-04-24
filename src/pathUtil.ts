@@ -1,8 +1,8 @@
 
-import { FilePathDelimiter } from "./constant/filePathDelimiter.js"
-import { UriPathDelimiter } from "./constant/uriPathDelimiter.js"
-import { StringUtil } from "./stringUtil.js"
-import { UriUtil } from "./uriUtil.js"
+import { FilePathDelimiter } from "./constant/filePathDelimiter.js";
+import { UriPathDelimiter } from "./constant/uriPathDelimiter.js";
+import { StringUtil } from "./stringUtil.js";
+import { UriUtil } from "./uriUtil.js";
 
 
 export class PathUtil
