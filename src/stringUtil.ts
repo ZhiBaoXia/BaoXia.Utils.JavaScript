@@ -492,6 +492,39 @@ export class StringUtil
 	}
 
 	/**
+	 * 判断指定的字符串，是否为“null”，“空字符串”，或“空白字符串”。
+	 * @param str 指定的字符串对象。
+	 * @returns 如果指定的字符串对象为“null”，或“空字符串”，则返回：true，否则返回：false。
+	 */
+	static isBlank(str: string | null | undefined): boolean
+	{
+		if (str == undefined
+			|| str == null
+			|| str.length < 1)
+		{
+			return true;
+		}
+		for (let character of str)
+		{
+			if (character != " ")
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * 判断指定的字符串，是否不为“null”，“空字符串”，或“空白字符串”。
+	 * @param str 指定的字符串对象。
+	 * @returns 如果指定的字符串对象为“null”，或“空字符串”，则返回：true，否则返回：false。
+	 */
+	static isNotBlank(str: string | null | undefined): boolean
+	{
+		return !StringUtil.isBlank(str);
+	}
+
+	/**
 	 * 返回指定字符串，或“Empty”。
 	 * @param str 指定的字符串对象。
 	 * @returns 指定的字符串对象不为“null”时返回：指定的字符串，否则返回：StringUtil.Empty。
