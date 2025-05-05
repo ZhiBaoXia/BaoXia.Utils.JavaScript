@@ -1,4 +1,4 @@
-import { TestCase } from "../src/index.js";
+import { TestCase, ValueUtil } from "../src/index.js";
 import { MapUtil } from "../src/index.js";
 
 export class MapUtilTest extends TestCase
@@ -63,13 +63,34 @@ export class MapUtilTest extends TestCase
 				// should use custom comparison function correctly.
 				let map3 = new Map([['a', { x: 1 }]]);
 				let map4 = new Map([['a', { x: 1 }]]);
-				assert(MapUtil.isEquals(map3, map4, (key, val1, val2) => val1?.x == val2?.x) == true);
+				assert(MapUtil.isEquals(
+					map3,
+					map4,
+					(key, val1, val2) => 
+					{
+						return ValueUtil.isEquals(
+							val1,
+							val2,
+							(val1, val2) =>
+							{
+								return val1.x == val2.x;
+							});
+					}) == true);
 
 				// 测试自定义比较函数的行为
 				// should use custom comparison function correctly.
 				map3 = new Map([['a', { x: 1 }]]);
 				map4 = new Map([['a', { x: 2 }]]);
-				assert(MapUtil.isEquals(map3, map4, (key, val1, val2) => val1?.x == val2?.x) == false);
+				assert(MapUtil.isEquals(map3, map4, (key, val1, val2) => 
+				{
+					return ValueUtil.isEquals(
+						val1,
+						val2,
+						(val1, val2) =>
+						{
+							return val1.x == val2.x;
+						});
+				}) == false);
 			});
 	}
 }
