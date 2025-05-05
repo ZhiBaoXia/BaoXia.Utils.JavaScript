@@ -44,5 +44,30 @@ export class ValueUtil
 		return ValueUtil.isTrue(value);
 	}
 
+	public static isEquals<ValueType>(
+		value1: ValueType | null | undefined,
+		value2: ValueType | null | undefined,
+		toIsEquals: (value1: ValueType, value2: ValueType) => boolean)
+		: boolean
+	{
+		if (value1 === value2)
+		{
+			return true;
+		}
+		if (!value1 && !value2)
+		{
+			return true;
+		}
+		if (!value1)
+		{
+			return false;
+		}
+		if (!value2)
+		{
+			return false;
+		}
+		return toIsEquals(value1, value2);
+	}
+
 	// #endRegion
 }

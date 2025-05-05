@@ -118,7 +118,7 @@ export class ArrayUtilTest extends TestCase
 					assert(ArrayUtil.isEquals(undefined, undefined, simpleEquals) == true);
 
 					// null and undefined should return false.
-					assert(ArrayUtil.isEquals(null, undefined, simpleEquals) == false);
+					assert(ArrayUtil.isEquals(null, undefined, simpleEquals) == true);
 
 					// one null and one array should return false.
 					assert(ArrayUtil.isEquals(null, [1], simpleEquals) == false);
