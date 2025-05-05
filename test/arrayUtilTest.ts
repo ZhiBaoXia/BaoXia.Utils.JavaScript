@@ -98,6 +98,47 @@ export class ArrayUtilTest extends TestCase
 				{
 					assert(ArrayUtil.clearItems(items).length == lastItemsLength);
 				}
+
+
+				////////////////////////////////////////////////	
+				// “isEquals”相关测试：
+				////////////////////////////////////////////////
+				{
+					// 基础比较函数
+					const simpleEquals = (a: any, b: any) => a === b;
+
+					// same array reference should return true.
+					const arr = [1, 2, 3];
+					assert(ArrayUtil.isEquals(arr, arr, simpleEquals) == true);
+
+					// both null should return true.
+					assert(ArrayUtil.isEquals(null, null, simpleEquals) == true);
+
+					// both undefined should return true.
+					assert(ArrayUtil.isEquals(undefined, undefined, simpleEquals) == true);
+
+					// null and undefined should return false.
+					assert(ArrayUtil.isEquals(null, undefined, simpleEquals) == false);
+
+					// one null and one array should return false.
+					assert(ArrayUtil.isEquals(null, [1], simpleEquals) == false);
+
+					// different length arrays should return false.
+					assert(ArrayUtil.isEquals([1, 2], [1], simpleEquals) == false);
+
+					// same length but different values should return false.
+					assert(ArrayUtil.isEquals([1, 2], [1, 3], simpleEquals) == false);
+
+					// same values should return true.
+					assert(ArrayUtil.isEquals([1, 2], [1, 2], simpleEquals) == true);
+
+					// custom comparison function should work.
+					const customEquals = (a: any, b: any) => Math.floor(a) === Math.floor(b);
+					assert(ArrayUtil.isEquals([1.1, 2.9], [1.0, 2.0], customEquals) == true);
+
+					// empty arrays should return true.
+					assert(ArrayUtil.isEquals([], [], simpleEquals) == true);
+				}
 			});
 	}
 }

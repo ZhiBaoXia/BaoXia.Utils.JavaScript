@@ -149,7 +149,7 @@ export class ArrayUtil
 		}
 		return newItems;
 	}
-	
+
 	/**
 	 * 移除指定数组内，指定范围内的元素。
 	 * @param items 指定的数组对象。
@@ -278,5 +278,51 @@ export class ArrayUtil
 			items.length = 0;
 		}
 		return lastArray;
+	}
+
+
+	static isEquals<ValueType>(
+		array1: Array<ValueType> | null | undefined,
+		array2: Array<ValueType> | null | undefined,
+		toIsEqualsValue: (value1: ValueType | undefined, value2: ValueType | undefined) => boolean): boolean
+	{
+		if (array1 === array2)
+		{
+			return true;
+		}
+		if (!array1
+			&& !array2)
+		{
+			return true;
+		}
+		if (!array1)
+		{
+			return false;
+		}
+		if (!array2)
+		{
+			return false;
+		}
+
+		if (array1.length != array2.length)
+		{
+			return false;
+		}
+
+		const itemsCount = array1.length;
+		for (let itemIndex = 0;
+			itemIndex < itemsCount;
+			itemIndex++)
+		{
+			const value1 = array1[itemIndex];
+			const value2 = array2[itemIndex];
+			if (!toIsEqualsValue(
+				value1,
+				value2))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }

@@ -8,6 +8,23 @@ export class StringUtilTest extends TestCase
 			(assert, assertFalse) =>
 			{
 				////////////////////////////////////////////////
+				// 空白字符串判断测试：
+				////////////////////////////////////////////////
+				{
+					assert(StringUtil.isEmpty(null) == true);
+					assert(StringUtil.isEmpty(undefined) == true);
+					assert(StringUtil.isEmpty("") == true);
+					assert(StringUtil.isEmpty(" ") == false);
+
+					assert(StringUtil.isBlank(null) == true);
+					assert(StringUtil.isBlank(undefined) == true);
+					assert(StringUtil.isBlank("") == true);
+					assert(StringUtil.isBlank(" ") == true);
+					assert(StringUtil.isBlank("  ") == true);
+					assert(StringUtil.isNotBlank(" a ") == true);
+				}
+
+				////////////////////////////////////////////////
 				// 字符串比较相关测试：
 				////////////////////////////////////////////////
 
