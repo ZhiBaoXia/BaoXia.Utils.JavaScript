@@ -387,6 +387,46 @@ export class StringUtilTest extends TestCase
 						assert(newString == "0,1,2")
 						// !!!   
 					}
+
+					newString = StringUtil.joinStringsWithDelimiter(
+						",",
+						true,
+						["0", null, "1", undefined, "2"]);
+					{
+						// !!!
+						assert(newString == "0,1,2")
+						// !!!   
+					}
+
+					newString = StringUtil.joinStringsWithDelimiter(
+						",",
+						true,
+						["0", null, "1", ",", undefined, "2"]);
+					{
+						// !!!
+						assert(newString == "0,1,2")
+						// !!!   
+					}
+
+					newString = StringUtil.joinStringsWithDelimiter(
+						",",
+						true,
+						["0", null, "1", ",", undefined, "2"]);
+					{
+						// !!!
+						assert(newString == "0,1,2")
+						// !!!   
+					}
+
+					newString = StringUtil.joinStringsWithDelimiter(
+						",",
+						true,
+						[null, undefined, ",", "0", null, "1", ",", undefined, "2", null, undefined, ","]);
+					{
+						// !!!
+						assert(newString == "0,1,2")
+						// !!!   
+					}
 				}
 			});
 	}

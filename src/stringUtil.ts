@@ -2006,72 +2006,88 @@ export class StringUtil
 	 * 使用指定的分隔符连接指定的字符串数组。
 	 * @param delimiter 指定的连接分隔符。
 	 * @param isDelimiterConsecutiveDisable 是否允许连续的分隔符，在“连接处”出现。 
-	 * @param strings 要进行连接的字符串数组。
+	 * @param substrings 要进行连接的字符串数组。
 	 * @returns 使用指定的分隔符连接指定字符串数组后，生成的最终字符串。
 	 */
 	static joinStringsWithDelimiter(
 		delimiter: string | null | undefined,
 		isDelimiterConsecutiveDisable: boolean,
-		...strings: string[] | Array<string>[]): string
+		...substrings: (string | null | undefined)[] | Array<string | null | undefined>[]): string
 	{
-		let finalString = StringUtil.Empty;
-		if (ArrayUtil.isEmpty(strings))
+		if (ArrayUtil.isEmpty(substrings))
 		{
-			return finalString;
+			return StringUtil.Empty;
 		}
-		let finalStrings: Array<string>;
-		if (strings[0] instanceof Array)
+		let finalSubstrings: Array<string | null | undefined>;
+		if (substrings[0] instanceof Array)
 		{
-			if (strings.length == 1)
+			if (substrings.length == 1)
 			{
-				finalStrings = strings[0];
+				finalSubstrings = substrings[0];
 			}
 			else
 			{
-				finalStrings = new Array<string>();
-				for (let stringArray of strings)
+				finalSubstrings = new Array<string | null | undefined>();
+				for (let stringArray of substrings)
 				{
 					if (stringArray instanceof Array)
 					{
-						finalStrings = finalStrings.concat(stringArray);
+						finalSubstrings = finalSubstrings.concat(stringArray);
 					}
-					else if (typeof (stringArray) == 'string')
+					else// if (typeof (stringArray) == 'string')
 					{
-						finalStrings.push(stringArray);
+						finalSubstrings.push(stringArray);
 					}
 				}
 			}
 		}
 		else
 		{
-			finalStrings = strings as string[];
+			finalSubstrings = substrings as (string | null | undefined)[];
 		}
 
+		let finalString = StringUtil.Empty;
 		let isDelimiterNotEmpty = StringUtil.isNotEmpty(delimiter);
 		let finalDelimiter = isDelimiterNotEmpty
 			? delimiter as string
 			: StringUtil.Empty;
-		for (let str of finalStrings)
+		for (let substring of finalSubstrings)
 		{
-			if (isDelimiterNotEmpty
-				&& finalString.length > 0)
+			if (substring
+				&& substring.length > 0)
 			{
 				if (isDelimiterConsecutiveDisable)
 				{
-					while (finalString.endsWith(finalDelimiter))
+					while (substring.startsWith(finalDelimiter))
 					{
-						finalString = finalString.substring(
-							0,
-							finalString.length - finalDelimiter.length);
+						substring = substring.substring(finalDelimiter.length);
 					}
-					while (str.startsWith(finalDelimiter))
+					while (substring.endsWith(finalDelimiter))
 					{
-						str = str.substring(finalDelimiter.length);
+						substring = substring.substring(0, substring.length - finalDelimiter.length);
+					}
+					if (substring.length < 1)
+					{
+						// !!!
+						continue;
+						// !!!
+					}
+					if (finalString.length > 0)
+					{
+						finalString += finalDelimiter;
 					}
 				}
-				finalString += delimiter;
 			}
-			finalString += str;
+			else if (isDelimiterConsecutiveDisable)
+			{
+				// !!!
+				continue;
+				// !!!
+			}
+
+			// !!!
+			finalString += substring;
+			// !!!
 		}
 		return finalString;
 	}
