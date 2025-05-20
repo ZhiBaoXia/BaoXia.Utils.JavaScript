@@ -99,13 +99,13 @@ export class Thenable<ErrorType, ThenableParamType>
 		: void
 	{
 		let callbackIntervalSecondsMin: number | null = null;
-		if (typeof callback_or_callbackIntervalSecondsMin == 'number')
+		if (callback)
 		{
-			callbackIntervalSecondsMin = callback_or_callbackIntervalSecondsMin;
+			callbackIntervalSecondsMin = callback_or_callbackIntervalSecondsMin as (number | null);
 		}
 		else
 		{
-			callback = callback_or_callbackIntervalSecondsMin;
+			callback = callback_or_callbackIntervalSecondsMin as (((error: ErrorType | null, callbackParam: ThenableParamType | null) => void) | null);
 		}
 
 		this._callback = callback;
