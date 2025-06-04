@@ -631,9 +631,12 @@ export class StringUtil
 							return false;
 						}
 					}
-					// !!!
-					return false;
-					// !!!
+					else
+					{
+						// !!!
+						return false;
+						// !!!
+					}
 				}
 			}
 		}
