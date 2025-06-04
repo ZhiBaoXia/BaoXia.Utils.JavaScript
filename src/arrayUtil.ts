@@ -1,3 +1,5 @@
+import { StringUtil } from "./stringUtil.js";
+
 export class ArrayUtil
 {
 	////////////////////////////////////////////////
@@ -280,6 +282,263 @@ export class ArrayUtil
 		return lastArray;
 	}
 
+	static enumerateItemIn<ItemType>(
+		items: Array<ItemType> | null | undefined,
+		toReceiveItem: (item: ItemType, itemIndex: number) => boolean)
+	{
+		if (!items)
+		{
+			return;
+		}
+		const itemsCount = items.length;
+		for (let itemIndex = 0;
+			itemIndex < itemsCount;
+			itemIndex++)
+		{
+			let item = items[itemIndex];
+			if (!toReceiveItem(
+				item,
+				itemIndex))
+			{
+				break;
+			}
+		}
+	}
+
+	static isItemIn<ItemType>(
+		items: Array<ItemType> | null | undefined,
+		objectItem: ItemType | null | undefined)
+		: boolean
+	{
+		if (!items)
+		{
+			return false;
+		}
+		const itemsCount = items.length;
+		for (let itemIndex = 0;
+			itemIndex < itemsCount;
+			itemIndex++)
+		{
+			let item = items[itemIndex];
+			if (item == objectItem)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	static isItemNotIn<ItemType>(
+		items: Array<ItemType> | null | undefined,
+		objectItem: ItemType | null | undefined)
+		: boolean
+	{
+		return !this.isItemIn(items, objectItem);
+	}
+
+	static isAnyItemsIn<ItemType>(
+		items: Array<ItemType> | null | undefined,
+		...objectItems: (ItemType | null | undefined)[])
+		: boolean
+	{
+		if (!items)
+		{
+			return false;
+		}
+		if (!objectItems
+			|| objectItems.length < 1)
+		{
+			return false;
+		}
+		const itemsCount = items.length;
+		for (let itemIndex = 0;
+			itemIndex < itemsCount;
+			itemIndex++)
+		{
+			let item = items[itemIndex];
+			if (objectItems.indexOf(item) >= 0)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	static isAnyItemsNotIn<ItemType>(
+		items: Array<ItemType> | null | undefined,
+		...objectItems: (ItemType | null | undefined)[])
+		: boolean
+	{
+		return !this.isAnyItemsIn(
+			items,
+			...objectItems);
+	}
+
+	static isAllItemsIn<ItemType>(
+		items: Array<ItemType> | null | undefined,
+		...objectItems: (ItemType | null | undefined)[])
+		: boolean
+	{
+		if (!items)
+		{
+			return false;
+		}
+		if (!objectItems
+			|| objectItems.length < 1)
+		{
+			return false;
+		}
+
+		for (let objectItem of objectItems)
+		{
+			if (!ArrayUtil.isItemIn(items, objectItem))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	static isAllItemsNotIn<ItemType>(
+		items: Array<ItemType> | null | undefined,
+		...objectItems: (ItemType | null | undefined)[])
+		: boolean
+	{
+		return !this.isAllItemsIn<ItemType>(
+			items,
+			...objectItems);
+	}
+
+	static isStringItemIn(
+		items: Array<string> | null | undefined,
+		objectItem: string | null | undefined,
+		isIgnoreCase: boolean = false)
+		: boolean
+	{
+		if (!items)
+		{
+			return false;
+		}
+		const itemsCount = items.length;
+		if (isIgnoreCase)
+		{
+			for (let itemIndex = 0;
+				itemIndex < itemsCount;
+				itemIndex++)
+			{
+				let item = items[itemIndex];
+				if (StringUtil.isEqualsIgnoreCase(item, objectItem))
+				{
+					return true;
+				}
+			}
+		}
+		else
+		{
+			for (let itemIndex = 0;
+				itemIndex < itemsCount;
+				itemIndex++)
+			{
+				let item = items[itemIndex];
+				if (item == objectItem)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	static isStringItemNotIn(
+		items: Array<string> | null | undefined,
+		objectItem: string | null | undefined,
+		isIgnoreCase: boolean = false)
+		: boolean
+	{
+		return !this.isStringItemIn(
+			items,
+			objectItem,
+			isIgnoreCase);
+	}
+
+	static isAnyStringItemsIn(
+		items: Array<string> | null | undefined,
+		isIgnoreCase: boolean,
+		...objectItems: string[])
+		: boolean
+	{
+		if (!items)
+		{
+			return false;
+		}
+		if (!objectItems
+			|| objectItems.length < 1)
+		{
+			return false;
+		}
+		const itemsCount = items.length;
+		for (let itemIndex = 0;
+			itemIndex < itemsCount;
+			itemIndex++)
+		{
+			let item = items[itemIndex];
+			if (this.isStringItemIn(objectItems, item))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	static isAnyStringItemsNotIn(
+		items: Array<string> | null | undefined,
+		isIgnoreCase: boolean,
+		...objectItems: string[])
+		: boolean
+	{
+		return !this.isAnyStringItemsIn(
+			items,
+			isIgnoreCase,
+			...objectItems);
+	}
+
+	static isAllStringItemsIn(
+		items: Array<string> | null | undefined,
+		isIgnoreCase: boolean,
+		...objectItems: (string | null | undefined)[])
+		: boolean
+	{
+		if (!items)
+		{
+			return false;
+		}
+		if (!objectItems
+			|| objectItems.length < 1)
+		{
+			return false;
+		}
+
+		for (let objectItem of objectItems)
+		{
+			if (!ArrayUtil.isStringItemIn(items, objectItem, isIgnoreCase))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	static isAllStringItemsNotIn(
+		items: Array<string> | null | undefined,
+		isIgnoreCase: boolean,
+		...objectItems: (string | null | undefined)[])
+		: boolean
+	{
+		return !this.isAllStringItemsIn(
+			items,
+			isIgnoreCase,
+			...objectItems);
+	}
 
 	static isEquals<ValueType>(
 		array1: Array<ValueType> | null | undefined,
