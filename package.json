@@ -28,5 +28,13 @@
   "bugs": {
     "url": "https://github.com/BaoXiaRuanJian/BaoXia.Utils.JavaScript/issues"
   },
-  "homepage": "https://github.com/BaoXiaRuanJian/BaoXia.Utils.JavaScript#readme"
+  "homepage": "https://github.com/BaoXiaRuanJian/BaoXia.Utils.JavaScript#readme",
+  "dependencies": {
+    "aes-js": "^3.1.2",
+    "install": "^0.13.0",
+    "npm": "^11.4.1"
+  },
+  "devDependencies": {
+    "@types/aes-js": "^3.1.4"
+  }
 }

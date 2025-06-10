@@ -18,6 +18,8 @@ import { TestProject } from "./unitTest/testProject.js"
 import { UriUtil } from "./uriUtil.js"
 import { ValueUtil } from "./valueUtil.js"
 import { VersionInfo } from "./versionInfo.js"
+import { AesUtil } from "./aesUtil.js"
+import { ByteUtil } from "./byteUtil.js"
 
 export
 {
@@ -25,6 +27,6 @@ export
 	DateTimeField, DelayTask, JsonUtil, LoopTask, MapUtil, Model,
 	ObjectUtil, PathUtil, RecursionUtil, StringUtil, TestCase,
 	TestProject, Thenable, UriUtil, ValueUtil,
-	VersionInfo
+	VersionInfo, AesUtil, ByteUtil
 }
 
