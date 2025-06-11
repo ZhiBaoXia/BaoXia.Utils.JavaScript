@@ -6,6 +6,8 @@ export class UriPathDelimiter
     ////////////////////////////////////////////////
 
     static readonly SchemeToHost: string = "://";
+	
+    static readonly SchemeToHostSimplify: string = ":/";
 
     static readonly HostToPort: string = ":";
 

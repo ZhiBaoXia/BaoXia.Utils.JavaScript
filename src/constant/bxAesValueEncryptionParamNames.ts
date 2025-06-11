@@ -1,0 +1,15 @@
+
+export enum BxAesValueEncryptionParamNames
+{
+	////////////////////////////////////////////////
+	// @静态常量
+	////////////////////////////////////////////////
+
+	// #region
+
+	Ciphertext = "ciphertext",
+
+	Nonce = "nonce"
+
+	// #endRegion
+}
