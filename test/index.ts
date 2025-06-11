@@ -1,11 +1,14 @@
 
 import { TestProject } from "../src/index.js";
+import { AesUtilTest } from "./aesUtilTest.js";
 import { ArrayUtilTest } from "./arrayUtilTest.js";
+import { BxAesValueUtilTest } from "./bxAesValueUtilTest.js";
 import { CookieUtilTest } from "./cookieUtilTest.js";
 import { DateTimeTest } from "./dateTimeTest.js";
 import { DelayTaskTest } from "./delayTaskTest.js";
 import { JsonUtilTest } from "./jsonUtilTest.js";
 import { LoopTaskTest } from "./loopTaskTest.js";
+import { MapUtilTest } from "./mapUtilTest.js";
 import { ObjectUtilTest } from "./objectUtilTest.js";
 import { PathUtilTest } from "./pathUtilTest.js";
 import { RecursionUtilTest } from "./recursionUtilTest.js";
@@ -16,8 +19,6 @@ import { TestCaseAsyncTest } from "./testCaseAsyncTest.js";
 import { UriUtilParseTest } from "./uriUtilParseTest.js";
 import { UriUtilPathOperationTest } from "./uriUtilPathOperationTest.js";
 import { VersionInfoTest } from "./versionInfoTest.js";
-import { MapUtilTest } from "./mapUtilTest.js";
-import { AesUtilTest } from "./aesUtilTest.js";
 
 let testProject = new TestProject(
 	"BaoXia.Utils.Javascript",
@@ -39,7 +40,8 @@ let testProject = new TestProject(
 		new RecursionUtilTest(),
 		new DelayTaskTest(),
 		new MapUtilTest(),
-		new AesUtilTest()
+		new AesUtilTest(),
+		new BxAesValueUtilTest()
 	]);
 // !!!
 await testProject.testAsync();

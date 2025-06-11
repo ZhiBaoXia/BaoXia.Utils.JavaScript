@@ -8,7 +8,6 @@ export class AesUtil
 
 	// #region
 
-
 	protected static bytesFromBase64(stringInBase64: string)
 		: Uint8Array 
 	{
