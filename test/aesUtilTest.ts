@@ -42,7 +42,7 @@ export class AesUtilTest extends TestCase
 
 					const plaintextByDecrypted = AesUtil.decryptWithCtr(TestParams_Ciphertext, TestParams_Key, TestParams_Nonce);
 
-					assert(plaintextByDecrypted.length > 0);
+					assert("16645670001" == plaintextByDecrypted);
 				}
 			});
 	}
