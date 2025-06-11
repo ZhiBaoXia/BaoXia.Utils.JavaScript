@@ -4,3 +4,6 @@ dist/
 lib/
 # 忽略“debug”文件夹下的内容。
 debug/
+
+# 忽略“node_modules”文件夹下的内容。
+node_modules/

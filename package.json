@@ -1,6 +1,6 @@
 {
   "name": "@baoxia/utils.javascript",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "description": "BaoXia Software Javascript Utils Set，includes commonly used utility components such as StringUtil, ArrayUtil, DateTime.",
   "type": "module",
   "files": [
@@ -28,5 +28,13 @@
   "bugs": {
     "url": "https://github.com/BaoXiaRuanJian/BaoXia.Utils.JavaScript/issues"
   },
-  "homepage": "https://github.com/BaoXiaRuanJian/BaoXia.Utils.JavaScript#readme"
+  "homepage": "https://github.com/BaoXiaRuanJian/BaoXia.Utils.JavaScript#readme",
+  "dependencies": {
+    "aes-js": "^3.1.2",
+    "install": "^0.13.0",
+    "npm": "^11.4.1"
+  },
+  "devDependencies": {
+    "@types/aes-js": "^3.1.4"
+  }
 }
