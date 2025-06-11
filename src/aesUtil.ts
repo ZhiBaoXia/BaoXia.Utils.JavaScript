@@ -1,4 +1,5 @@
 import aesJs from "aes-js";
+import { ByteUtil } from "./index.js";
 
 export class AesUtil
 {
@@ -11,13 +12,13 @@ export class AesUtil
 	protected static bytesFromBase64(stringInBase64: string)
 		: Uint8Array 
 	{
-		return new Uint8Array(atob(stringInBase64).split('').map(c => c.charCodeAt(0)));
+		return new Uint8Array(ByteUtil.atob(stringInBase64).split('').map(c => c.charCodeAt(0)));
 	}
 
 	protected static base64FromBytes(bytes: Uint8Array)
 		: string 
 	{
-		return btoa(String.fromCharCode.apply(null, bytes as unknown as number[]));
+		return ByteUtil.btoa(String.fromCharCode.apply(null, bytes as unknown as number[]));
 	}
 
 	protected static normalizeKeyBytes(keyBytes: Uint8Array): Uint8Array
