@@ -14,22 +14,22 @@ export class AesUtilTest extends TestCase
 				////////////////////////////////////////////////
 				// 本地加密&解密测试：
 				////////////////////////////////////////////////
-				// {
-				// 	const TestParams_Key = "4341F7D1FD8F4D8B88873D1CD7E387B1";
-				// 	const TestParams_Plaintext = 'Hello World！';
-				// 	const TestParams_Nonce = "ELMqoE+WfRbD4bRzWn8UVw==";
-				// 	const TestParams_Ciphertext = "p5G1yOLg+1JjudFocUg=";
+				{
+					const TestParams_Key = "4341F7D1FD8F4D8B88873D1CD7E387B1";
+					const TestParams_Plaintext = 'Hello World！';
+					const TestParams_Nonce = "ELMqoE+WfRbD4bRzWn8UVw==";
+					const TestParams_Ciphertext = "p5G1yOLg+1JjudFocUg=";
 
-				// 	const ciphertext = AesUtil.encryptWithCtr(TestParams_Plaintext, TestParams_Key, TestParams_Nonce);
-				// 	// !!!
-				// 	assert(TestParams_Ciphertext == ciphertext);
-				// 	// !!!
+					const ciphertext = AesUtil.encryptWithCtr(TestParams_Plaintext, TestParams_Key, TestParams_Nonce);
+					// !!!
+					assert(TestParams_Ciphertext == ciphertext);
+					// !!!
 
-				// 	const plaintext = AesUtil.decryptWithCtr(ciphertext, TestParams_Key, TestParams_Nonce);
-				// 	// !!!
-				// 	assert(TestParams_Plaintext == plaintext);
-				// 	// !!!
-				// }
+					const plaintext = AesUtil.decryptWithCtr(ciphertext, TestParams_Key, TestParams_Nonce);
+					// !!!
+					assert(TestParams_Plaintext == plaintext);
+					// !!!
+				}
 
 
 				////////////////////////////////////////////////
