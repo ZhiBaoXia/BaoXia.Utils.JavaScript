@@ -18,7 +18,7 @@ export class RecursionUtil
 				toCreateNextRecursionStepType: ((currentStep: RecursionStepType) => RecursionStepType) | null
 			): void
 	{
-		if (rootItem === null)
+		if (!rootItem)
 		{
 			return;
 		}
@@ -37,7 +37,7 @@ export class RecursionUtil
 		while (recursionSteps.length > 0)
 		{
 			const currentRecursionStep = recursionSteps[recursionSteps.length - 1];
-			if (currentRecursionStep === null)
+			if (!currentRecursionStep)
 			{
 				recursionSteps.pop();
 				continue;
@@ -64,7 +64,7 @@ export class RecursionUtil
 				}
 
 				const childItems = toGetChildItems(item, currentRecursionStep, recursionSteps);
-				if (childItems === null || childItems.length < 1)
+				if (!childItems || childItems.length < 1)
 				{
 					continue;
 				}
