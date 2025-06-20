@@ -1,4 +1,6 @@
 import { TestCase, ObjectUtil } from "../src/index.js";
+import { TestParentClass } from "./model/testParentClass.js"
+import { TestChildClassA } from "./model/testChildClassA.js"
 
 export class ObjectUtilTest extends TestCase
 {
@@ -95,6 +97,31 @@ export class ObjectUtilTest extends TestCase
 				//
 				assert(allPropertiesCount == 8);
 				//
+
+
+				let testParentObject = new TestParentClass(1, "2", "3", ["4", "5", "6"]);
+				let testChildObjectA = new TestChildClassA();
+				{
+					ObjectUtil.setAllPropertiesFrom(
+						testParentObject,
+						testChildObjectA);
+				}
+				//
+				assert(testChildObjectA.number == 1);
+				assert(testChildObjectA.name == "2");
+				assert(testChildObjectA.value == "3");
+				assert(testChildObjectA.stringValues![0] == "4");
+				assert(testChildObjectA.stringValues![1] == "5");
+				assert(testChildObjectA.stringValues![2] == "6");
+				assert(testChildObjectA.childNumberValue == 0);
+				assert(testChildObjectA.childStringValue == null);
+				//
+
+				testParentObject = new TestParentClass(1, "2", "3", ["4", "5", "6"]);
+				testChildObjectA = new TestChildClassA();
+				{
+					Object.assign(testChildObjectA, testParentObject);
+				}
 			});
 	}
 }

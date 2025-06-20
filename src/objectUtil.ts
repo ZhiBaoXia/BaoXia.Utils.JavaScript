@@ -151,7 +151,32 @@ export class ObjectUtil
 		}
 
 		let objectCloned = Object.assign({}, obj);
-		{ }
+		{
+		}
 		return objectCloned;
+	}
+
+	static setAllPropertiesFrom
+		<SoruceObjectType extends object,
+			propertyKeyType extends keyof SoruceObjectType>
+		(sourceObject: Pick<SoruceObjectType, propertyKeyType>,
+			targetObject: SoruceObjectType,
+			exceptionsBySetProperty: Array<any> | null = null)
+		: SoruceObjectType
+	{
+		for (const key in sourceObject)
+		{
+			try
+			{
+				targetObject[key] = sourceObject[key];
+			}
+			catch (exception: any) 
+			{
+				// !!!
+				exceptionsBySetProperty?.push(exception);
+				// !!!
+			}
+		}
+		return targetObject;
 	}
 }
