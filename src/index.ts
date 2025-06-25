@@ -8,6 +8,7 @@ import { DateTimeField } from "./constant/dateTimeField.js"
 import * as Constant from "./constant/index.js"
 import { CookieUtil } from "./cookieUtil.js"
 import { DateTime } from "./dateTime.js"
+import { DateTimeUtil } from "./dateTimeUtil.js"
 import { DelayTask } from "./delayTask.js"
 import { JsonUtil } from "./jsonUtil.js"
 import { LoopTask } from "./loopTask.js"
@@ -26,8 +27,7 @@ import { VersionInfo } from "./versionInfo.js"
 
 export
 {
-	AesUtil, ArrayUtil, BxAesValueEncryptionMethodNames, BxAesValueEncryptionParamNames, BxAesValueUtil, ByteUtil, Constant, CookieUtil, DateTime,
-	DateTimeField, DelayTask, JsonUtil, LoopTask, MapUtil, Model,
+	AesUtil, ArrayUtil, BxAesValueEncryptionMethodNames, BxAesValueEncryptionParamNames, BxAesValueUtil, ByteUtil, Constant, CookieUtil, DateTime, DateTimeField, DateTimeUtil, DelayTask, JsonUtil, LoopTask, MapUtil, Model,
 	ObjectUtil, PathUtil, RecursionUtil, StringUtil, TestCase,
 	TestProject, Thenable, UriUtil, ValueUtil,
 	VersionInfo
