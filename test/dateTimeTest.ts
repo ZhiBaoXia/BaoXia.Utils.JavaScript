@@ -136,11 +136,11 @@ export class DateTimeTest extends TestCase
 				let now = DateTime.Now;
 				let nowListCaption = DateTimeUtil.captionOfListElementDefault(now);
 				{
-					assert(nowListCaption.length > 0);
+					assert(nowListCaption!.length > 0);
 				}
 				let nowDetailCaption = DateTimeUtil.captionOfDetailPageDefault(now);
 				{
-					assert(nowDetailCaption.length > 0);
+					assert(nowDetailCaption!.length > 0);
 				}
 			});
 	}

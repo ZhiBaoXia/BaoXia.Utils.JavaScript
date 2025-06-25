@@ -10,10 +10,15 @@ export class DateTimeUtil
 
 
 	public static captionOfListElementDefault(
-		dateTimeOffset: DateTime,
+		dateTimeOffset: DateTime | null | undefined,
 		isNeedSecondsField: boolean = false)
-		: string
+		: string | null
 	{
+		if (!dateTimeOffset)
+		{
+			return null;
+		}
+
 		let caption: string;
 		var now = DateTime.Now;
 		if (dateTimeOffset.isTodayOf(now))
@@ -61,9 +66,15 @@ export class DateTimeUtil
 	}
 
 	public static captionOfDetailPageDefault(
-		dateTime: DateTime,
-		isNeedSecondsField: boolean = false): string
+		dateTime: DateTime | null | undefined,
+		isNeedSecondsField: boolean = false)
+		: string | null
 	{
+		if (!dateTime)
+		{
+			return null;
+		}
+
 		let caption: string;
 		var now = DateTime.Now;
 		if (dateTime.isTodayOf(now))
@@ -100,7 +111,7 @@ export class DateTimeUtil
 			}
 		}
 		else if (dateTime.isEquals(now, DateTimeField.Year))
-{
+		{
 			if (isNeedSecondsField)
 			{
 				caption = dateTime.toString("MM月dd日 HH:mm:ss");
