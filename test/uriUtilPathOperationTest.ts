@@ -1,5 +1,6 @@
 
-import { TestCase, UriUtil } from "../src/index.js";
+import { TestCase } from "@baoxia/utils.javascript.testutil";
+import { UriUtil } from "../src/index.js";
 
 export class UriUtilPathOperationTest extends TestCase
 {

@@ -1,5 +1,5 @@
-import { TestCase } from "../src/index.js";
 import { VersionInfo } from "../src/versionInfo.js";
+import { TestCase } from "@baoxia/utils.javascript.testutil"
 
 export class VersionInfoTest extends TestCase
 {

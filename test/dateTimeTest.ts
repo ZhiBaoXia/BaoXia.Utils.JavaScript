@@ -1,4 +1,5 @@
-import { TestCase, DateTime, DateTimeField, DateTimeUtil } from "../src/index.js";
+import { TestCase } from "@baoxia/utils.javascript.testutil";
+import { DateTime, DateTimeField, DateTimeUtil } from "../src/index.js";
 
 export class DateTimeTest extends TestCase
 {
