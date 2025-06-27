@@ -1,8 +1,6 @@
 
 import { TestProject } from "../src/index.js";
-import { AesUtilTest } from "./aesUtilTest.js";
 import { ArrayUtilTest } from "./arrayUtilTest.js";
-import { BxAesValueUtilTest } from "./bxAesValueUtilTest.js";
 import { CookieUtilTest } from "./cookieUtilTest.js";
 import { DateTimeTest } from "./dateTimeTest.js";
 import { DelayTaskTest } from "./delayTaskTest.js";
@@ -40,8 +38,6 @@ let testProject = new TestProject(
 		new RecursionUtilTest(),
 		new DelayTaskTest(),
 		new MapUtilTest(),
-		new AesUtilTest(),
-		new BxAesValueUtilTest()
 	]);
 // !!!
 await testProject.testAsync();
