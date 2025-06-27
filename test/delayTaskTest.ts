@@ -1,4 +1,5 @@
-import { DelayTask, TestCase } from "../src/index.js";
+import { DelayTask } from "../src/index.js";
+import { TestCase } from "@baoxia/utils.javascript.testutil";
 
 export class DelayTaskTest extends TestCase
 {

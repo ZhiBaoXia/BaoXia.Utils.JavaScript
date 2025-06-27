@@ -1,5 +1,5 @@
-
-import { TestCase, UriUtil, StringUtil } from "../src/index.js";
+import { TestCase } from "@baoxia/utils.javascript.testutil";
+import { StringUtil, UriUtil } from "../src/index.js";
 
 export class UriUtilParseTest extends TestCase
 {

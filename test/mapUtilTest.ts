@@ -1,5 +1,6 @@
-import { TestCase, ValueUtil } from "../src/index.js";
+import { ValueUtil } from "../src/index.js";
 import { MapUtil } from "../src/index.js";
+import { TestCase } from "@baoxia/utils.javascript.testutil"
 
 export class MapUtilTest extends TestCase
 {

@@ -1,6 +1,7 @@
+import { TestCase } from "@baoxia/utils.javascript.testutil";
 import { SystemName } from "../src/constant/systemName.js";
 import { EnvironmentUtil } from "../src/environmentUtil.js";
-import { TestCase, PathUtil } from "../src/index.js";
+import { PathUtil } from "../src/index.js";
 
 export class PathUtilTest extends TestCase
 {

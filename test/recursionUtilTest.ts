@@ -1,4 +1,5 @@
-import { TestCase, RecursionUtil } from "../src/index.js";
+import { TestCase } from "@baoxia/utils.javascript.testutil";
+import { RecursionUtil } from "../src/index.js";
 import { ItemWithChildren } from "./model/ItemWithChildren.js";
 
 export class RecursionUtilTest extends TestCase

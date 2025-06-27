@@ -1,5 +1,5 @@
 import { DateTime } from "../src/index.js";
-import { TestCaseAsync } from "../src/unitTest/testCaseAsync.js";
+import { TestCaseAsync } from "@baoxia/utils.javascript.testutil";
 
 export class TestCaseAsyncTest extends TestCaseAsync
 {

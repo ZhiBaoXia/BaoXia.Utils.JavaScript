@@ -1,5 +1,5 @@
-
-import { TestCase, StringUtil, CookieUtil } from "../src/index.js";
+import { TestCase } from "@baoxia/utils.javascript.testutil";
+import { CookieUtil, StringUtil } from "../src/index.js";
 
 export class CookieUtilTest extends TestCase
 {
