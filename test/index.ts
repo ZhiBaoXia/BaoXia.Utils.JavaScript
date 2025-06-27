@@ -1,5 +1,5 @@
 
-import { TestProject } from "../src/index.js";
+import { TestProject } from "@baoxia/utils.javascript.testutil";
 import { ArrayUtilTest } from "./arrayUtilTest.js";
 import { CookieUtilTest } from "./cookieUtilTest.js";
 import { DateTimeTest } from "./dateTimeTest.js";

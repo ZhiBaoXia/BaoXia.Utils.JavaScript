@@ -1,4 +1,5 @@
-import { TestCase, ArrayUtil } from "../src/index.js";
+import { ArrayUtil } from "../src/index.js";
+import { TestCase } from "@baoxia/utils.javascript.testutil"
 
 export class ArrayUtilTest extends TestCase
 {

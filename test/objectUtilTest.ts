@@ -1,6 +1,7 @@
-import { TestCase, ObjectUtil } from "../src/index.js";
-import { TestParentClass } from "./model/testParentClass.js"
-import { TestChildClassA } from "./model/testChildClassA.js"
+import { TestCase } from "@baoxia/utils.javascript.testutil";
+import { ObjectUtil } from "../src/index.js";
+import { TestChildClassA } from "./model/testChildClassA.js";
+import { TestParentClass } from "./model/testParentClass.js";
 
 export class ObjectUtilTest extends TestCase
 {

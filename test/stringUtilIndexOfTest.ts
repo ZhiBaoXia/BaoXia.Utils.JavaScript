@@ -1,4 +1,5 @@
-import { TestCase, StringUtil } from "../src/index.js";
+import { TestCase } from "@baoxia/utils.javascript.testutil";
+import { StringUtil } from "../src/index.js";
 
 export class StringUtilIndexOfTest extends TestCase
 {

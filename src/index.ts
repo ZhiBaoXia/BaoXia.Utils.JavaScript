@@ -14,8 +14,6 @@ import { PathUtil } from "./pathUtil.js"
 import { RecursionUtil } from "./recursionUtil.js"
 import { StringUtil } from "./stringUtil.js"
 import { Thenable } from "./thenable.js"
-import { TestCase } from "./unitTest/testCase.js"
-import { TestProject } from "./unitTest/testProject.js"
 import { UriUtil } from "./uriUtil.js"
 import { ValueUtil } from "./valueUtil.js"
 import { VersionInfo } from "./versionInfo.js"
@@ -23,8 +21,7 @@ import { VersionInfo } from "./versionInfo.js"
 export
 {
 	ArrayUtil, Constant, CookieUtil, DateTime, DateTimeField, DateTimeUtil, DelayTask, JsonUtil, LoopTask, MapUtil, Model,
-	ObjectUtil, PathUtil, RecursionUtil, StringUtil, TestCase,
-	TestProject, Thenable, UriUtil, ValueUtil,
+	ObjectUtil, PathUtil, RecursionUtil, StringUtil, Thenable, UriUtil, ValueUtil,
 	VersionInfo
 }
 
