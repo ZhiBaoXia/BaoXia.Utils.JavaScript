@@ -63,7 +63,6 @@ export class EnvironmentUtil
         return userAgent;
     }
 
-
     static get isWindows(): boolean
     {
         return EnvironmentUtil.systemName == SystemName.Windows;
