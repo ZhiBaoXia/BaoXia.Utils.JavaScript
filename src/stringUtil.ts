@@ -1637,14 +1637,28 @@ export class StringUtil
 	}
 
 	/**
-	 * 根据指定的格式化字符串，格式化指定的值。
-	 * @param formatter 指定的字符串格式，支持格式有：
-	 * %%，百分号；
-	 * “%x1.x2d”，“%x1.x2i”或“%x1.x2f”，
-	 * 其中x1表示要展示的整数位数，“0”或“不指定”表示不需要限制位数，不足时左侧补“0”，
-	 * x2表示要展示的浮点数位数，“0”或“不指定”表示不需要限制位数，不足时右侧补“0”。
-	 * @param values 要进行格式化的值。
-	 * @returns format 格式化后的字符串。
+	 * 格式化字符串，支持多种占位符类型：
+	 * - %% : 转义百分号
+	 * - %d/%i : 整数格式化
+	 * - %f : 浮点数格式化
+	 * - %s : 字符串格式化
+	 * 
+	 * @param formatter 格式化模板字符串，包含占位符
+	 * @param values 要填充到占位符中的值数组
+	 * @returns 格式化后的字符串
+	 * 
+	 * @example
+	 * // 基本用法
+	 * StringUtil.format("Hello %s", "World"); // "Hello World"
+	 * 
+	 * // 数字格式化
+	 * StringUtil.format("Number: %d", 123); // "Number: 123"
+	 * 
+	 * // 浮点数格式化
+	 * StringUtil.format("Price: %.2f", 12.345); // "Price: 12.35"
+	 * 
+	 * // 转义百分号
+	 * StringUtil.format("Discount: %d%%", 20); // "Discount: 20%"
 	 */
 	static format(formatter: string | null | undefined, ...values: any[]): string
 	{

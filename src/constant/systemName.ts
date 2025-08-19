@@ -10,4 +10,10 @@ export class SystemName
     static readonly Windows = "Windows";
 
     static readonly Linux = "Linux";
+
+    static readonly Mac = "Mac";
+
+    static readonly Android = "Android";
+
+    static readonly IOS = "IOS";
 }
