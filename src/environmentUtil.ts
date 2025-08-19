@@ -1,5 +1,5 @@
 
-import { SystemName } from "./constant/systemName.js"
+import { SystemName } from "./constant/systemName.js";
 import { StringUtil } from "./stringUtil.js";
 
 export class EnvironmentUtil
@@ -8,7 +8,7 @@ export class EnvironmentUtil
     // @类方法
     ////////////////////////////////////////////////
 
-    protected static _systemName:string = StringUtil.Empty;
+    protected static _systemName: string = StringUtil.Empty;
 
     static get systemName(): string
     {
@@ -26,6 +26,21 @@ export class EnvironmentUtil
                     >= 0)
                 {
                     this._systemName = SystemName.Linux;
+                }
+                if (StringUtil.indexOfKeywordIn(userAgent, "Mac", true)
+                    >= 0)
+                {
+                    this._systemName = SystemName.Mac;
+                }
+                if (StringUtil.indexOfKeywordIn(userAgent, "Android", true)
+                    >= 0)
+                {
+                    this._systemName = SystemName.Android;
+                }
+                if (StringUtil.indexOfKeywordIn(userAgent, "iPhone", true)
+                    >= 0)
+                {
+                    this._systemName = SystemName.IOS;
                 }
                 this._systemName = SystemName.Unknown;
             }
@@ -59,4 +74,18 @@ export class EnvironmentUtil
         return EnvironmentUtil.systemName != SystemName.Windows;
     }
 
+    static get isMac(): boolean
+    {
+        return EnvironmentUtil.systemName == SystemName.Mac;
+    }
+
+    static get isAndroid(): boolean
+    {
+        return EnvironmentUtil.systemName == SystemName.Android;
+    }
+
+    static get isIOS(): boolean
+    {
+        return EnvironmentUtil.systemName == SystemName.IOS;
+    }
 }
