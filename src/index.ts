@@ -10,6 +10,7 @@ import { JsonUtil } from "./jsonUtil.js"
 import { LoopTask } from "./loopTask.js"
 import { MapUtil } from "./mapUtil.js"
 import * as Model from "./model/index.js"
+import { NumberUtil } from "./numberUtil.js"
 import { ObjectUtil } from "./objectUtil.js"
 import { PathUtil } from "./pathUtil.js"
 import { RecursionUtil } from "./recursionUtil.js"
@@ -21,8 +22,7 @@ import { VersionInfo } from "./versionInfo.js"
 
 export
 {
-	ArrayUtil, Constant, CookieUtil, DateTime, DateTimeField, DateTimeUtil, DelayTask, EnvironmentUtil, JsonUtil, LoopTask, MapUtil, Model,
-	ObjectUtil, PathUtil, RecursionUtil, StringUtil, Thenable, UriUtil, ValueUtil,
+	ArrayUtil, Constant, CookieUtil, DateTime, DateTimeField, DateTimeUtil, DelayTask, EnvironmentUtil, JsonUtil, LoopTask, MapUtil, Model, NumberUtil, ObjectUtil, PathUtil, RecursionUtil, StringUtil, Thenable, UriUtil, ValueUtil,
 	VersionInfo
 }
 
