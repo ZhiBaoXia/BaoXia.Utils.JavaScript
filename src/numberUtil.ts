@@ -23,8 +23,12 @@ export class NumberUtil
 	 * @param value 要解析的字符串。
 	 * @returns 如果解析成功返回对应的整数，如果解析失败返回 0。
 	 */
-	public static parseInt(value: string): number
+	public static parseInt(value: string | null | undefined): number
 	{
+		if (!value)
+		{
+			return 0;
+		}
 		const parsedValue = parseInt(value);
 		return isNaN(parsedValue) ? 0 : parsedValue;
 	}
@@ -34,8 +38,12 @@ export class NumberUtil
 	 * @param value 要解析的字符串。
 	 * @returns 如果解析成功返回对应的浮点数，如果解析失败返回 0。
 	 */
-	public static parseNumber(value: string): number 
+	public static parseNumber(value: string | null|undefined): number 
 	{
+		if (!value)
+		{
+			return 0;
+		}
 		const parsedValue = parseFloat(value);
 		return isNaN(parsedValue) ? 0 : parsedValue;
 	}
