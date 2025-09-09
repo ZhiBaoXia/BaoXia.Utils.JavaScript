@@ -1,6 +1,6 @@
-import { DateTimeField } from "./constant/dateTimeField.js"
+import { DateTimeField } from "./constant/dateTimeField.js";
+import { DateTimeSpan } from "./model/dateTimeSpan.js";
 import { StringRange } from "./model/stringRange.js";
-import { DateTimeSpan } from "./model/dateTimeSpan.js"
 import { StringUtil } from "./stringUtil.js";
 
 export class DateTime
@@ -15,11 +15,11 @@ export class DateTime
 	// @自身属性
 	////////////////////////////////////////////////
 
-	protected _date: Date;
+	data: Date;
 
 	get timeZone(): number
 	{
-		let timezoneOffsetMinutes = this._date.getTimezoneOffset();
+		let timezoneOffsetMinutes = this.data.getTimezoneOffset();
 		let timezone = Math.floor(-1 * timezoneOffsetMinutes / 60);
 		{ }
 		return timezone;
@@ -27,7 +27,7 @@ export class DateTime
 
 	get timeZoneMinutes(): number
 	{
-		let timezoneOffsetMinutes = this._date.getTimezoneOffset();
+		let timezoneOffsetMinutes = this.data.getTimezoneOffset();
 		let timezoneMinutes = Math.round(-1 * timezoneOffsetMinutes % 60);
 		{ }
 		return timezoneMinutes;
@@ -35,87 +35,87 @@ export class DateTime
 
 	get year(): number
 	{
-		return this._date.getFullYear();
+		return this.data.getFullYear();
 	}
 
 	set year(year: number)
 	{
-		this._date.setFullYear(year);
+		this.data.setFullYear(year);
 	}
 
 	get month(): number
 	{
-		return this._date.getMonth() + 1;
+		return this.data.getMonth() + 1;
 	}
 
 	set month(month: number)
 	{
-		this._date.setMonth(month - 1);
+		this.data.setMonth(month - 1);
 	}
 
 	get day(): number
 	{
-		return this._date.getDate();
+		return this.data.getDate();
 	}
 
 	set day(day: number)
 	{
-		this._date.setDate(day);
+		this.data.setDate(day);
 	}
 
 	get weekday(): number
 	{
-		return this._date.getDay();
+		return this.data.getDay();
 	}
 
 	get hour(): number
 	{
-		return this._date.getHours();
+		return this.data.getHours();
 	}
 
 	set hour(hour: number)
 	{
-		this._date.setHours(hour);
+		this.data.setHours(hour);
 	}
 
 	get minute(): number
 	{
-		return this._date.getMinutes();
+		return this.data.getMinutes();
 	}
 
 	set minute(minute: number)
 	{
-		this._date.setMinutes(minute);
+		this.data.setMinutes(minute);
 	}
 
 	get second(): number
 	{
-		return this._date.getSeconds();
+		return this.data.getSeconds();
 	}
 
 	set second(second: number)
 	{
-		this._date.setSeconds(second);
+		this.data.setSeconds(second);
 	}
 
 	get millisecond(): number
 	{
-		return this._date.getMilliseconds();
+		return this.data.getMilliseconds();
 	}
 
 	set millisecond(millisecond: number)
 	{
-		this._date.setMilliseconds(millisecond);
+		this.data.setMilliseconds(millisecond);
 	}
 
 	get millsecondsFrom1970(): number
 	{
-		return this._date.getTime();
+		return this.data.getTime();
 	}
 
 	set millsecondsFrom1970(millsecondsFrom1970: number)
 	{
-		this._date.setTime(millsecondsFrom1970);
+		this.data.setTime(millsecondsFrom1970);
 	}
 
 	////////////////////////////////////////////////
@@ -307,9 +307,9 @@ export class DateTime
 		}
 		else if (date instanceof DateTime)
 		{
-			date = date._date;
+			date = date.data;
 		}
-		this._date
+		this.data
 			= date != null
 				? date
 				: new Date();
@@ -322,8 +322,8 @@ export class DateTime
 	 */
 	addYears(years: number): DateTime
 	{
-		this._date = new Date(
-			this._date.getTime()
+		this.data = new Date(
+			this.data.getTime()
 			+ years * 365 * 24 * 60 * 60 * 1000);
 		{ }
 		return this;
@@ -350,8 +350,8 @@ export class DateTime
 	 */
 	addDays(days: number): DateTime
 	{
-		this._date = new Date(
-			this._date.getTime()
+		this.data = new Date(
+			this.data.getTime()
 			+ days * 24 * 60 * 60 * 1000);
 		{ }
 		return this;
@@ -364,8 +364,8 @@ export class DateTime
 	 */
 	addHours(hours: number): DateTime
 	{
-		this._date = new Date(
-			this._date.getTime()
+		this.data = new Date(
+			this.data.getTime()
 			+ hours * 60 * 60 * 1000);
 		{ }
 		return this;
@@ -378,8 +378,8 @@ export class DateTime
 	 */
 	addMinutes(minutes: number): DateTime
 	{
-		this._date = new Date(
-			this._date.getTime()
+		this.data = new Date(
+			this.data.getTime()
 			+ minutes * 60 * 1000);
 		{ }
 		return this;
@@ -392,8 +392,8 @@ export class DateTime
 	 */
 	addSeconds(seconds: number): DateTime
 	{
-		this._date = new Date(
-			this._date.getTime()
+		this.data = new Date(
+			this.data.getTime()
 			+ seconds * 1000);
 		{ }
 		return this;
@@ -406,8 +406,8 @@ export class DateTime
 	 */
 	addMilliseconds(milliseconds: number): DateTime
 	{
-		this._date = new Date(
-			this._date.getTime()
+		this.data = new Date(
+			this.data.getTime()
 			+ milliseconds);
 		{ }
 		return this;
@@ -868,7 +868,7 @@ export class DateTime
 	 * @param isRemoveLeftCharsByPlaceholder 是否依据日期格式化占位符移除时间字段左边的字符，默认为：false。
 	 * @returns 使用给定的模板和日期字段标题替换后的日期字符串。 
 	 */
-	protected replaceDateFormatterPlaceholderInFormatter(
+	replaceDateFormatterPlaceholderInFormatter(
 		stringFormatter: string | null,
 		formatterPlaceholder: string | null,
 		dateFieldCaption: string | null,
@@ -1079,7 +1079,7 @@ export class DateTime
 		}
 		else
 		{
-			dateTimeString = this._date.toISOString();
+			dateTimeString = this.data.toISOString();
 		}
 		return dateTimeString;
 	}
