@@ -134,13 +134,13 @@ export class ObjectUtilTest extends TestCase
 				}
 
 
-				let testRequest1 = new TestRequest();
+				let testRequest1: TestRequest | null | undefined = new TestRequest();
 				{
 					testRequest1.searchKey = "123";
 					testRequest1.pageIndex = 1;
 					testRequest1.pageSize = 20;
 				}
-				let testRequest2 = new TestRequest();
+				let testRequest2: TestRequest | null | undefined = new TestRequest();
 				{
 					testRequest2.searchKey = "123";
 					testRequest2.pageIndex = 1;
@@ -162,6 +162,11 @@ export class ObjectUtilTest extends TestCase
 					assert(ObjectUtil.isEqualsWithProperties(testRequest1, testRequest2) == false);
 				}
 
+				testRequest1 = null;
+				testRequest2 = undefined;
+				{
+					assert(ObjectUtil.isEqualsWithProperties(testRequest1, testRequest2));
+				}
 			});
 	}
 }
