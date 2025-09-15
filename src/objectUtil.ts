@@ -179,4 +179,64 @@ export class ObjectUtil
 		}
 		return targetObject;
 	}
+
+	static isEqualsWithProperties(
+		obj1: object,
+		obj2: object,
+		...excludedPropertyNames: Array<string>
+	): boolean
+	{
+		// 检查两个对象是否引用同一个实例
+		if (obj1 === obj2)
+		{
+			return true;
+		}
+
+		// 获取两个对象的所有自身可枚举属性（公开属性）
+		const keys1 = Object.keys(obj1);
+		const keys2 = Object.keys(obj2);
+
+		// 检查属性数量是否相同
+		if (keys1.length !== keys2.length)
+		{
+			return false;
+		}
+
+		// 检查每个属性的值是否相等
+		for (const key of keys1)
+		{
+			// 确保obj2也有这个属性
+			if (!keys2.includes(key))
+			{
+				return false;
+			}
+
+			if (excludedPropertyNames.includes(key))
+			{
+				continue;
+			}
+
+			const value1 = (obj1 as any)[key];
+			const value2 = (obj2 as any)[key];
+
+			// 如果属性值是对象，则递归比较
+			if (typeof value1 === 'object' && value1 !== null &&
+				typeof value2 === 'object' && value2 !== null)
+			{
+				if (!ObjectUtil.isEqualsWithProperties(value1, value2, ...excludedPropertyNames))
+				{
+					return false;
+				}
+			}
+			else
+			{
+				// 基本类型直接比较
+				if (value1 !== value2)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }

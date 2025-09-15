@@ -3,6 +3,15 @@ import { ObjectUtil } from "../src/index.js";
 import { TestChildClassA } from "./model/testChildClassA.js";
 import { TestParentClass } from "./model/testParentClass.js";
 
+
+class TestRequest
+{
+	searchKey?: String;
+	pageIndex: number = 0;
+	pageSize: number = 20;
+}
+
+
 export class ObjectUtilTest extends TestCase
 {
 	////////////////////////////////////////////////
@@ -123,6 +132,36 @@ export class ObjectUtilTest extends TestCase
 				{
 					Object.assign(testChildObjectA, testParentObject);
 				}
+
+
+				let testRequest1 = new TestRequest();
+				{
+					testRequest1.searchKey = "123";
+					testRequest1.pageIndex = 1;
+					testRequest1.pageSize = 20;
+				}
+				let testRequest2 = new TestRequest();
+				{
+					testRequest2.searchKey = "123";
+					testRequest2.pageIndex = 1;
+					testRequest2.pageSize = 20;
+				}
+				{
+					assert(ObjectUtil.isEqualsWithProperties(testRequest1, testRequest2));
+				}
+
+				testRequest2.pageIndex = 2;
+				{
+					assert(ObjectUtil.isEqualsWithProperties(testRequest1, testRequest2) == false);
+					assert(ObjectUtil.isEqualsWithProperties(testRequest1, testRequest2, "pageIndex", "pageSize") == true);
+				}
+
+				testRequest1.searchKey = "456";
+				testRequest2.pageIndex = 1;
+				{
+					assert(ObjectUtil.isEqualsWithProperties(testRequest1, testRequest2) == false);
+				}
+
 			});
 	}
 }
