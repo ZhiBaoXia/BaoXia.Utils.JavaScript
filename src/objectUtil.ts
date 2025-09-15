@@ -181,8 +181,8 @@ export class ObjectUtil
 	}
 
 	static isEqualsWithProperties(
-		obj1: object,
-		obj2: object,
+		obj1: object | null | undefined,
+		obj2: object | null | undefined,
 		...excludedPropertyNames: Array<string>
 	): boolean
 	{
@@ -191,10 +191,26 @@ export class ObjectUtil
 		{
 			return true;
 		}
+		if (!obj1
+			&& !obj2)
+		{
+			return true;
+		}
+		if (obj1
+			&& !obj2)
+		{
+			return false;
+		}
+		if (!obj1
+			&& obj2)
+		{
+			return false;
+		}
+
 
 		// 获取两个对象的所有自身可枚举属性（公开属性）
-		const keys1 = Object.keys(obj1);
-		const keys2 = Object.keys(obj2);
+		const keys1 = Object.keys(obj1!);
+		const keys2 = Object.keys(obj2!);
 
 		// 检查属性数量是否相同
 		if (keys1.length !== keys2.length)
