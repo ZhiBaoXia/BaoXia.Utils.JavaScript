@@ -1,3 +1,4 @@
+import { JsonUtil } from "./jsonUtil.js";
 import { ObjectPropertyInfo } from "./model/objectPropertyInfo.js";
 
 export class ObjectUtil
@@ -143,16 +144,23 @@ export class ObjectUtil
 	 * @param obj 指定的对象。
 	 * @returns 返回克隆的对象。
 	 */
-	static cloneObject<ObjectType>(obj: ObjectType | null): ObjectType | null
+	static cloneObject<ObjectType>(obj: ObjectType | null | undefined, isDeepCopy: boolean = false): ObjectType | null
 	{
 		if (obj == null)
 		{
 			return null;
 		}
 
-		let objectCloned = Object.assign({}, obj);
+		if (isDeepCopy)
 		{
+			const objJson = JsonUtil.stringify(obj);
+			const objectCloned = JsonUtil.parse<ObjectType>(objJson);
+			{ }
+			return objectCloned;
 		}
+
+		let objectCloned = Object.assign({}, obj);
+		{ }
 		return objectCloned;
 	}
 
