@@ -1,4 +1,5 @@
 import { ArrayUtil } from "./arrayUtil.js"
+import { ClipboardUtil } from "./clipboardUtil.js"
 import { DateTimeField } from "./constant/dateTimeField.js"
 import * as Constant from "./constant/index.js"
 import { CookieUtil } from "./cookieUtil.js"
@@ -22,7 +23,7 @@ import { VersionInfo } from "./versionInfo.js"
 
 export
 {
-	ArrayUtil, Constant, CookieUtil, DateTime, DateTimeField, DateTimeUtil, DelayTask, EnvironmentUtil, JsonUtil, LoopTask, MapUtil, Model, NumberUtil, ObjectUtil, PathUtil, RecursionUtil, StringUtil, Thenable, UriUtil, ValueUtil,
+	ArrayUtil, ClipboardUtil, Constant, CookieUtil, DateTime, DateTimeField, DateTimeUtil, DelayTask, EnvironmentUtil, JsonUtil, LoopTask, MapUtil, Model, NumberUtil, ObjectUtil, PathUtil, RecursionUtil, StringUtil, Thenable, UriUtil, ValueUtil,
 	VersionInfo
 }
 
