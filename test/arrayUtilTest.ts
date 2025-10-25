@@ -1,5 +1,5 @@
+import { TestCase } from "@baoxia/utils.javascript.testutil";
 import { ArrayUtil } from "../src/index.js";
-import { TestCase } from "@baoxia/utils.javascript.testutil"
 
 export class ArrayUtilTest extends TestCase
 {
@@ -289,19 +289,19 @@ export class ArrayUtilTest extends TestCase
 					const objectItems_4 = ["a", "b", "c", "d"];
 					const unobjectItems = ["x", "y", "z", "d", "e", "f"];
 
-					assertFalse(ArrayUtil.isAnyStringItemsIn(testItems, false, ...objectItems_0));
-					assert(ArrayUtil.isAnyStringItemsIn(testItems, false, ...objectItems_1));
-					assert(ArrayUtil.isAnyStringItemsIn(testItems, false, ...objectItems_2));
-					assert(ArrayUtil.isAnyStringItemsIn(testItems, false, ...objectItems_3));
-					assert(ArrayUtil.isAnyStringItemsIn(testItems, false, ...objectItems_4));
-					assertFalse(ArrayUtil.isAnyStringItemsIn(testItems, false, ...unobjectItems));
+					assertFalse(ArrayUtil.isAnyStringItemsIn(testItems, ...objectItems_0));
+					assert(ArrayUtil.isAnyStringItemsIn(testItems, ...objectItems_1));
+					assert(ArrayUtil.isAnyStringItemsIn(testItems, ...objectItems_2));
+					assert(ArrayUtil.isAnyStringItemsIn(testItems, ...objectItems_3));
+					assert(ArrayUtil.isAnyStringItemsIn(testItems, ...objectItems_4));
+					assertFalse(ArrayUtil.isAnyStringItemsIn(testItems, ...unobjectItems));
 
-					assert(ArrayUtil.isAnyStringItemsNotIn(testItems, false, ...objectItems_0));
-					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, false, ...objectItems_1));
-					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, false, ...objectItems_2));
-					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, false, ...objectItems_3));
-					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, false, ...objectItems_4));
-					assert(ArrayUtil.isAnyStringItemsNotIn(testItems, false, ...unobjectItems));
+					assert(ArrayUtil.isAnyStringItemsNotIn(testItems, ...objectItems_0));
+					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, ...objectItems_1));
+					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, ...objectItems_2));
+					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, ...objectItems_3));
+					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, ...objectItems_4));
+					assert(ArrayUtil.isAnyStringItemsNotIn(testItems, ...unobjectItems));
 				}
 
 
@@ -375,19 +375,19 @@ export class ArrayUtilTest extends TestCase
 					const objectItems_4 = ["a", "b", "c", "d"];
 					const unobjectItems = ["x", "y", "z", "d", "e", "f"];
 
-					assertFalse(ArrayUtil.isAnyStringItemsIn(testItems, true, ...objectItems_0));
-					assert(ArrayUtil.isAnyStringItemsIn(testItems, true, ...objectItems_1));
-					assert(ArrayUtil.isAnyStringItemsIn(testItems, true, ...objectItems_2));
-					assert(ArrayUtil.isAnyStringItemsIn(testItems, true, ...objectItems_3));
-					assert(ArrayUtil.isAnyStringItemsIn(testItems, true, ...objectItems_4));
-					assertFalse(ArrayUtil.isAnyStringItemsIn(testItems, true, ...unobjectItems));
+					assertFalse(ArrayUtil.isAnyStringItemsIn(testItems, ...objectItems_0));
+					assert(ArrayUtil.isAnyStringItemsIn(testItems, ...objectItems_1));
+					assert(ArrayUtil.isAnyStringItemsIn(testItems, ...objectItems_2));
+					assert(ArrayUtil.isAnyStringItemsIn(testItems, ...objectItems_3));
+					assert(ArrayUtil.isAnyStringItemsIn(testItems, ...objectItems_4));
+					assertFalse(ArrayUtil.isAnyStringItemsIn(testItems, ...unobjectItems));
 
-					assert(ArrayUtil.isAnyStringItemsNotIn(testItems, true, ...objectItems_0));
-					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, true, ...objectItems_1));
-					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, true, ...objectItems_2));
-					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, true, ...objectItems_3));
-					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, true, ...objectItems_4));
-					assert(ArrayUtil.isAnyStringItemsNotIn(testItems, true, ...unobjectItems));
+					assert(ArrayUtil.isAnyStringItemsNotIn(testItems, ...objectItems_0));
+					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, ...objectItems_1));
+					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, ...objectItems_2));
+					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, ...objectItems_3));
+					assertFalse(ArrayUtil.isAnyStringItemsNotIn(testItems, ...objectItems_4));
+					assert(ArrayUtil.isAnyStringItemsNotIn(testItems, ...unobjectItems));
 				}
 
 
