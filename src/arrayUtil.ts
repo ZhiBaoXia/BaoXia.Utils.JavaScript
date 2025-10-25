@@ -462,7 +462,6 @@ export class ArrayUtil
 
 	static isAnyStringItemsIn(
 		items: Array<string> | null | undefined,
-		isIgnoreCase: boolean,
 		...objectItems: string[])
 		: boolean
 	{
@@ -489,16 +488,13 @@ export class ArrayUtil
 		return false;
 	}
 
-
 	static isAnyStringItemsNotIn(
 		items: Array<string> | null | undefined,
-		isIgnoreCase: boolean,
 		...objectItems: string[])
 		: boolean
 	{
 		return !this.isAnyStringItemsIn(
 			items,
-			isIgnoreCase,
 			...objectItems);
 	}
 
@@ -543,7 +539,8 @@ export class ArrayUtil
 	static isEquals<ValueType>(
 		array1: Array<ValueType> | null | undefined,
 		array2: Array<ValueType> | null | undefined,
-		toIsEqualsValue: (value1: ValueType | undefined, value2: ValueType | undefined) => boolean): boolean
+		toIsEqualsValue: (value1: ValueType | undefined, value2: ValueType | undefined) => boolean,
+		isSequenceIgnored = false): boolean
 	{
 		if (array1 === array2)
 		{
@@ -569,6 +566,47 @@ export class ArrayUtil
 		}
 
 		const itemsCount = array1.length;
+		if (isSequenceIgnored)
+		{
+			for (let value1 of array1)
+			{
+				let isValue1ExistedInArray2 = false;
+				for (let value2 of array2)
+				{
+					if (toIsEqualsValue(
+						value1,
+						value2))
+					{
+						isValue1ExistedInArray2 = true;
+						break;
+					}
+				}
+				if (!isValue1ExistedInArray2)
+				{
+					return false;
+				}
+			}
+			for (let value2 of array2)
+			{
+				let isValue2ExistedInArray1 = false;
+				for (let value1 of array1)
+				{
+					if (toIsEqualsValue(
+						value1,
+						value2))
+					{
+						isValue2ExistedInArray1 = true;
+						break;
+					}
+				}
+				if (!isValue2ExistedInArray1)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
 		for (let itemIndex = 0;
 			itemIndex < itemsCount;
 			itemIndex++)
