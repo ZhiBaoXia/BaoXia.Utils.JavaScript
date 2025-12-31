@@ -1716,20 +1716,16 @@ export class StringUtil
 						{
 							////////////////////////////////////////////////
 							// !!!
-							placeholderRange
-								= new StringRange(
-									placeholderEscapeCharBeginIndex,
-									placeholderTypeCharBeginIndex
-									+ Placeholder_Type_Char_Percent.length
-									- placeholderEscapeCharBeginIndex);
+							placeholderRange = new StringRange(placeholderEscapeCharBeginIndex,
+								placeholderTypeCharBeginIndex
+								+ Placeholder_Type_Char_Percent.length - placeholderEscapeCharBeginIndex);
 							placeholderRanges.push(placeholderRange);
 							placeholderValues.push("%");
 							// !!!
 							////////////////////////////////////////////////
 						}
 						// !!!
-						charIndex
-							= placeholderEscapeCharBeginIndex
+						charIndex = placeholderEscapeCharBeginIndex
 							+ Placeholder_Escape_Char.length
 							+ placeholderParamLength
 							+ Placeholder_Type_Char_Percent.length
@@ -1872,10 +1868,8 @@ export class StringUtil
 						if (value != null)
 						{
 							let valueString: string = StringUtil.Empty;
-							let placeholderParamString
-								= formatter.substring(
-									placeholderEscapeCharEndIndex,
-									placeholderTypeCharBeginIndex);
+							let placeholderParamString = formatter.substring(
+								placeholderEscapeCharEndIndex, placeholderTypeCharBeginIndex);
 							if (StringUtil.isEmpty(placeholderParamString))
 							{
 								valueString = value.toString();
@@ -1890,21 +1884,16 @@ export class StringUtil
 								{
 									if (StringUtil.isNotEmpty(numberStringInfo.integerString))
 									{
-										integerCharsCount
-											= this.parseToInt(numberStringInfo.integerString);
+										integerCharsCount = this.parseToInt(numberStringInfo.integerString);
 									}
 									if (StringUtil.isNotEmpty(numberStringInfo.floatString))
 									{
-										floatCharsCount
-											= this.parseToInt(numberStringInfo.floatString);
+										floatCharsCount = this.parseToInt(numberStringInfo.floatString);
 									}
 								}
 								if (floatCharsCount >= 0)
 								{
-									valueString
-										= StringUtil.stringByFixedFloat(
-											value,
-											floatCharsCount);
+									valueString = StringUtil.stringByFixedFloat(value, floatCharsCount);
 								}
 								else
 								{

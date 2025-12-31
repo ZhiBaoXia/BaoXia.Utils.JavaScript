@@ -1,3 +1,4 @@
+
 export class IntervalTask
 {
 	////////////////////////////////////////////////
@@ -12,11 +13,13 @@ export class IntervalTask
 
 	invokeIndex: number = 0;
 
-	toInvokeNext: ((toInvokeFinished: () => void, isLastInvoke: boolean, invokeIndex: number, invokesCountMax: number) => void) | null = null;
+	invokeContent: ((toInvokeFinished: () => void, isLastInvoke: boolean, invokeIndex: number, invokesCountMax: number) => void) | null = null;
 
 	private _lastInvokeTimestamp: number = 0;
 
 	private _timeoutTimerId: number | null = null;
+
+	startTime: number = 0;
 
 	// #endRegion
 
@@ -30,8 +33,8 @@ export class IntervalTask
 	start(
 		intervalSeconds: number,
 		invokesCountMax: number,
-		toInvokeNext: ((toInvokeFinished: () => void, isLastInvoke: boolean, invokeIndex: number, invokesCountMax: number) => void) | null,
-		isInvokeTaskAtNow: boolean = false)
+		invokeContent: ((toInvokeNext: () => void, isLastInvoke: boolean, invokeIndex: number, invokesCountMax: number) => void) | null,
+		isInvokeTaskAtNow: boolean = false): number | null
 	{
 		// !!!
 		this.stop();
@@ -40,11 +43,11 @@ export class IntervalTask
 		this.intervalSeconds = intervalSeconds;
 		this.invokesCountMax = invokesCountMax;
 		this.invokeIndex = 0;
-		this.toInvokeNext = toInvokeNext;
+		this.invokeContent = invokeContent;
 
-		if (!this.toInvokeNext)
+		if (!this.invokeContent)
 		{
-			return;
+			return null;
 		}
 
 		if (isInvokeTaskAtNow)
@@ -71,6 +74,10 @@ export class IntervalTask
 			this._timeoutTimerId = timeoutTimerId as unknown as number;
 			// !!!
 		}
+		// !!!
+		this.startTime = new Date().getTime();
+		// !!!
+		return this.startTime;
 	}
 
 	trystart(
@@ -105,8 +112,8 @@ export class IntervalTask
 		this.stop();
 		// !!!
 
-		const toInvokeNext = this.toInvokeNext;
-		if (!toInvokeNext)
+		const invokeContent = this.invokeContent;
+		if (!invokeContent)
 		{
 			return;
 		}
@@ -117,7 +124,7 @@ export class IntervalTask
 
 
 		this._lastInvokeTimestamp = new Date().getTime();
-		toInvokeNext(
+		invokeContent(
 			() =>
 			{
 				this.invokeIndex++;
@@ -135,6 +142,7 @@ export class IntervalTask
 				{
 					intervalSecondsToNextInvoke = 0;
 				}
+
 				const timeoutTimerId = setTimeout(
 					() =>
 					{

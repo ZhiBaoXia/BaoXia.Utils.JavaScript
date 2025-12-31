@@ -6,14 +6,21 @@ import { StringUtil } from "./stringUtil.js";
 export class DateTime
 {
 	////////////////////////////////////////////////
-	// @静态变量
+	// @静态常量
 	////////////////////////////////////////////////
 
+	// #region
+
 	static WeekdayCaptions: string[] = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+
+	// #endRegion
+
 
 	////////////////////////////////////////////////
 	// @自身属性
 	////////////////////////////////////////////////
+
+	// #region
 
 	data: Date;
 
@@ -50,6 +57,21 @@ export class DateTime
 
 	set month(month: number)
 	{
+		const currentMonth = this.month;
+		const targetMonth = month;
+		if (DateTime.isMonth31Days(currentMonth))
+		{
+			if (DateTime.isMonth30Days(targetMonth)
+				&& this.day > 30)
+			{
+				this.day = 30;
+			}
+			else if (DateTime.isMonth28Days(targetMonth)
+				&& this.day > 28)
+			{
+				this.day = 28;
+			}
+		}
 		this.data.setMonth(month - 1);
 	}
 
@@ -118,9 +140,14 @@ export class DateTime
 		this.data.setTime(millsecondsFrom1970);
 	}
 
+	// #endRegion
+
+
 	////////////////////////////////////////////////
-	// @类方法
+	// @静态变量
 	////////////////////////////////////////////////
+
+	// #region
 
 	/**
 	 * 时间对象的最小值。
@@ -140,6 +167,52 @@ export class DateTime
 		return new DateTime();
 	}
 
+	// #endRegion
+
+
+	////////////////////////////////////////////////
+	// @类方法
+	////////////////////////////////////////////////
+
+	// #region
+
+
+	static isMonth30Days(month: number)
+	{
+		if (month == 4
+			|| month == 6
+			|| month == 9
+			|| month == 11)
+		{
+			return true;
+		}
+		return false;
+	}
+
+
+	static isMonth31Days(month: number)
+	{
+		if (month == 1
+			|| month == 3
+			|| month == 5
+			|| month == 7
+			|| month == 8
+			|| month == 10
+			|| month == 12)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	static isMonth28Days(month: number)
+	{
+		if (month == 2)
+		{
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * 根据指定的比较精度，比较两个时间对象的“早晚”，当“dateTimeA”早于“dateTimeB”时返回“-1”；当“dateTimeA”晚于“dateTimeB”时返回“1”；当“dateTimeA”等于“dateTimeB”时返回“0”。
@@ -294,9 +367,14 @@ export class DateTime
 			== 0;
 	}
 
+	// #endRegion
+
+
 	////////////////////////////////////////////////
 	// @自身实现
 	////////////////////////////////////////////////
+
+	// #region
 
 	constructor(date: DateTime | Date | number | string | null = null)
 	{
@@ -1092,4 +1170,6 @@ export class DateTime
 	{
 		return this.toISOString();
 	}
+
+	// #endRegion
 }
