@@ -950,7 +950,10 @@ export class DateTime
 		stringFormatter: string | null,
 		formatterPlaceholder: string | null,
 		dateFieldCaption: string | null,
-		isRemoveLeftCharsByPlaceholder: boolean = false): string | null
+		isRemoveLeftCharsByPlaceholder: boolean = false,
+		toIsRemoveLeftCharsByPlaceholderWithFormatterPlaceholderLength:
+			((formatterPlaceholderLength: number, dateFieldCaption: string | null) => boolean) | null = null)
+		: string | null
 	{
 		if (StringUtil.isEmpty(stringFormatter)
 			|| StringUtil.isEmpty(formatterPlaceholder))
@@ -962,27 +965,29 @@ export class DateTime
 			dateFieldCaption = StringUtil.Empty;
 		}
 
-		let formatterPlaceholderRanges
-			= StringUtil.getRangesOfKeywordIn(
-				stringFormatter,
-				formatterPlaceholder,
-				false);
+		let formatterPlaceholderRanges = StringUtil.getRangesOfKeywordIn(
+			stringFormatter, formatterPlaceholder, false);
 		if (formatterPlaceholderRanges.length > 0)
 		{
-			formatterPlaceholderRanges
-				= StringRange.tryCompressionRangesWithConsecutiveCharIndex(
-					formatterPlaceholderRanges);
+			formatterPlaceholderRanges = StringRange.tryCompressionRangesWithConsecutiveCharIndex(
+				formatterPlaceholderRanges);
 			let dateFieldCaptions: string[] = [];
 			let dateFieldCaptionOriginal = dateFieldCaption;
 			for (let formatterPlaceholderRange of formatterPlaceholderRanges)
 			{
 				let formatterPlaceholderLength = formatterPlaceholderRange.charsCount;
+				dateFieldCaption = StringUtil.complementZeroAtIntegerCharsLeftTo(
+					dateFieldCaptionOriginal!, formatterPlaceholderLength);
+				if (dateFieldCaption.length > formatterPlaceholderLength)
 				{
-					dateFieldCaption = StringUtil.complementZeroAtIntegerCharsLeftTo(
-						dateFieldCaptionOriginal!,
-						formatterPlaceholderLength);
-					if (isRemoveLeftCharsByPlaceholder
-						&& dateFieldCaption.length > formatterPlaceholderLength)
+					let isRemoveLeftCharsByPlaceholderFinaly = isRemoveLeftCharsByPlaceholder;
+					if (toIsRemoveLeftCharsByPlaceholderWithFormatterPlaceholderLength)
+					{
+						isRemoveLeftCharsByPlaceholderFinaly
+							= toIsRemoveLeftCharsByPlaceholderWithFormatterPlaceholderLength(
+								formatterPlaceholderLength, dateFieldCaption);
+					}
+					if (isRemoveLeftCharsByPlaceholderFinaly)
 					{
 						dateFieldCaption = dateFieldCaption.substring(
 							(dateFieldCaption.length - formatterPlaceholderLength));
@@ -991,12 +996,8 @@ export class DateTime
 				dateFieldCaptions.push(dateFieldCaption);
 			}
 			// !!!
-			stringFormatter
-				= StringUtil.replaceKeywordsInRangesWithStringsSpecifiedIn(
-					stringFormatter,
-					formatterPlaceholderRanges,
-					dateFieldCaptions,
-					false);
+			stringFormatter = StringUtil.replaceKeywordsInRangesWithStringsSpecifiedIn(
+				stringFormatter, formatterPlaceholderRanges, dateFieldCaptions, false);
 			// !!!
 		}
 		return stringFormatter;
@@ -1008,8 +1009,7 @@ export class DateTime
 	 * @param stringFormatter 指定的格式化模板。
 	 * @returns 指定模板结构的当前时间对象字符串。
 	 */
-	toString(
-		stringFormatter: string | null = null): string
+	toString(stringFormatter: string | null = null): string
 	{
 		if (StringUtil.isEmpty(stringFormatter))
 		{
@@ -1021,34 +1021,32 @@ export class DateTime
 		////////////////////////////////////////////////
 		let yearFormatterPlaceholder = "y";
 		let yearFieldCaption = this.year.toString();
-		stringFormatter
-			= this.replaceDateFormatterPlaceholderInFormatter(
-				stringFormatter,
-				yearFormatterPlaceholder,
-				yearFieldCaption,
-				true);
+		stringFormatter = this.replaceDateFormatterPlaceholderInFormatter(
+			stringFormatter, yearFormatterPlaceholder, yearFieldCaption, true,
+			(formatterPlaceholderLength, dateFieldCaption) =>
+			{
+				if (formatterPlaceholderLength >= 4)
+				{
+					return false;
+				}
+				return true;
+			});
 
 		////////////////////////////////////////////////
 		// 月份的占位符： M 。
 		////////////////////////////////////////////////
 		let monthFormatterPlaceholder = "M";
 		let monthFieldCaption = this.month.toString();
-		stringFormatter
-			= this.replaceDateFormatterPlaceholderInFormatter(
-				stringFormatter,
-				monthFormatterPlaceholder,
-				monthFieldCaption);
+		stringFormatter = this.replaceDateFormatterPlaceholderInFormatter(
+			stringFormatter, monthFormatterPlaceholder, monthFieldCaption);
 
 		////////////////////////////////////////////////
 		// 日期的占位符： d 。
 		////////////////////////////////////////////////
 		let dayFormatterPlaceholder = "d";
 		let dayFieldCaption = this.day.toString();
-		stringFormatter
-			= this.replaceDateFormatterPlaceholderInFormatter(
-				stringFormatter,
-				dayFormatterPlaceholder,
-				dayFieldCaption);
+		stringFormatter = this.replaceDateFormatterPlaceholderInFormatter(
+			stringFormatter, dayFormatterPlaceholder, dayFieldCaption);
 
 		////////////////////////////////////////////////
 		// 周日期的占位符： w 。
@@ -1063,22 +1061,16 @@ export class DateTime
 		{
 			weekdayFieldCaption = weekdayCaptions[weekdayIndex];
 		}
-		stringFormatter
-			= this.replaceDateFormatterPlaceholderInFormatter(
-				stringFormatter,
-				weekdayFormatterPlaceholder,
-				weekdayFieldCaption);
+		stringFormatter = this.replaceDateFormatterPlaceholderInFormatter(
+			stringFormatter, weekdayFormatterPlaceholder, weekdayFieldCaption);
 
 		////////////////////////////////////////////////
 		// 24小时制，小时的占位符： H 。
 		////////////////////////////////////////////////
 		let hourIn24FormatterPlaceholder = "H";
 		let hourIn24FieldCaption = this.hour.toString();
-		stringFormatter
-			= this.replaceDateFormatterPlaceholderInFormatter(
-				stringFormatter,
-				hourIn24FormatterPlaceholder,
-				hourIn24FieldCaption);
+		stringFormatter = this.replaceDateFormatterPlaceholderInFormatter(
+			stringFormatter, hourIn24FormatterPlaceholder, hourIn24FieldCaption);
 
 		////////////////////////////////////////////////
 		// 12小时制，小时的占位符： h 。
@@ -1090,33 +1082,24 @@ export class DateTime
 			hourIn12 -= 12;
 		}
 		let hourIn12FieldCaption = hourIn12.toString();
-		stringFormatter
-			= this.replaceDateFormatterPlaceholderInFormatter(
-				stringFormatter,
-				hourIn12FormatterPlaceholder,
-				hourIn12FieldCaption);
+		stringFormatter = this.replaceDateFormatterPlaceholderInFormatter(
+			stringFormatter, hourIn12FormatterPlaceholder, hourIn12FieldCaption);
 
 		////////////////////////////////////////////////
 		// 分钟的占位符： m 。
 		////////////////////////////////////////////////
 		let minuteFormatterPlaceholder = "m";
 		let minuteFieldCaption = this.minute.toString();
-		stringFormatter
-			= this.replaceDateFormatterPlaceholderInFormatter(
-				stringFormatter,
-				minuteFormatterPlaceholder,
-				minuteFieldCaption);
+		stringFormatter = this.replaceDateFormatterPlaceholderInFormatter(
+			stringFormatter, minuteFormatterPlaceholder, minuteFieldCaption);
 
 		////////////////////////////////////////////////
 		// 秒钟的占位符： s 。
 		////////////////////////////////////////////////
 		let secondFormatterPlaceholder = "s";
 		let secondFieldCaption = this.second.toString();
-		stringFormatter
-			= this.replaceDateFormatterPlaceholderInFormatter(
-				stringFormatter,
-				secondFormatterPlaceholder,
-				secondFieldCaption);
+		stringFormatter = this.replaceDateFormatterPlaceholderInFormatter(
+			stringFormatter, secondFormatterPlaceholder, secondFieldCaption);
 
 
 		////////////////////////////////////////////////
@@ -1124,11 +1107,8 @@ export class DateTime
 		////////////////////////////////////////////////
 		let millisecondFormatterPlaceholder = "f";
 		let millisecondFieldCaption = this.millisecond.toString();
-		stringFormatter
-			= this.replaceDateFormatterPlaceholderInFormatter(
-				stringFormatter,
-				millisecondFormatterPlaceholder,
-				millisecondFieldCaption);
+		stringFormatter = this.replaceDateFormatterPlaceholderInFormatter(
+			stringFormatter, millisecondFormatterPlaceholder, millisecondFieldCaption);
 
 		if (stringFormatter != null)
 		{
@@ -1147,13 +1127,8 @@ export class DateTime
 		let dateTimeString = StringUtil.Empty;
 		if (isUseLocalTimeZone)
 		{
-			let timezoneString
-				= StringUtil.format(
-					"%2d:%2d",
-					this.timeZone,
-					this.timeZoneMinutes);
-			dateTimeString = this.toString(
-				"yyyy-MM-ddTHH:mm:ss.fff+" + timezoneString);
+			let timezoneString = StringUtil.format("%2d:%2d", this.timeZone, this.timeZoneMinutes);
+			dateTimeString = this.toString("yyyy-MM-ddTHH:mm:ss.fff+" + timezoneString);
 		}
 		else
 		{
@@ -1168,6 +1143,10 @@ export class DateTime
 	 */
 	toJSON(): string
 	{
+		// if (this.data.getFullYear()>=10000)
+		// {
+		// 	return 
+		// }
 		return this.toISOString();
 	}
 

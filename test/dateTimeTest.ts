@@ -55,9 +55,7 @@ export class DateTimeTest extends TestCase
 				assertFalse(dateTimeA.isGreaterThanOrEquals(dateTimeB));
 
 
-				dateTimeB = dateTimeA.dateTimeByOffset(
-					DateTimeField.Second,
-					-1);
+				dateTimeB = dateTimeA.dateTimeByOffset(DateTimeField.Second,-1);
 				assertFalse(dateTimeA.isLessThan(dateTimeB));
 				assertFalse(dateTimeA.isLessThanOrEquals(dateTimeB));
 				assertFalse(dateTimeA.isEquals(dateTimeB));
@@ -142,6 +140,18 @@ export class DateTimeTest extends TestCase
 				let nowDetailCaption = DateTimeUtil.captionOfDetailPageDefault(now);
 				{
 					assert(nowDetailCaption!.length > 0);
+				}
+
+
+
+				////////////////////////////////////////////////
+				// 极限值相关测试：
+				////////////////////////////////////////////////
+				const dateTimeMaxString = "9999-12-31T23:59:59.9999999+00:00";
+				const dateTimeMax = new DateTime(dateTimeMaxString);
+				const dateTimeMaxISOString = dateTimeMax.toISOString();
+				{
+					assert(dateTimeMaxISOString == "10000-01-01T07:59:59.999+08:00");
 				}
 			});
 	}
