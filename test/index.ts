@@ -17,6 +17,7 @@ import { TestCaseAsyncTest } from "./testCaseAsyncTest.js";
 import { UriUtilParseTest } from "./uriUtilParseTest.js";
 import { UriUtilPathOperationTest } from "./uriUtilPathOperationTest.js";
 import { VersionInfoTest } from "./versionInfoTest.js";
+import { GuidUtilTest } from "./guidUtilTest.js";
 
 let testProject = new TestProject(
 	"BaoXia.Utils.Javascript",
@@ -38,6 +39,7 @@ let testProject = new TestProject(
 		new RecursionUtilTest(),
 		new DelayTaskTest(),
 		new MapUtilTest(),
+		new GuidUtilTest(),
 	]);
 // !!!
 await testProject.testAsync();

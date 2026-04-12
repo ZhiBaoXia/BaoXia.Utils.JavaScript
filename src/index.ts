@@ -7,6 +7,7 @@ import { DateTime } from "./dateTime.js"
 import { DateTimeUtil } from "./dateTimeUtil.js"
 import { DelayTask } from "./delayTask.js"
 import { EnvironmentUtil } from "./environmentUtil.js"
+import { GuidUtil } from "./guidUtil.js"
 import { IntervalTask } from "./intervalTask.js"
 import { JsonUtil } from "./jsonUtil.js"
 import { LoopTask } from "./loopTask.js"
@@ -23,7 +24,6 @@ import { ValueUtil } from "./valueUtil.js"
 import { VersionInfo } from "./versionInfo.js"
 export
 {
-	ArrayUtil, ClipboardUtil, Constant, CookieUtil, DateTime, DateTimeField, DateTimeUtil, DelayTask, EnvironmentUtil, IntervalTask, JsonUtil, LoopTask, MapUtil, Model, NumberUtil, ObjectUtil, PathUtil, RecursionUtil, StringUtil, Thenable, UriUtil, ValueUtil,
+	ArrayUtil, ClipboardUtil, Constant, CookieUtil, DateTime, DateTimeField, DateTimeUtil, DelayTask, EnvironmentUtil, GuidUtil, IntervalTask, JsonUtil, LoopTask, MapUtil, Model, NumberUtil, ObjectUtil, PathUtil, RecursionUtil, StringUtil, Thenable, UriUtil, ValueUtil,
 	VersionInfo
 }
-
