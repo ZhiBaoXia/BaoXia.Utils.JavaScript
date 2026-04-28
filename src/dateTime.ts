@@ -22,11 +22,11 @@ export class DateTime
 
 	// #region
 
-	data: Date;
+	date: Date;
 
 	get timeZone(): number
 	{
-		let timezoneOffsetMinutes = this.data.getTimezoneOffset();
+		let timezoneOffsetMinutes = this.date.getTimezoneOffset();
 		let timezone = Math.floor(-1 * timezoneOffsetMinutes / 60);
 		{ }
 		return timezone;
@@ -34,7 +34,7 @@ export class DateTime
 
 	get timeZoneMinutes(): number
 	{
-		let timezoneOffsetMinutes = this.data.getTimezoneOffset();
+		let timezoneOffsetMinutes = this.date.getTimezoneOffset();
 		let timezoneMinutes = Math.round(-1 * timezoneOffsetMinutes % 60);
 		{ }
 		return timezoneMinutes;
@@ -42,17 +42,17 @@ export class DateTime
 
 	get year(): number
 	{
-		return this.data.getFullYear();
+		return this.date.getFullYear();
 	}
 
 	set year(year: number)
 	{
-		this.data.setFullYear(year);
+		this.date.setFullYear(year);
 	}
 
 	get month(): number
 	{
-		return this.data.getMonth() + 1;
+		return this.date.getMonth() + 1;
 	}
 
 	set month(month: number)
@@ -72,72 +72,72 @@ export class DateTime
 				this.day = 28;
 			}
 		}
-		this.data.setMonth(month - 1);
+		this.date.setMonth(month - 1);
 	}
 
 	get day(): number
 	{
-		return this.data.getDate();
+		return this.date.getDate();
 	}
 
 	set day(day: number)
 	{
-		this.data.setDate(day);
+		this.date.setDate(day);
 	}
 
 	get weekday(): number
 	{
-		return this.data.getDay();
+		return this.date.getDay();
 	}
 
 	get hour(): number
 	{
-		return this.data.getHours();
+		return this.date.getHours();
 	}
 
 	set hour(hour: number)
 	{
-		this.data.setHours(hour);
+		this.date.setHours(hour);
 	}
 
 	get minute(): number
 	{
-		return this.data.getMinutes();
+		return this.date.getMinutes();
 	}
 
 	set minute(minute: number)
 	{
-		this.data.setMinutes(minute);
+		this.date.setMinutes(minute);
 	}
 
 	get second(): number
 	{
-		return this.data.getSeconds();
+		return this.date.getSeconds();
 	}
 
 	set second(second: number)
 	{
-		this.data.setSeconds(second);
+		this.date.setSeconds(second);
 	}
 
 	get millisecond(): number
 	{
-		return this.data.getMilliseconds();
+		return this.date.getMilliseconds();
 	}
 
 	set millisecond(millisecond: number)
 	{
-		this.data.setMilliseconds(millisecond);
+		this.date.setMilliseconds(millisecond);
 	}
 
 	get millsecondsFrom1970(): number
 	{
-		return this.data.getTime();
+		return this.date.getTime();
 	}
 
 	set millsecondsFrom1970(millsecondsFrom1970: number)
 	{
-		this.data.setTime(millsecondsFrom1970);
+		this.date.setTime(millsecondsFrom1970);
 	}
 
 	// #endRegion
@@ -385,9 +385,9 @@ export class DateTime
 		}
 		else if (date instanceof DateTime)
 		{
-			date = date.data;
+			date = date.date;
 		}
-		this.data
+		this.date
 			= date != null
 				? date
 				: new Date();
@@ -400,8 +400,8 @@ export class DateTime
 	 */
 	addYears(years: number): DateTime
 	{
-		this.data = new Date(
-			this.data.getTime()
+		this.date = new Date(
+			this.date.getTime()
 			+ years * 365 * 24 * 60 * 60 * 1000);
 		{ }
 		return this;
@@ -428,8 +428,8 @@ export class DateTime
 	 */
 	addDays(days: number): DateTime
 	{
-		this.data = new Date(
-			this.data.getTime()
+		this.date = new Date(
+			this.date.getTime()
 			+ days * 24 * 60 * 60 * 1000);
 		{ }
 		return this;
@@ -442,8 +442,8 @@ export class DateTime
 	 */
 	addHours(hours: number): DateTime
 	{
-		this.data = new Date(
-			this.data.getTime()
+		this.date = new Date(
+			this.date.getTime()
 			+ hours * 60 * 60 * 1000);
 		{ }
 		return this;
@@ -456,8 +456,8 @@ export class DateTime
 	 */
 	addMinutes(minutes: number): DateTime
 	{
-		this.data = new Date(
-			this.data.getTime()
+		this.date = new Date(
+			this.date.getTime()
 			+ minutes * 60 * 1000);
 		{ }
 		return this;
@@ -470,8 +470,8 @@ export class DateTime
 	 */
 	addSeconds(seconds: number): DateTime
 	{
-		this.data = new Date(
-			this.data.getTime()
+		this.date = new Date(
+			this.date.getTime()
 			+ seconds * 1000);
 		{ }
 		return this;
@@ -484,8 +484,8 @@ export class DateTime
 	 */
 	addMilliseconds(milliseconds: number): DateTime
 	{
-		this.data = new Date(
-			this.data.getTime()
+		this.date = new Date(
+			this.date.getTime()
 			+ milliseconds);
 		{ }
 		return this;
@@ -1132,7 +1132,7 @@ export class DateTime
 		}
 		else
 		{
-			dateTimeString = this.data.toISOString();
+			dateTimeString = this.date.toISOString();
 		}
 		return dateTimeString;
 	}
