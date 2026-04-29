@@ -140,6 +140,10 @@ export class DateTime
 		this.date.setTime(millsecondsFrom1970);
 	}
 
+	title?: string;
+
+	subtitle?: string;
+
 	// #endRegion
 
 
@@ -376,10 +380,21 @@ export class DateTime
 
 	// #region
 
-	constructor(date: DateTime | Date | number | string | null = null)
+	constructor(date: DateTime | Date | number | string | null = null,
+		month?: number, day?: number, hour?: number, minute?: number, second?: number)
 	{
-		if (typeof (date) == "number"
-			|| typeof (date) == "string")
+		if (typeof (date) == "number")
+		{
+			if (month != undefined)
+			{
+				date = new Date(date, month - 1, day, hour, minute, second);
+			}
+			else
+			{
+				date = new Date(date);
+			}
+		}
+		else if (typeof (date) == "string")
 		{
 			date = new Date(date);
 		}
@@ -387,10 +402,7 @@ export class DateTime
 		{
 			date = date.date;
 		}
-		this.date
-			= date != null
-				? date
-				: new Date();
+		this.date = date != null ? date : new Date();
 	}
 
 	/**
