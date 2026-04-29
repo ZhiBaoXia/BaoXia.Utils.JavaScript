@@ -144,6 +144,8 @@ export class DateTime
 
 	subtitle?: string;
 
+	description?: string;
+
 	// #endRegion
 
 
@@ -381,7 +383,8 @@ export class DateTime
 	// #region
 
 	constructor(date: DateTime | Date | number | string | null = null,
-		month?: number, day?: number, hour?: number, minute?: number, second?: number)
+		month?: number, day?: number, hour?: number, minute?: number, second?: number,
+		title?: string, subtitle?: string, description?: string)
 	{
 		if (typeof (date) == "number")
 		{
@@ -403,6 +406,10 @@ export class DateTime
 			date = date.date;
 		}
 		this.date = date != null ? date : new Date();
+
+		this.title = title;
+		this.subtitle = subtitle;
+		this.description = description;
 	}
 
 	/**
