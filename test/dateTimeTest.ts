@@ -75,6 +75,11 @@ export class DateTimeTest extends TestCase
 			assert(dateTimeA.isGreaterThan(dateTimeB));
 			assert(dateTimeA.isGreaterThanOrEquals(dateTimeB));
 
+			dateTimeA = new DateTime(2026, 1, 4);
+			assertFalse(dateTimeA.isEquals(DateTime.Now, DateTimeField.Day));
+
+			dateTimeA = new DateTime();
+
 			////////////////////////////////////////////////
 			// 其他相关测试：
 			////////////////////////////////////////////////

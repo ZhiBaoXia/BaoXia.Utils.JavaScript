@@ -248,7 +248,7 @@ export class DateTime
 
 		let year = dateTimeA.year;
 		let anotherYear = dateTimeB.year;
-		if (year < anotherYear)
+		if (year == undefined || isNaN(year) || year < anotherYear)
 		{
 			return -1;
 		}
@@ -263,7 +263,7 @@ export class DateTime
 
 		let month = dateTimeA.month;
 		let anotherMonth = dateTimeB.month;
-		if (month < anotherMonth)
+		if (month == undefined || isNaN(month) || month < anotherMonth)
 		{
 			return -1;
 		}
@@ -278,7 +278,7 @@ export class DateTime
 
 		let day = dateTimeA.day;
 		let anotherDay = dateTimeB.day;
-		if (day < anotherDay)
+		if (day == undefined || isNaN(day) || day < anotherDay)
 		{
 			return -1;
 		}
@@ -293,7 +293,7 @@ export class DateTime
 
 		let hour = dateTimeA.hour;
 		let anotherHour = dateTimeB.hour;
-		if (hour < anotherHour)
+		if (hour == undefined || isNaN(hour) || hour < anotherHour)
 		{
 			return -1;
 		}
@@ -308,7 +308,7 @@ export class DateTime
 
 		let minute = dateTimeA.minute;
 		let anotherMinute = dateTimeB.minute;
-		if (minute < anotherMinute)
+		if (minute == undefined || isNaN(minute) || minute < anotherMinute)
 		{
 			return -1;
 		}
@@ -323,7 +323,7 @@ export class DateTime
 
 		let second = dateTimeA.second;
 		let anotherSecond = dateTimeB.second;
-		if (second < anotherSecond)
+		if (second == undefined || isNaN(second) || second < anotherSecond)
 		{
 			return -1;
 		}
@@ -338,7 +338,7 @@ export class DateTime
 
 		let millisecond = dateTimeA.millisecond;
 		let anotherMillisecond = dateTimeB.millisecond;
-		if (millisecond < anotherMillisecond)
+		if (millisecond == undefined || isNaN(millisecond) || millisecond < anotherMillisecond)
 		{
 			return -1;
 		}
@@ -390,7 +390,7 @@ export class DateTime
 		{
 			if (month != undefined)
 			{
-				date = new Date(date, month - 1, day, hour, minute, second);
+				date = new Date(date, month - 1, day ?? 1, hour ?? 0, minute ?? 0, second ?? 0);
 			}
 			else
 			{
