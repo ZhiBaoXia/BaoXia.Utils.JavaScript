@@ -78,21 +78,89 @@ export class DateTimeTest extends TestCase
 			dateTimeA = new DateTime(2026, 1, 4);
 			assertFalse(dateTimeA.isEquals(DateTime.Now, DateTimeField.Day));
 
-			dateTimeA = new DateTime();
+			dateTimeA = new DateTime(2026, 4, 24);
 
-			////////////////////////////////////////////////
-			// 其他相关测试：
-			////////////////////////////////////////////////
-			dateTimeA = new DateTime();
+			const dateTimeOfLastOfDay = dateTimeA.dateTimeAtLastOfDay();
 			{
-				dateTimeA.year = 2023;
-				dateTimeA.month = 4;
-				dateTimeA.day = 26;
-				dateTimeA.hour = 16;
-				dateTimeA.minute = 30;
-				dateTimeA.second = 1;
-				dateTimeA.millisecond = 123;
+				assert(dateTimeOfLastOfDay.year == 2026);
+				assert(dateTimeOfLastOfDay.month == 4);
+				assert(dateTimeOfLastOfDay.day == 24);
+				assert(dateTimeOfLastOfDay.hour == 23);
+				assert(dateTimeOfLastOfDay.minute == 59);
+				assert(dateTimeOfLastOfDay.second == 59);
+				assert(dateTimeOfLastOfDay.millisecond == 999);
 			}
+
+			const dateTimeOfEndOfWeek = dateTimeA.dateTimeAtEndOfWeek();
+			{
+				assert(dateTimeOfEndOfWeek.year == 2026);
+				assert(dateTimeOfEndOfWeek.month == 4);
+				assert(dateTimeOfEndOfWeek.day == 26);
+				assert(dateTimeOfEndOfWeek.hour == 0);
+				assert(dateTimeOfEndOfWeek.minute == 0);
+				assert(dateTimeOfEndOfWeek.second == 0);
+				assert(dateTimeOfEndOfWeek.millisecond == 0);
+			}
+
+			const dateTimeOfLastOfWeek = dateTimeA.dateTimeAtLastOfWeek();
+			{
+				assert(dateTimeOfLastOfWeek.year == 2026);
+				assert(dateTimeOfLastOfWeek.month == 4);
+				assert(dateTimeOfLastOfWeek.day == 25);
+				assert(dateTimeOfLastOfWeek.hour == 23);
+				assert(dateTimeOfLastOfWeek.minute == 59);
+				assert(dateTimeOfLastOfWeek.second == 59);
+				assert(dateTimeOfLastOfWeek.millisecond == 999);
+			}
+
+			const dateTimeOfLastOfChineseWeek = dateTimeA.dateTimeAtLastOfChineseWeek();
+			{
+				assert(dateTimeOfLastOfChineseWeek.year == 2026);
+				assert(dateTimeOfLastOfChineseWeek.month == 4);
+				assert(dateTimeOfLastOfChineseWeek.day == 26);
+				assert(dateTimeOfLastOfChineseWeek.hour == 23);
+				assert(dateTimeOfLastOfChineseWeek.minute == 59);
+				assert(dateTimeOfLastOfChineseWeek.second == 59);
+				assert(dateTimeOfLastOfChineseWeek.millisecond == 999);
+			}
+
+			const dateTimeOfLastOfMonth = dateTimeA.dateTimeAtLastOfMonth();
+			{
+				assert(dateTimeOfLastOfMonth.year == 2026);
+				assert(dateTimeOfLastOfMonth.month == 4);
+				assert(dateTimeOfLastOfMonth.day == 30);
+				assert(dateTimeOfLastOfMonth.hour == 23);
+				assert(dateTimeOfLastOfMonth.minute == 59);
+				assert(dateTimeOfLastOfMonth.second == 59);
+				assert(dateTimeOfLastOfMonth.millisecond == 999);
+			}
+
+			const dateTimeOfLastOfQuarter = dateTimeA.dateTimeAtLastOfQuarter();
+			{
+				assert(dateTimeOfLastOfQuarter.year == 2026);
+				assert(dateTimeOfLastOfQuarter.month == 6);
+				assert(dateTimeOfLastOfQuarter.day == 30);
+				assert(dateTimeOfLastOfQuarter.hour == 23);
+				assert(dateTimeOfLastOfQuarter.minute == 59);
+				assert(dateTimeOfLastOfQuarter.second == 59);
+				assert(dateTimeOfLastOfQuarter.millisecond == 999);
+			}
+
+			const dateTimeOfLastOfYear = dateTimeA.dateTimeAtLastOfYear();
+			{
+				assert(dateTimeOfLastOfYear.year == 2026);
+				assert(dateTimeOfLastOfYear.month == 12);
+				assert(dateTimeOfLastOfYear.day == 31);
+				assert(dateTimeOfLastOfYear.hour == 23);
+				assert(dateTimeOfLastOfYear.minute == 59);
+				assert(dateTimeOfLastOfYear.second == 59);
+				assert(dateTimeOfLastOfYear.millisecond == 999);
+			}
+
+
+
+
+			dateTimeA = new DateTime(2023, 4, 26, 16, 30, 1, 123);
 			let dateTimeCaption = dateTimeA.toString("yyyy-MM-dd HH:mm:ss.fff");
 			{
 				assert(dateTimeCaption == "2023-04-26 16:30:01.123");
