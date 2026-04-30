@@ -414,9 +414,9 @@ export class DateTime
 	 */
 	addYears(years: number): DateTime
 	{
-		this.date = new Date(
-			this.date.getTime()
-			+ years * 365 * 24 * 60 * 60 * 1000);
+		const currentDate = this.date;
+		this.date = new Date(currentDate.getFullYear() + years, currentDate.getMonth(), currentDate.getDate(),
+			currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds(), currentDate.getMilliseconds());
 		{ }
 		return this;
 	}
@@ -428,10 +428,10 @@ export class DateTime
 	 */
 	addMonths(months: number): DateTime
 	{
-		let dateTime = this.addYears(Math.floor(months / 12))
-		{
-			dateTime.month = Math.round(months) % 12;
-		}
+		const currentDate = this.date;
+		this.date = new Date(currentDate.getFullYear(), currentDate.getMonth() + months, currentDate.getDate(),
+			currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds(), currentDate.getMilliseconds());
+		{ }
 		return this;
 	}
 
@@ -442,9 +442,9 @@ export class DateTime
 	 */
 	addDays(days: number): DateTime
 	{
-		this.date = new Date(
-			this.date.getTime()
-			+ days * 24 * 60 * 60 * 1000);
+		const currentDate = this.date;
+		this.date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + days,
+			currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds(), currentDate.getMilliseconds());
 		{ }
 		return this;
 	}
@@ -456,9 +456,10 @@ export class DateTime
 	 */
 	addHours(hours: number): DateTime
 	{
-		this.date = new Date(
-			this.date.getTime()
-			+ hours * 60 * 60 * 1000);
+		const currentDate = this.date;
+		this.date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(),
+			currentDate.getHours() + hours, currentDate.getMinutes(), currentDate.getSeconds(),
+			currentDate.getMilliseconds());
 		{ }
 		return this;
 	}
@@ -470,9 +471,10 @@ export class DateTime
 	 */
 	addMinutes(minutes: number): DateTime
 	{
-		this.date = new Date(
-			this.date.getTime()
-			+ minutes * 60 * 1000);
+		const currentDate = this.date;
+		this.date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(),
+			currentDate.getHours(), currentDate.getMinutes() + minutes, currentDate.getSeconds(),
+			currentDate.getMilliseconds());
 		{ }
 		return this;
 	}
@@ -484,9 +486,10 @@ export class DateTime
 	 */
 	addSeconds(seconds: number): DateTime
 	{
-		this.date = new Date(
-			this.date.getTime()
-			+ seconds * 1000);
+		const currentDate = this.date;
+		this.date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(),
+			currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds() + seconds,
+			currentDate.getMilliseconds());
 		{ }
 		return this;
 	}
@@ -498,9 +501,10 @@ export class DateTime
 	 */
 	addMilliseconds(milliseconds: number): DateTime
 	{
-		this.date = new Date(
-			this.date.getTime()
-			+ milliseconds);
+		const currentDate = this.date;
+		this.date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(),
+			currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds(),
+			currentDate.getMilliseconds() + milliseconds);
 		{ }
 		return this;
 	}
