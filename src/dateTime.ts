@@ -378,14 +378,14 @@ export class DateTime
 	// #region
 
 	constructor(date: DateTime | Date | number | string | null = null,
-		month?: number, day?: number, hour?: number, minute?: number, second?: number,
+		month?: number, day?: number, hour?: number, minute?: number, second?: number, millisecond?: number,
 		title?: string, subtitle?: string, description?: string)
 	{
 		if (typeof (date) == "number")
 		{
 			if (month != undefined)
 			{
-				date = new Date(date, month - 1, day ?? 1, hour ?? 0, minute ?? 0, second ?? 0);
+				date = new Date(date, month - 1, day ?? 1, hour ?? 0, minute ?? 0, second ?? 0, millisecond ?? 0);
 			}
 			else
 			{
@@ -834,6 +834,17 @@ export class DateTime
 	}
 
 	/**
+	 * 获取当前日期时间，“今日，23点59分59秒999毫秒”的日期时间对象。
+	 * @returns 返回当前日期时间，“今日，23点59分59秒999毫秒”的日期时间对象。
+	 */
+	dateTimeAtLastOfDay(): DateTime
+	{
+		let dateTime = this.dateTimeAtEndOfDay().addMilliseconds(-1);
+		{ }
+		return dateTime;
+	}
+
+	/**
 	 * 获取当前日期时间，“明日，0点0分0秒0毫秒”的日期时间对象。
 	 * @returns 返回当前日期时间，“明日，0点0分0秒0毫秒”的日期时间对象。
 	 */
@@ -860,14 +871,62 @@ export class DateTime
 	}
 
 	/**
-	 * 获取当前日期时间，“下周日，0点0分0秒0毫秒”的日期时间对象。
+	 * 获取当前日期时间，“本周六，23点59分59秒99999毫秒”的日期时间对象。
+	 * @returns 返回当前日期时间，“本周六，23点59分59秒999999毫秒”的日期时间对象。
+	 */
+	dateTimeAtLastOfWeek(): DateTime
+	{
+		let dateTime = this.dateTimeAtEndOfWeek().addMilliseconds(-1);
+		{
+		}
+		return dateTime;
+	}
+
+	/**
+	 * 获取当前日期时间，“周日，0点0分0秒0毫秒”的日期时间对象。
 	 * @returns 返回当前日期时间，“周日，0点0分0秒0毫秒”的日期时间对象。
 	 */
 	dateTimeAtEndOfWeek(): DateTime
 	{
 		let dateTime = this.dateTimeAtEndOfDay();
 		{
-			dateTime.addDays(6 - dateTime.weekday);
+			dateTime.addDays(7 - dateTime.weekday);
+		}
+		return dateTime;
+	}
+
+	/**
+	 * 获取当前日期时间，“本周周一，0点0分0秒0毫秒”的日期时间对象。
+	 * @returns 返回当前日期时间，“本周周一，0点0分0秒0毫秒”的日期时间对象。
+	 */
+	dateTimeAtBeginOfChineseWeek(): DateTime
+	{
+		let dateTime = this.dateTimeAtBeginOfWeek().addDays(1);
+		{
+		}
+		return dateTime;
+	}
+
+	/**
+	 * 获取当前日期时间，“本周日，23点59分59秒99999毫秒”的日期时间对象。
+	 * @returns 返回当前日期时间，“本周日，23点59分59秒999999毫秒”的日期时间对象。
+	 */
+	dateTimeAtLastOfChineseWeek(): DateTime
+	{
+		let dateTime = this.dateTimeAtLastOfWeek().addDays(1);
+		{
+		}
+		return dateTime;
+	}
+
+	/**
+	 * 获取当前日期时间，“下周一，0点0分0秒0毫秒”的日期时间对象。
+	 * @returns 返回当前日期时间，“下周一，0点0分0秒0毫秒”的日期时间对象。
+	 */
+	dateTimeAtEndOfChineseWeek(): DateTime
+	{
+		let dateTime = this.dateTimeAtEndOfWeek().addDays(1);
+		{
 		}
 		return dateTime;
 	}
@@ -882,6 +941,17 @@ export class DateTime
 		{
 			dateTime.day = 1;
 		}
+		return dateTime;
+	}
+
+	/**
+	 * 获取当前日期时间，“本月最后1日，23点59分59秒999毫秒”的日期时间对象。
+	 * @returns 返回当前日期时间，“本月最后1日，23点59分59秒999毫秒”的日期时间对象。
+	 */
+	dateTimeAtLastOfMonth(): DateTime
+	{
+		let dateTime = this.dateTimeAtEndOfMonth().addMilliseconds(-1);
+		{ }
 		return dateTime;
 	}
 
@@ -912,6 +982,17 @@ export class DateTime
 	}
 
 	/**
+	 * 获取当前日期时间，“本季度最后一天，23点59分59秒999毫秒”的日期时间对象。
+	 * @returns 返回当前日期时间，“本季度最后一天，23点59分59秒999毫秒”的日期时间对象。
+	 */
+	dateTimeAtLastOfQuarter(): DateTime
+	{
+		let dateTime = this.dateTimeAtEndOfQuarter().addMilliseconds(-1);
+		{ }
+		return dateTime;
+	}
+
+	/**
 	 * 获取当前日期时间，“下季1日，0点0分0秒0毫秒”的日期时间对象。
 	 * @returns 返回当前日期时间，“下季1日，0点0分0秒0毫秒”的日期时间对象。
 	 */
@@ -935,6 +1016,17 @@ export class DateTime
 			dateTime.month = 1;
 			dateTime.day = 1;
 		}
+		return dateTime;
+	}
+
+	/**
+	 * 获取当前日期时间，“本年最后一天，23点59分59秒999毫秒”的日期时间对象。
+	 * @returns 返回当前日期时间，“本年最后一天，23点59分59秒999毫秒”的日期时间对象。
+	 */
+	dateTimeAtLastOfYear(): DateTime
+	{
+		let dateTime = this.dateTimeAtEndOfYear().addMilliseconds(-1);
+		{ }
 		return dateTime;
 	}
 
