@@ -228,20 +228,19 @@ export class DateTime
 	 * @returns 当“dateTimeA”早于“dateTimeB”时返回“-1”；当“dateTimeA”晚于“dateTimeB”时返回“1”；当“dateTimeA”等于“dateTimeB”时返回“0”。
 	 */
 	static compareDateTimes(
-		dateTimeA: DateTime | null,
-		dateTimeB: DateTime | null,
+		dateTimeA: DateTime | null | undefined,
+		dateTimeB: DateTime | null | undefined,
 		compareAccuracy: DateTimeField = DateTimeField.Millisecond): number
 	{
-		if (dateTimeA == null
-			|| dateTimeB == null)
+		if (!dateTimeA && !dateTimeB)
 		{
 			return 0;
 		}
-		if (dateTimeA == null)
+		if (!dateTimeA)
 		{
 			return -1;
 		}
-		if (dateTimeB == null)
+		if (!dateTimeB)
 		{
 			return 1;
 		}
@@ -362,15 +361,11 @@ export class DateTime
 	 * @returns 当“dateTimeA”等于“dateTimeB”时返回“true”，否则返回“false”。
 	 */
 	static equalsDateTimes(
-		dateTimeA: DateTime | null,
-		dateTimeB: DateTime | null,
+		dateTimeA: DateTime | null | undefined,
+		dateTimeB: DateTime | null | undefined,
 		compareAccuracy: DateTimeField = DateTimeField.Millisecond): boolean
 	{
-		return DateTime.compareDateTimes(
-			dateTimeA,
-			dateTimeB,
-			compareAccuracy)
-			== 0;
+		return DateTime.compareDateTimes(dateTimeA, dateTimeB, compareAccuracy) == 0;
 	}
 
 	// #endRegion
@@ -585,8 +580,7 @@ export class DateTime
 	 * @param [compareAccuracy] 指定的时间比较精度，类型为“DateTimeField”。
 	 * @returns 当前时间等于“anotherDateTime”时返回“true”，否则返回“false”。
 	 */
-	isEquals(
-		anotherDateTime: DateTime | null | undefined,
+	isEquals(anotherDateTime: DateTime | null | undefined,
 		compareAccuracy: DateTimeField = DateTimeField.Millisecond): boolean
 	{
 		if (!anotherDateTime)
@@ -606,7 +600,7 @@ export class DateTime
 	 * @returns 当前时间不等于“anotherDateTime”时返回“true”，否则返回“false”。
 	 */
 	isNotEquals(
-		anotherDateTime: DateTime | null,
+		anotherDateTime: DateTime | null | undefined,
 		compareAccuracy: DateTimeField = DateTimeField.Millisecond): boolean
 	{
 		return !this.isEquals(anotherDateTime, compareAccuracy);
@@ -619,7 +613,7 @@ export class DateTime
 	 * @returns 当前时间晚于“anotherDateTime”时返回“true”，否则返回“false”。
 	 */
 	isGreaterThan(
-		anotherDateTime: DateTime | null,
+		anotherDateTime: DateTime | null | undefined,
 		compareAccuracy: DateTimeField = DateTimeField.Millisecond): boolean
 	{
 		return DateTime.compareDateTimes(
@@ -635,7 +629,7 @@ export class DateTime
 	 * @returns 当前时间晚于或等于“anotherDateTime”时返回“true”，否则返回“false”。
 	 */
 	isGreaterThanOrEquals(
-		anotherDateTime: DateTime | null,
+		anotherDateTime: DateTime | null | undefined,
 		compareAccuracy: DateTimeField = DateTimeField.Millisecond): boolean
 	{
 		return DateTime.compareDateTimes(
@@ -645,7 +639,7 @@ export class DateTime
 	}
 
 
-	isPrevDayOf(anotherDateTime: DateTime | null): boolean
+	isPrevDayOf(anotherDateTime: DateTime | null | undefined): boolean
 	{
 		var dateTimeBeforeAnotherDateTime = anotherDateTime?.addDays(-1);
 		if (this.isEquals(dateTimeBeforeAnotherDateTime, DateTimeField.Day))
@@ -655,7 +649,7 @@ export class DateTime
 		return false;
 	}
 
-	isNextDayOf(anotherDateTime: DateTime | null): boolean
+	isNextDayOf(anotherDateTime: DateTime | null | undefined): boolean
 	{
 		var dateTimeAfterAnotherDateTime = anotherDateTime?.addDays(1);
 		if (this.isEquals(dateTimeAfterAnotherDateTime, DateTimeField.Day))
@@ -665,17 +659,17 @@ export class DateTime
 		return false;
 	}
 
-	isYesterdayOf(anotherDateTime: DateTime | null): boolean
+	isYesterdayOf(anotherDateTime: DateTime | null | undefined): boolean
 	{
 		return this.isPrevDayOf(anotherDateTime);
 	}
 
-	isTodayOf(anotherDateTime: DateTime | null): boolean
+	isTodayOf(anotherDateTime: DateTime | null | undefined): boolean
 	{
 		return this.isEquals(anotherDateTime, DateTimeField.Day);
 	}
 
-	isTomorrowOf(anotherDateTime: DateTime | null): boolean
+	isTomorrowOf(anotherDateTime: DateTime | null | undefined): boolean
 	{
 		return this.isNextDayOf(anotherDateTime);
 	}
