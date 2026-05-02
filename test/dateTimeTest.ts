@@ -181,6 +181,26 @@ export class DateTimeTest extends TestCase
 				assert(dateTimeCaption == "23-4-26 04:30:01.123");
 			}
 
+			const endOfYear = dateTimeA.dateTimeAtEndOfYear();
+			{
+				assert(endOfYear.year == 2024);
+				assert(endOfYear.month == 1);
+				assert(endOfYear.day == 1);
+				assert(endOfYear.hour == 0);
+				assert(endOfYear.minute == 0);
+				assert(endOfYear.second == 0);
+				assert(endOfYear.millisecond == 0);
+			}
+			{
+				assert(dateTimeA.year == 2023);
+				assert(dateTimeA.month == 4);
+				assert(dateTimeA.day == 26);
+				assert(dateTimeA.hour == 16);
+				assert(dateTimeA.minute == 30);
+				assert(dateTimeA.second == 1);
+				assert(dateTimeA.millisecond == 123);
+			}
+
 
 			////////////////////////////////////////////////
 			// ISO时间字符串相关测试：

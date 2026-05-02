@@ -398,7 +398,7 @@ export class DateTime
 		}
 		else if (date instanceof DateTime)
 		{
-			date = date.date;
+			date = new Date(date.date.getTime());
 		}
 		this.date = date != null ? date : new Date();
 
