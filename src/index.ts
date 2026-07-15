@@ -19,12 +19,13 @@ import { PathUtil } from "./pathUtil.js"
 import { RecursionUtil } from "./recursionUtil.js"
 import { StringUtil } from "./stringUtil.js"
 import { Thenable } from "./thenable.js"
+import { TraceUtil } from "./traceUtil.js"
 import { UriUtil } from "./uriUtil.js"
 import { ValueUtil } from "./valueUtil.js"
 import { VersionInfo } from "./versionInfo.js"
 export
 {
-	ArrayUtil, ClipboardUtil, Constant, CookieUtil, DateTime, DateTimeField, DateTimeUtil, DelayTask, EnvironmentUtil, GuidUtil, IntervalTask, JsonUtil, LoopTask, MapUtil, Model, NumberUtil, ObjectUtil, PathUtil, RecursionUtil, StringUtil, Thenable, UriUtil, ValueUtil,
+	ArrayUtil, ClipboardUtil, Constant, CookieUtil, DateTime, DateTimeField, DateTimeUtil, DelayTask, EnvironmentUtil, GuidUtil, IntervalTask, JsonUtil, LoopTask, MapUtil, Model, NumberUtil, ObjectUtil, PathUtil, RecursionUtil, StringUtil, Thenable, TraceUtil, UriUtil, ValueUtil,
 	VersionInfo
 }
 
