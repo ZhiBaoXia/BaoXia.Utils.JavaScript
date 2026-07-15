@@ -27,3 +27,4 @@ export
 	ArrayUtil, ClipboardUtil, Constant, CookieUtil, DateTime, DateTimeField, DateTimeUtil, DelayTask, EnvironmentUtil, GuidUtil, IntervalTask, JsonUtil, LoopTask, MapUtil, Model, NumberUtil, ObjectUtil, PathUtil, RecursionUtil, StringUtil, Thenable, UriUtil, ValueUtil,
 	VersionInfo
 }
+

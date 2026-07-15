@@ -4,6 +4,7 @@ import { ArrayUtilTest } from "./arrayUtilTest.js";
 import { CookieUtilTest } from "./cookieUtilTest.js";
 import { DateTimeTest } from "./dateTimeTest.js";
 import { DelayTaskTest } from "./delayTaskTest.js";
+import { GuidUtilTest } from "./guidUtilTest.js";
 import { JsonUtilTest } from "./jsonUtilTest.js";
 import { LoopTaskTest } from "./loopTaskTest.js";
 import { MapUtilTest } from "./mapUtilTest.js";
@@ -14,10 +15,10 @@ import { StringUtilFormatTest } from "./stringUtilFormatTest.js";
 import { StringUtilIndexOfTest } from "./stringUtilIndexOfTest.js";
 import { StringUtilTest } from "./stringUtilTest.js";
 import { TestCaseAsyncTest } from "./testCaseAsyncTest.js";
+import { TraceUtilTest } from "./traceUtilTest.js";
 import { UriUtilParseTest } from "./uriUtilParseTest.js";
 import { UriUtilPathOperationTest } from "./uriUtilPathOperationTest.js";
 import { VersionInfoTest } from "./versionInfoTest.js";
-import { GuidUtilTest } from "./guidUtilTest.js";
 
 let testProject = new TestProject(
 	"BaoXia.Utils.Javascript",
@@ -40,6 +41,7 @@ let testProject = new TestProject(
 		new DelayTaskTest(),
 		new MapUtilTest(),
 		new GuidUtilTest(),
+		new TraceUtilTest(),
 	]);
 // !!!
 await testProject.testAsync();
